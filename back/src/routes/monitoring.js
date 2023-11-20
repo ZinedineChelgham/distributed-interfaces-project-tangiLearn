@@ -3,7 +3,7 @@ import express from 'express';
 
 const router = express.Router();
 
-router.get('/hello', (req, res) => {
+router.get('/', (req, res) => {
     res.send({ express: 'Hello From Monitoring' });
 });
 
