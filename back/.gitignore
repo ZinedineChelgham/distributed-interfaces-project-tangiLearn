@@ -1,0 +1,23 @@
+# Dependency directories
+node_modules/
+npm-debug.log
+
+# Environment variables
+.env
+
+# Build artifacts
+dist/
+build/
+*.log
+*.zip
+*.tar.gz
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-workspace
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
