@@ -18,6 +18,9 @@ db.once("open", () => console.log("Connected to Database"));
 // Create Express app
 const app = express();
 
+// Allow Express to understand JSON
+app.use(express.json());
+
 // Registering routes
 app.use("/api/monitoring", monitoringRoutes);
 app.use("/api/pipe-game", pipeGameRoutes);
