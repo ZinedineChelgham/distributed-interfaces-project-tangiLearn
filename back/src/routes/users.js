@@ -2,8 +2,8 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send({ express: "Hello From Tower Game" });
+router.get("/teacher", (req, res) => {
+  res.send({ express: "Hello From Users" });
 });
 
 export default router;
