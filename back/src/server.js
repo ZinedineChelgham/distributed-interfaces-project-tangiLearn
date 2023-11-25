@@ -4,6 +4,7 @@ import monitoringRoutes from "./routes/monitoring.js";
 import pipeGameRoutes from "./routes/pipeGame.js";
 import towerGameRoutes from "./routes/towerGame.js";
 import teacherRoutes from "./routes/teachers.js";
+import pupilRoutes from "./routes/pupils.js";
 import mongoose from "mongoose";
 
 // Connect to MongoDB
@@ -26,6 +27,7 @@ app.use("/api/monitoring", monitoringRoutes);
 app.use("/api/pipe-game", pipeGameRoutes);
 app.use("/api/tower-game", towerGameRoutes);
 app.use("/api/teacher", teacherRoutes);
+app.use("/api/pupil", pupilRoutes);
 
 // Serve at localhost:3000
 const PORT = 3000;

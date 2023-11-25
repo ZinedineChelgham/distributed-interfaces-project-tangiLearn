@@ -1,9 +1,18 @@
 import mongoose from "mongoose";
 
 const pupilSchema = new mongoose.Schema({
-  name: String,
-  surname: String,
-  tokenId: String,
+  name: {
+    type: String,
+    required: true,
+  },
+  surname: {
+    type: String,
+    required: true,
+  },
+  tokenId: {
+    type: String,
+    required: false,
+  },
   teacher: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Teacher",
