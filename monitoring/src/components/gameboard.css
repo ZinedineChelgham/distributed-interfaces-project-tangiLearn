@@ -1,0 +1,19 @@
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-size, 3), 1fr); /* Utilisation de var() pour utiliser la variable CSS gridSize */
+    gap: 10px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.grid-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ccc;
+    font-size: 20px;
+    font-weight: bold;
+}
