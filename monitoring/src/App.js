@@ -1,12 +1,15 @@
 import './App.css';
 import React from 'react';
 import GameBoard from './components/gameboard.js';
+import EyeIcon from "./components/eyeIcon";
     const App = () => {
         return (
-
             <div>
-                <h1>Jeu des tours</h1>
                 <GameBoard/>
+                <EyeIcon direction="left" />
+                <EyeIcon direction="right" />
+                <EyeIcon direction="top" />
+                <EyeIcon direction="bottom" />
             </div>
         );
     }

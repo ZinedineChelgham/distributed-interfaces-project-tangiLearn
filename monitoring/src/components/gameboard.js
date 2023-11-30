@@ -9,7 +9,7 @@ const GameBoard = () => {
         const totalCells = 9;
 
         for (let i = 1; i <= totalCells; i++) {
-            cells.push(<div key={i} className="grid-item">{i}</div>);
+            cells.push(<div key={i} className="grid-item"></div>);
         }
 
         return cells;
