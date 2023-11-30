@@ -3,10 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './gameboard.css';
 
-const GameBoard = ({ gridSize }) => {
+const GameBoard = () => {
     const renderCells = () => {
         const cells = [];
-        const totalCells = gridSize * gridSize;
+        const totalCells = 9;
 
         for (let i = 1; i <= totalCells; i++) {
             cells.push(<div key={i} className="grid-item">{i}</div>);
@@ -16,7 +16,7 @@ const GameBoard = ({ gridSize }) => {
     }
 
     return (
-        <div className="grid-container" style={{ '--grid-size': gridSize }}>
+        <div className="grid-container">
             {renderCells()}
         </div>
     );
