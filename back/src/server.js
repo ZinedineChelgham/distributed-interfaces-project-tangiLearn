@@ -21,7 +21,7 @@ const app = express();
 app.use(express.json());
 
 // Registering routes
-app.use("/api/monitoring", monitoringRoutes);
+app.use("/api/front", monitoringRoutes);
 app.use("/api/pipe-game", pipeGameRoutes);
 app.use("/api/tower-game", towerGameRoutes);
 app.use("/api/teacher", teacherRoutes);
