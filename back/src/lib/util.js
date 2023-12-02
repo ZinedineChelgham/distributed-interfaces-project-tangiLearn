@@ -28,3 +28,18 @@ export const comparePassword = (password, hash) => {
     });
   });
 };
+
+export class PipeGameAction {
+  /**
+   * @param {"move" | "rotate"} type - The type of action. Note that a player can rotate a pipe and move it at the same time.
+   * @param {0|1|2|3} pipeType - The type of pipe to move. 0 = straight, 1 = elbow, 2 = t-shape, 3 = big.
+   * @param {{x:number,y:number}} position - The final position of the pipe after the player has released it.
+   * @param {0|90|180|270} rotation - The final rotation of the pipe after the player has released it.
+   */
+  constructor(type, pipeType, position, rotation) {
+    this.type = type;
+    this.pipeType = pipeType;
+    this.position = position;
+    this.rotation = rotation;
+  }
+}
