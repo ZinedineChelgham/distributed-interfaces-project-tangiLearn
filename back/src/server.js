@@ -8,9 +8,7 @@ import pupilRoutes from "./routes/pupils.js";
 import mongoose from "mongoose";
 
 // Connect to MongoDB
-mongoose.connect("mongodb://127.0.0.1:46902", {
-  useNewUrlParser: true,
-});
+mongoose.connect(process.env.MONGO_URL, {});
 
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
