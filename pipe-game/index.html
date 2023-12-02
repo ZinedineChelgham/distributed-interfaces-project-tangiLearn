@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slide Puzzle</title>
+    <link rel="stylesheet" href="index.css" />
+    <script type="module" src="index.js"></script>
+  </head>
+
+  <body>
+    <div id="game-container">
+      <div id="board"></div>
+      <div id="inventory">
+        <img
+          id="inv-pipe-curved"
+          class="pipe"
+          src="assets/images/pipeCurved.png"
+          alt="pipeCurved"
+          draggable="true"
+          data-pipeCat="1"
+        />
+        <img
+          id="inv-pipe-straight"
+          class="pipe"
+          src="assets/images/pipeStraight.png"
+          alt="pipeStraight"
+          draggable="true"
+          data-pipeCat="2"
+        />
+        <img
+          id="inv-pipe-t"
+          class="pipe"
+          src="assets/images/pipeTshape.png"
+          alt="pipeTshape"
+          draggable="true"
+          data-pipeCat="3"
+        />
+      </div>
+    </div>
+  </body>
+</html>
