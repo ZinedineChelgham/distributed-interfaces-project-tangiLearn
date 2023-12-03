@@ -3,39 +3,34 @@ import React, { useState } from 'react';
 import GameBoard from '../components/gameboard.js';
 import EyeIcon from "../components/eyeIcon";
 import styles from './new_game.css';
-
+import {useHistory} from "react-router-dom";
 
 const NewGame = () => {
+
     const [selectedValues, setSelectedValues] = useState(Array(12).fill(''));
-    const [gameId, setGameId] = useState('');
     const handleInputChange = (index, value) => {
         const newValues = [...selectedValues];
         newValues[index] = value;
         setSelectedValues(newValues);
     };
-    const { nanoid } = require('nanoid');
-
-    const generateGameId = () => {
-        // Générer un identifiant avec nanoid (longueur par défaut est 21)
-        return nanoid();
-    };
-
     const handleStartGame = () => {
         // Vérifiez que tous les champs sont remplis
         if (selectedValues.every(value => value.trim() !== '')) {
-            // Si la validation réussit, générez l'ID de partie (à ajuster selon votre logique)
-            const generatedGameId = generateGameId();
-            setGameId(generatedGameId);
-            console.log('ID de partie généré :', generatedGameId);
-
             // Envoyez les données au backend
             sendGameDataToBackend({
                 selectedValues: selectedValues,
-                gameId: generatedGameId
-            }).then(r => console.log(r));
-
-            console.log('Données envoyées avec succès!');
-        } else {
+            }).then(gameID => {
+                if (gameID) {
+                    console.log('Données envoyées avec succès!');
+                    console.log('ID de la partie :', gameID);
+                    // Redirigez l'utilisateur vers la page de jeu
+                    window.location.href = `/gamepage/${gameID}`;
+                } else {
+                    console.error('ID de la partie non valide ou manquant dans la réponse du backend.');
+                }
+            });
+        }
+        else {
             console.log('Veuillez remplir tous les champs.');
         }
     };
@@ -51,7 +46,8 @@ const NewGame = () => {
 
             if (response.ok) {
                 const responseData = await response.json();
-                console.log('Réponse du backend :', responseData);
+                console.log('id de la partie :', responseData.gameID);
+                return responseData.gameID;
             } else {
                 console.error('Erreur lors de la requête au backend :', response.statusText);
             }
@@ -117,8 +113,6 @@ const NewGame = () => {
                     ))}
                 </div>
             </div>
-
-
 
             {/* Bouton pour commencer le jeu */}
             <button onClick={handleStartGame}>Commencer le jeu</button>
