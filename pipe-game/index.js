@@ -30,6 +30,12 @@ function initGame() {
 }
 
 let pipeRotationTracker = {};
+let pipeCounts = {
+    1: 5,
+    2: 5,
+    3: 5,
+};
+
 
 function initBoard() {
     let board = document.getElementById("board");
@@ -51,7 +57,7 @@ function initBoard() {
                     clone.addEventListener("dragstart", function () {
                         draggedItem = clone;
                         setTimeout(() => {
-                            draggedItem.style.display = "flex";
+                            //draggedItem.style.display = "flex";
                         }, 0);
                     });
 
@@ -80,24 +86,26 @@ function initBoard() {
     }
 }
 
-function handleDrop(e) {
-    console.log(e);
-    var dt = e.dataTransfer
-    var img = dt.files
-}
-
-function preventDefaults(e) {
-    e.preventDefault()
-    e.stopPropagation()
-    console.log(e.srcElement.dataset.pipecat);
-}
 
 
 function initInventory() {
     const pipes = document.querySelectorAll(".pipe");
-    pipes.forEach(pipe => {
+    const inventoryItems = document.querySelectorAll(".inventory-item");
+    for (let i = 0; i < pipes.length; i++) {
+        const pipe = pipes[i];
+        const pipeCat = pipe.getAttribute("data-pipeCat");
+        const pipeCount = pipeCounts[pipeCat];
+        const countSpan = document.createElement("span");
+        countSpan.classList.add("pipeCount");
+        countSpan.textContent = `*${pipeCount || 0}`;
+        inventoryItems[i].appendChild(countSpan);
+
+
         pipe.addEventListener("dragstart", function () {
             draggedItem = pipe;
+            pipeCounts[pipeCat] = pipeCounts[pipeCat] - 1;
+            countSpan.textContent = `*${pipeCounts[pipeCat] || 0}`;
+            console.log(pipeCounts);
             setTimeout(() => {
                 //pipe.style.display = "none";
             }, 0);
@@ -109,6 +117,6 @@ function initInventory() {
                 draggedItem = null;
             }, 0);
         });
-    });
+    };
 
 }
