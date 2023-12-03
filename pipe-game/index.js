@@ -1,4 +1,5 @@
 import { TUIOManager } from "@dj256/tuiomanager";
+import { ImageElementWidget } from "@dj256/tuiomanager/widgets";
 
 const BOARD_WIDTH = 500;
 const BOARD_HEIGHT = 500;
@@ -10,19 +11,10 @@ const placeableImgsInRow = BOARD_WIDTH / IMAGES_WIDTH;
 const placeableImgsInCol = BOARD_HEIGHT / IMAGES_HEIGHT;
 
 
-window.onload = initGame;
-const tuioManager = new TUIOManager();
+new TUIOManager().start()
 
 
 let draggedItem = null;
-
-
-function initGame() {
-  initBoard();
-  initInventory();
-
-}
-
 let pipeRotationTracker = {};
 let pipeCounts = {
   1: 5,
@@ -30,10 +22,26 @@ let pipeCounts = {
   3: 5
 };
 
+let board = document.getElementById("board");
+
+initBoard();
+initInventory();
+
+
+const testImageWidget = new ImageElementWidget(
+  0,
+  0,
+  100,
+  100,
+  0,
+  1,
+  "./assets/images/pipeCurved.png"
+);
+
+testImageWidget.addTo(board)
+
 
 function initBoard() {
-  let board = document.getElementById("board");
-
   for (let i = 0; i < placeableImgsInRow; i++) {
     for (let j = 0; j < placeableImgsInCol; j++) {
       let cell = document.createElement("div");
