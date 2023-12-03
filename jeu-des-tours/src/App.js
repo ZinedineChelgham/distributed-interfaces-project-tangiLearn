@@ -1,17 +1,17 @@
 import './App.css';
 import React from 'react';
-import GameBoard from './components/gameboard.js';
-import EyeIcon from "./components/eyeIcon";
+import NewGame from './pages/new_game.js';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 const App = () => {
-  return (
-      <div>
-        <GameBoard/>
-        <EyeIcon direction="left" />
-        <EyeIcon direction="right" />
-        <EyeIcon direction="top" />
-        <EyeIcon direction="bottom" />
-      </div>
-  );
+    return (
+        <Router>
+            <div className="App">
+                    <Route path="/">
+                        <NewGame />
+                    </Route>
+            </div>
+        </Router>
+    );
 }
 
 export default App;

@@ -1,33 +1,29 @@
 .eye-icon {
-    font-size: 24px;
     position: absolute;
-    width: 24px; /* Assurez-vous d'ajuster la largeur et la hauteur en fonction de vos images */
-    height: 24px;
-    display: flex;
+    width: 10vw;
+    height: 10vh;
     align-items: center;
-    justify-content: center;
 }
 
 .eye-icon-left {
     left: 18%;
-    top: 50%;
-    transform: translateY(-50%); /* Rotation de -90 degrés pour l'orientation vers la gauche */
+    top: 37%;
 }
 
 .eye-icon-right {
-    right: 25%;
-    top: 50%;
-    transform: translateY(-50%) rotate(-180deg); /* Rotation de 90 degrés pour l'orientation vers la droite */
+    right: 35%;
+    top: 35%;
+    transform:rotate(-180deg);
 }
 
 .eye-icon-top {
     top: 10%;
-    left: 46%;
-    transform: translateX(-50%) rotate(90deg); /* Pas de rotation pour l'orientation vers le haut */
+    left: 36%;
+    transform: rotate(90deg);
 }
 
 .eye-icon-bottom {
-    bottom: 8%;
-    left: 46%;
-    transform: translateX(-50%) rotate(-90deg); /* Rotation de 180 degrés pour l'orientation vers le bas */
+    bottom: 25%;
+    left: 36%;
+    transform: rotate(-90deg);
 }
