@@ -37,7 +37,7 @@ const NewGame = () => {
     };
     const sendGameDataToBackend = async (data) => {
         try {
-            const response = await fetch('/tower-game/start-game', {
+            const response = await fetch(`/api/tower-game/start-game`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
