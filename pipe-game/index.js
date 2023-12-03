@@ -49,7 +49,7 @@ function initBoard() {
                     clone.addEventListener("dragstart", function () {
                         draggedItem = clone;
                         setTimeout(() => {
-                            draggedItem.style.display = "block";
+                            draggedItem.style.display = "flex";
                         }, 0);
                     });
 
