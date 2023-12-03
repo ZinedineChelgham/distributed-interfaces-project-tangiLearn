@@ -5,14 +5,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "vite build",
     "serve": "vite preview"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dj256/tuiomanager": "^1.5.0",
+    "@dj256/tuiomanager": "^1.5.4",
     "vite": "^5.0.4"
   }
 }
