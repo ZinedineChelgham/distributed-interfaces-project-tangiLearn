@@ -1,9 +1,4 @@
-// Import TUIOManager
-//import TUIOManager from './tuiomanager/core/TUIOManager';
-//import ImageElementWidget from './tuiomanager/widgets/ElementWidget/ImageElementWidget/ImageElementWidget';
-/* * TUIOManager starter * */
-// const tuioManager = new TUIOManager();
-// tuioManager.start();
+import { TUIOManager } from "@dj256/tuiomanager";
 
 const BOARD_WIDTH = 500;
 const BOARD_HEIGHT = 500;
@@ -16,7 +11,7 @@ const placeableImgsInCol = BOARD_HEIGHT / IMAGES_HEIGHT;
 
 
 window.onload = initGame;
-
+const tuioManager = new TUIOManager();
 
 
 let draggedItem = null;
