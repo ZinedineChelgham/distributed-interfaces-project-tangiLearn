@@ -29,6 +29,8 @@ function initGame() {
 
 }
 
+let pipeRotationTracker = {};
+
 function initBoard() {
     let board = document.getElementById("board");
 
@@ -61,6 +63,14 @@ function initBoard() {
                             draggedItem = null;
                         }, 0);
                     });
+
+                    clone.addEventListener("click", function (e) {
+                        let curAngle = pipeRotationTracker[clone] || 0;
+                        curAngle += 90;
+                        clone.style.transition = "transform 0.4s ease"; // Adding transition to the transform property
+                        clone.style.transform = "rotate(" + curAngle + "deg)";
+                        pipeRotationTracker[clone] = curAngle;
+                    })
 
                     cell.appendChild(clone);
                 }
