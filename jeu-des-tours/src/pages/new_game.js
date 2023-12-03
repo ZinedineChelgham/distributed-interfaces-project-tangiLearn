@@ -6,15 +6,54 @@ import styles from './new_game.css';
 
 const NewGame = () => {
     const [selectedValues, setSelectedValues] = useState(Array(12).fill(''));
-
+    const [gameId, setGameId] = useState('');
     const handleInputChange = (index, value) => {
         const newValues = [...selectedValues];
         newValues[index] = value;
         setSelectedValues(newValues);
     };
+    const generateGameId = () => {
+        const { v4: uuidv4 } = require('uuid');
+        return uuidv4();
+    };
 
     const handleStartGame = () => {
-        console.log('Valeurs choisies :', selectedValues);
+        // Vérifiez que tous les champs sont remplis
+        if (selectedValues.every(value => value.trim() !== '')) {
+            // Si la validation réussit, générez l'ID de partie (à ajuster selon votre logique)
+            const generatedGameId = generateGameId();
+            setGameId(generatedGameId);
+
+            // Envoyez les données au backend
+            sendGameDataToBackend({
+                selectedValues: selectedValues,
+                gameId: generatedGameId
+            }).then(r => console.log(r));
+
+            console.log('Données envoyées avec succès!');
+        } else {
+            console.log('Veuillez remplir tous les champs.');
+        }
+    };
+    const sendGameDataToBackend = async (data) => {
+        try {
+            const response = await fetch('/tower-game/start-game', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log('Réponse du backend :', responseData);
+            } else {
+                console.error('Erreur lors de la requête au backend :', response.statusText);
+            }
+        } catch (error) {
+            console.error('Erreur lors de l\'envoi des données au backend :', error);
+        }
     };
 
     return (
