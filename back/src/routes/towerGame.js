@@ -1,8 +1,8 @@
 import express from "express";
 import { TowerGame } from "../model/towerGame.js";
 
-
 const router = express.Router();
+
 
 // Endpoint pour recevoir les données du frontend
 router.post("/start-game", async (req, res) => {
@@ -10,13 +10,13 @@ router.post("/start-game", async (req, res) => {
     const { selectedValues, gameId } = req.body;
 
     // Enregistrez les données dans la base de données
-    const TowerGame = new TowerGame({
+    const TowerGameInstance = new TowerGame({
       selectedValues,
       gameId,
     });
 
-    await TowerGame.save();
-    console.log("Données enregistrées avec succès :", TowerGame);
+    await TowerGameInstance.save();
+    console.log("Données enregistrées avec succès :", TowerGameInstance);
     res.status(200).json({ success: true, message: "Données enregistrées avec succès." });
   } catch (error) {
     console.error("Erreur lors de l'enregistrement des données :", error);

@@ -4,6 +4,7 @@ import GameBoard from '../components/gameboard.js';
 import EyeIcon from "../components/eyeIcon";
 import styles from './new_game.css';
 
+
 const NewGame = () => {
     const [selectedValues, setSelectedValues] = useState(Array(12).fill(''));
     const [gameId, setGameId] = useState('');
@@ -12,9 +13,11 @@ const NewGame = () => {
         newValues[index] = value;
         setSelectedValues(newValues);
     };
+    const { nanoid } = require('nanoid');
+
     const generateGameId = () => {
-        const { v4: uuidv4 } = require('uuid');
-        return uuidv4();
+        // Générer un identifiant avec nanoid (longueur par défaut est 21)
+        return nanoid();
     };
 
     const handleStartGame = () => {
@@ -23,6 +26,7 @@ const NewGame = () => {
             // Si la validation réussit, générez l'ID de partie (à ajuster selon votre logique)
             const generatedGameId = generateGameId();
             setGameId(generatedGameId);
+            console.log('ID de partie généré :', generatedGameId);
 
             // Envoyez les données au backend
             sendGameDataToBackend({
@@ -37,7 +41,7 @@ const NewGame = () => {
     };
     const sendGameDataToBackend = async (data) => {
         try {
-            const response = await fetch(`/api/tower-game/start-game`, {
+            const response = await fetch(`http://127.0.0.1:3000/api/tower-game/start-game`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

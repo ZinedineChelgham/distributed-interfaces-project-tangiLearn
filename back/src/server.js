@@ -6,6 +6,7 @@ import towerGameRoutes from "./routes/towerGame.js";
 import teacherRoutes from "./routes/teachers.js";
 import pupilRoutes from "./routes/pupils.js";
 import mongoose from "mongoose";
+import cors from "cors";
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL, {});
@@ -19,6 +20,8 @@ const app = express();
 
 // Allow Express to understand JSON
 app.use(express.json());
+app.use(cors());
+
 
 // Registering routes
 app.use("/api/front", monitoringRoutes);
