@@ -128,7 +128,7 @@ function initInventory() {
 
   const pipes = [
     new ImageElementWidget(
-      1000,
+      800,
       600,
       IMAGES_WIDTH,
       IMAGES_HEIGHT,
@@ -137,7 +137,7 @@ function initInventory() {
       "./assets/images/pipeCurved.png"
     ),
     new ImageElementWidget(
-      750,
+      550,
       600,
       IMAGES_WIDTH,
       IMAGES_HEIGHT,
@@ -146,7 +146,7 @@ function initInventory() {
       "./assets/images/pipeStraight.png"
     ),
     new ImageElementWidget(
-      500,
+      300,
       600,
       IMAGES_WIDTH,
       IMAGES_HEIGHT,
@@ -166,7 +166,6 @@ function initInventory() {
     // })
     pipe.onTagCreation((tuioTag) => {
       pipe.domElem.get(0).classList.add(`drag-${tuioTag.id}`);
-      pipe.domElem.get(0).classList.add(`dragged`);
       let pipeCat;
       pipe.domElem.get(0).classList.forEach((className) => {
         if (className.startsWith("pipe-cat-")) {
@@ -205,7 +204,6 @@ function initInventory() {
       pipe.domElem.get(0).style.top = cellY+"px";
 
       pipe.domElem.get(0).classList.remove(`drag-${tuioTagId}`);
-      pipe.domElem.get(0).classList.remove(`dragged`);
       let pipeCat;
       pipe.domElem.get(0).classList.forEach((className) => {
         if (className.startsWith("pipe-cat-")) {
