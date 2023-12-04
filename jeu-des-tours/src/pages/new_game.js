@@ -4,8 +4,14 @@ import GameBoard from '../components/gameboard.js';
 import EyeIcon from "../components/eyeIcon";
 import styles from './new_game.css';
 import {useHistory} from "react-router-dom";
+import {useEffect} from "react";
 
 const NewGame = () => {
+    const generateEmptyBoard = () => {
+        const emptyBoard = Array.from({ length: 3 }, () => Array(3).fill(0));
+        return emptyBoard;
+    };
+    const [gameState, setGameState] = useState(generateEmptyBoard());
     const { nanoid } = require('nanoid');
     function generateGameID() {
         return nanoid(8);
@@ -18,6 +24,8 @@ const NewGame = () => {
         newValues[index] = value;
         setSelectedValues(newValues);
     };
+    const initialGameState = Array.from({ length: 3 }, () => Array(3).fill(0));
+
     const handleStartGame = () => {
         // Vérifiez que tous les champs sont remplis
         if (selectedValues.every(value => value.trim() !== '')) {
@@ -29,12 +37,13 @@ const NewGame = () => {
             sendGameDataToBackend({
                 selectedValues: selectedValues,
                 gameId: generatedGameId,
+                state_game: initialGameState,
             }).then(r => {
                 console.log(r);
                 console.log('Données envoyées avec succès!');
 
                 // Redirigez l'utilisateur vers la page de jeu
-                window.location.href = `/gamepage/${generatedGameId}`;
+                window.location.href = `/gamepage?id=${generatedGameId}`;
             }).catch(error => {
                 console.error('Erreur lors de la requête au backend :', error);
             });
@@ -126,7 +135,7 @@ const NewGame = () => {
             {/* Bouton pour commencer le jeu */}
             <button onClick={handleStartGame}>Commencer le jeu</button>
             {/* Grille de jeu */}
-            <GameBoard />
+            <GameBoard stateGame={gameState} />
             {/* Autres composants */}
             {/*<EyeIcon direction="left" />
             <EyeIcon direction="right" />

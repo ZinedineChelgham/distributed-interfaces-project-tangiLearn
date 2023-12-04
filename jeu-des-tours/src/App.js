@@ -14,7 +14,7 @@ const App = () => {
                     <Route path="/startgame">
                         <NewGame />
                     </Route>
-                <Route path="/gamepage/:id">
+                <Route path="/gamepage">
                     <GamePage />
                 </Route>
                 </Switch>

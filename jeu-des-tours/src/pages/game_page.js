@@ -1,27 +1,38 @@
 import GameBoard from '../components/gameboard.js';
 import EyeIcon from "../components/eyeIcon";
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useParams } from 'react-router-dom';
 
 function GamePage() {
-    const id = useParams();
+    const queryParameters = new URLSearchParams(window.location.search)
+    const [gameData, setGameData] = React.useState(null);
+    const [values, setValues] = React.useState(null);
+    const [state_game, setState_game] = React.useState(null);
+    const id = queryParameters.get("id");
     function getGameData() {
         fetch(`http://localhost:3000/api/tower-game/get-game-data/${id}`)
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => {
+                console.log(data);
+                setGameData(data);
+                setValues(data.gameData.selectedValues);
+                setState_game(data.gameData.state_game);
+            })
             .catch(error => console.log(error));
+
     }
-    const values = getGameData();
+
+    useEffect(() => {
+        getGameData();
+    }, []);
+
     return (
         <div>
             <h1>Game Page</h1>
             <p>Game ID: {id}</p>
             <p>Values: {values}</p>
-            <GameBoard/>
-            <EyeIcon direction="left" />
-            <EyeIcon direction="right" />
-            <EyeIcon direction="top" />
-            <EyeIcon direction="bottom" />
+            <p>State: {state_game}</p>
+            <GameBoard stateGame={state_game}/>
         </div>
     );
 }
