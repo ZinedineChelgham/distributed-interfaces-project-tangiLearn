@@ -31,15 +31,32 @@ initInventory();
 const testImageWidget = new ImageElementWidget(
   0,
   0,
-  100,
-  100,
+  IMAGES_WIDTH,
+  IMAGES_HEIGHT,
   0,
   1,
   "./assets/images/pipeCurved.png"
 );
 
 testImageWidget.addTo(board)
+testImageWidget.onTouchCreation((touch) => {
+  console.log("touch creation");
+})
+testImageWidget.onTouchDeletion((touch) => {
+  console.log("touch deletion");
+})
 
+testImageWidget.onTagCreation((tag) => {
+  console.log("tag creation");
+})
+
+testImageWidget.onTagDeletion((tag) => {
+  console.log("tag deletion");
+})
+
+testImageWidget.onTagUpdate((tag) => {
+  console.log("tag update");
+})
 
 function initBoard() {
   for (let i = 0; i < placeableImgsInRow; i++) {
@@ -107,7 +124,6 @@ function initInventory() {
     countSpan.classList.add("pipeCount");
     countSpan.textContent = `*${pipeCount || 0}`;
     inventoryItems[i].appendChild(countSpan);
-
 
     pipe.addEventListener("dragstart", function() {
       draggedItem = pipe;
