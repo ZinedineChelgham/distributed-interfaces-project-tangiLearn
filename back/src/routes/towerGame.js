@@ -5,21 +5,24 @@ const router = express.Router();
 
 
 // Endpoint pour recevoir les données du frontend
+// Endpoint pour recevoir les données du frontend
 router.post("/start-game", async (req, res) => {
   try {
-    const { selectedValues } = req.body;
-
+    const { selectedValues, gameId } = req.body;
     // Enregistrez les données dans la base de données
-    const newGame = new TowerGame({ selectedValues });
-    const savedGame = await newGame.save();
+      const TowerGameInstance = new TowerGame({
+        selectedValues,
+        gameId,
+      });
+      await TowerGameInstance.save();
+      console.log("Données enregistrées avec succès :", TowerGameInstance);
+      res.status(200).json({ success: true, message: "Données enregistrées avec succès." });
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement des données :", error);
+      res.status(500).json({ success: false, message: "Erreur lors de l'enregistrement des données." });
+    }
+  });
 
-    // Renvoyez l'ID généré au front-end
-    res.status(200).json({ success: true, gameID: savedGame._id.toString() });
-  } catch (error) {
-    console.error("Erreur lors du démarrage d'une nouvelle partie :", error);
-    res.status(500).json({ success: false, message: "Erreur lors du démarrage d'une nouvelle partie." });
-  }
-});
 router.get("/get-game-data/:id", async (req, res) => {
   try {
     // Récupérez l'ID à partir des paramètres de l'URL

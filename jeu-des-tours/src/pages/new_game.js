@@ -6,8 +6,13 @@ import styles from './new_game.css';
 import {useHistory} from "react-router-dom";
 
 const NewGame = () => {
-
+    const { nanoid } = require('nanoid');
+    function generateGameID() {
+        return nanoid(8);
+    }
     const [selectedValues, setSelectedValues] = useState(Array(12).fill(''));
+    const [gameId, setGameId] = useState('');
+
     const handleInputChange = (index, value) => {
         const newValues = [...selectedValues];
         newValues[index] = value;
@@ -16,24 +21,28 @@ const NewGame = () => {
     const handleStartGame = () => {
         // Vérifiez que tous les champs sont remplis
         if (selectedValues.every(value => value.trim() !== '')) {
+            const generatedGameId = generateGameID();
+            setGameId(generatedGameId);
+            console.log('ID de partie généré :', generatedGameId);
+
             // Envoyez les données au backend
             sendGameDataToBackend({
                 selectedValues: selectedValues,
-            }).then(gameID => {
-                if (gameID) {
-                    console.log('Données envoyées avec succès!');
-                    console.log('ID de la partie :', gameID);
-                    // Redirigez l'utilisateur vers la page de jeu
-                    window.location.href = `/gamepage/${gameID}`;
-                } else {
-                    console.error('ID de la partie non valide ou manquant dans la réponse du backend.');
-                }
+                gameId: generatedGameId,
+            }).then(r => {
+                console.log(r);
+                console.log('Données envoyées avec succès!');
+
+                // Redirigez l'utilisateur vers la page de jeu
+                window.location.href = `/gamepage/${generatedGameId}`;
+            }).catch(error => {
+                console.error('Erreur lors de la requête au backend :', error);
             });
-        }
-        else {
+        } else {
             console.log('Veuillez remplir tous les champs.');
         }
     };
+
     const sendGameDataToBackend = async (data) => {
         try {
             const response = await fetch(`http://127.0.0.1:3000/api/tower-game/start-game`, {
@@ -46,8 +55,8 @@ const NewGame = () => {
 
             if (response.ok) {
                 const responseData = await response.json();
-                console.log('id de la partie :', responseData.gameID);
-                return responseData.gameID;
+                console.log('Réponse du backend :', responseData);
+
             } else {
                 console.error('Erreur lors de la requête au backend :', response.statusText);
             }
