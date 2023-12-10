@@ -1,11 +1,21 @@
 import express from "express";
 import { TowerGame } from "../model/towerGame.js";
-
+import { WebSocketServer } from 'ws';
+import WebSocket from 'ws';
+const app = express();
+import cors from "cors";
+import bodyParser from "body-parser";
 const router = express.Router();
+const wss = new WebSocketServer({ port: 8080 });
+app.use(cors());
 
+app.use(bodyParser.json());
+// Exemple de gestion de la connexion WebSocket
+wss.on('listening', () => console.log('Server listening on port 8080'));
 
-// Endpoint pour recevoir les données du frontend
-// Endpoint pour recevoir les données du frontend
+wss.on('connection', (ws) => {
+  console.log('Client connected to WebSocket server');
+});
 router.post("/start-game", async (req, res) => {
   try {
     const { selectedValues, gameId,state_game } = req.body;
@@ -23,6 +33,7 @@ router.post("/start-game", async (req, res) => {
       res.status(500).json({ success: false, message: "Erreur lors de l'enregistrement des données." });
     }
   });
+
 
 router.get("/get-game-data/:id", async (req, res) => {
   try {
@@ -66,7 +77,12 @@ router.post('/update-data/:id', async (req, res) => {
     console.log('Données de jeu mises à jour :', game);
     // Sauvegardez les modifications dans la base de données
     await game.save();
-
+    // Envoyez les données mises à jour à tous les clients WebSocket connectés
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ gameId, row, col, action }));
+      }
+    });
     res.status(200).json({ success: true, message: 'Données mises à jour avec succès.' });
   } catch (error) {
     console.error('Erreur lors de la mise à jour des données du jeu :', error);

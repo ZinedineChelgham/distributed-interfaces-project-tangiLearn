@@ -1,5 +1,5 @@
 // GameBoard.js
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './gameboard.css';
 
 const GameBoard = () => {
@@ -44,7 +44,6 @@ const GameBoard = () => {
             console.error('Erreur lors de la mise à jour des données au backend :', error);
         }
     };
-
     const renderCells = () => {
             return cellValues.map((value, index) => (
                 <div key={index} className="grid-item">
@@ -60,6 +59,7 @@ const GameBoard = () => {
     return (
         <div className="grid-container">
             {renderCells()}
+            <button> WebSocket test</button>
         </div>
     );
 }

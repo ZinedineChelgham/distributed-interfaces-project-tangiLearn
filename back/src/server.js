@@ -29,9 +29,9 @@ app.use("/api/pipe-game", pipeGameRoutes);
 app.use("/api/tower-game", towerGameRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/pupil", pupilRoutes);
-
 // Serve at localhost:3000
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
