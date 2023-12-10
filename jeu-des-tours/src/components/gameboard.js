@@ -39,7 +39,7 @@ const GameBoard = () => {
         // Supprimez la classe après 3 secondes pour arrêter l'animation
         setTimeout(() => {
             cellElement.classList.remove('shining');
-        }, 3000);
+        }, 5000);
     };
 
 
