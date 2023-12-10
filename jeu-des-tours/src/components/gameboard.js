@@ -1,6 +1,7 @@
 // GameBoard.js
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './gameboard.css';
+const socket = new WebSocket('ws://localhost:8080/connection');
 
 const GameBoard = () => {
     const [cellValues, setCellValues] = useState(Array(9).fill(0));
@@ -23,6 +24,49 @@ const GameBoard = () => {
         const col = index % 3; // Obtenez la colonne en prenant le reste de la division par la largeur de la grille
         return { row, col };
     };
+    const convertCoordinatesToIndex = (column, row) => {
+        const totalColumns = 3; // Le nombre total de colonnes dans votre grille
+        return row * totalColumns + column;
+    };
+    // Fonction pour faire briller la case correspondante
+    const shineCell = (column, row) => {
+        const index = convertCoordinatesToIndex(column, row);
+
+        // Ajoutez une classe spéciale pour déclencher l'animation
+        const cellElement = document.getElementById(`cell-${index}`);
+        cellElement.classList.add('shining');
+
+        // Supprimez la classe après 3 secondes pour arrêter l'animation
+        setTimeout(() => {
+            cellElement.classList.remove('shining');
+        }, 3000);
+    };
+
+
+    // Fonction ping pour traiter les messages reçus
+    const ping = (event) => {
+        try {
+            // Extrait les valeurs de colonne et de ligne du message
+            const match = event.data.match(/column:(\d+); row:(\d+); action:\d+/);
+
+            // Vérifie si le match a réussi
+            if (match) {
+                const column = parseInt(match[1], 10); // Convertit la valeur de colonne en nombre entier
+                const row = parseInt(match[2], 10);    // Convertit la valeur de ligne en nombre entier
+
+                // Appelez la fonction ping avec les coordonnées reçues
+                shineCell(column, row);
+            } else {
+                console.log('Le message ne correspond pas au format attendu');
+            }
+        } catch (error) {
+            console.error('Erreur lors de l\'analyse du message :', error);
+        }
+    };
+
+    // Écoutez les mises à jour du backend
+    socket.addEventListener('message', ping);
+
     const updateGameData = async (index, action) => {
         const { row, col } = convertIndexToCoordinates(index);
         const gameId = new URLSearchParams(window.location.search).get('id');
@@ -46,7 +90,7 @@ const GameBoard = () => {
     };
     const renderCells = () => {
             return cellValues.map((value, index) => (
-                <div key={index} className="grid-item">
+                <div key={index}  id={`cell-${index}`} className="grid-item">
                     <button onClick={() => handleDecrement(index)}>-</button>
                     <span>{value}</span>
                     <button onClick={() => handleIncrement(index)}>+</button>
@@ -59,7 +103,6 @@ const GameBoard = () => {
     return (
         <div className="grid-container">
             {renderCells()}
-            <button> WebSocket test</button>
         </div>
     );
 }

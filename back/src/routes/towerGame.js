@@ -13,8 +13,23 @@ app.use(bodyParser.json());
 // Exemple de gestion de la connexion WebSocket
 wss.on('listening', () => console.log('Server listening on port 8080'));
 
+// Exemple de gestion de la connexion WebSocket
 wss.on('connection', (ws) => {
   console.log('Client connected to WebSocket server');
+  ws.on('message', (message) => {
+    console.log('Received message:', message.toString());
+
+    // Envoyez une réponse au client
+    ws.send('Message received by the server');
+
+    // Envoyez le message à tous les clients connectés (broadcast)
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN && client !== ws) {
+        // Envoyez le message reçu du casque AR à tous les clients
+        client.send(message.toString());
+      }
+    });
+  });
 });
 router.post("/start-game", async (req, res) => {
   try {
@@ -58,7 +73,7 @@ router.get("/get-game-data/:id", async (req, res) => {
 });
 router.post('/update-data/:id', async (req, res) => {
   try {
-    const { gameId, row, col, action } = req.body;
+    let { gameId, row, col, action } = req.body;
 
     // Recherchez la partie dans la base de données par gameId
     const game = await TowerGame.findOne({ gameId: gameId });
@@ -78,9 +93,11 @@ router.post('/update-data/:id', async (req, res) => {
     // Sauvegardez les modifications dans la base de données
     await game.save();
     // Envoyez les données mises à jour à tous les clients WebSocket connectés
+    if(action === 'increment') action = 1;
+    else if(action === 'decrement') action = -1;
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ gameId, row, col, action }));
+        client.send(JSON.stringify({ origin: 'backend', row, col, action }));
       }
     });
     res.status(200).json({ success: true, message: 'Données mises à jour avec succès.' });
@@ -89,4 +106,25 @@ router.post('/update-data/:id', async (req, res) => {
     res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour des données du jeu.' });
   }
 });
-export default router;
+router.post('/ping', async (req, res) => {
+  try {
+    const { row, col, action } = req.body;
+
+    // Recherchez la partie dans la base de données par gameId
+    const game = await TowerGame.findOne({ gameId: gameId });
+
+    // Vérifiez si la partie existe
+    if (!game) {
+      return res.status(404).json({ success: false, message: 'Partie non trouvée.' });
+    }
+
+    // Vous pouvez traiter les données de ping ici
+    console.log('Ping received:', {row, col, action });
+
+    // Répondez avec succès
+    res.status(200).json({ success: true, message: 'Ping reçu avec succès.' });
+  } catch (error) {
+    console.error('Erreur lors de la gestion du ping :', error);
+    res.status(500).json({ success: false, message: 'Erreur lors de la gestion du ping.' });
+  }
+});export default router;

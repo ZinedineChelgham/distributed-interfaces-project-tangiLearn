@@ -31,3 +31,17 @@ button:last-child {
     left: auto;
     right: 5px;
 }
+/* Ajoutez cette classe pour déclencher l'animation */
+.shining {
+    animation: blinkAnimation 1s infinite;
+}
+
+/* Définissez l'animation elle-même */
+@keyframes blinkAnimation {
+    0%, 100% {
+        background-color: initial; /* Couleur d'arrière-plan par défaut */
+    }
+    50% {
+        background-color: blue; /* Couleur d'arrière-plan pendant le clignotement */
+    }
+}

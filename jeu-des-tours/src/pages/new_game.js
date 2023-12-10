@@ -135,7 +135,6 @@ const NewGame = () => {
             {/* Bouton pour commencer le jeu */}
             <button onClick={handleStartGame}>Commencer le jeu</button>
             {/* Grille de jeu */}
-            <GameBoard stateGame={gameState} />
             {/* Autres composants */}
             {/*<EyeIcon direction="left" />
             <EyeIcon direction="right" />
