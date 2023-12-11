@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dj256/tuiomanager": "^1.5.8",
+    "@dj256/tuiomanager": "^1.5.11",
     "vite": "^5.0.4"
   }
 }

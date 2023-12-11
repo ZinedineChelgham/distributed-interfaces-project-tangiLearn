@@ -1,8 +1,8 @@
 import { TUIOManager } from "@dj256/tuiomanager";
 import { ImageElementWidget } from "@dj256/tuiomanager/widgets";
 
-const BOARD_WIDTH = 500;
-const BOARD_HEIGHT = 500;
+const BOARD_WIDTH = 1400;
+const BOARD_HEIGHT = 800;
 
 const IMAGES_WIDTH = 100;
 const IMAGES_HEIGHT = 100;
@@ -10,8 +10,11 @@ const IMAGES_HEIGHT = 100;
 const placeableImgsInRow = BOARD_WIDTH / IMAGES_WIDTH;
 const placeableImgsInCol = BOARD_HEIGHT / IMAGES_HEIGHT;
 
+const inventoryWidth = (1920 - BOARD_WIDTH) / 2;
 
-new TUIOManager().start();
+let gameContainer = document.getElementById("game-container");
+const gameContainerBoundingRect = gameContainer.getBoundingClientRect();
+new TUIOManager(gameContainer).start();
 
 
 let draggedItem = null;
@@ -22,14 +25,9 @@ let pipeCounts = {
 };
 
 let board = document.getElementById("board");
+board.style.width = BOARD_WIDTH + "px";
+board.style.height = BOARD_HEIGHT + "px";
 let cells = [];
-
-for (let i = 0; i < 25; i++) {
-  const cell = document.createElement("div");
-  cell.classList.add("cell");
-  board.append(cell);
-  cells.push(cell);
-}
 
 initInventory();
 
@@ -89,6 +87,16 @@ function initBoard() {
   }
 }
 
+for (let i = 0; i < BOARD_WIDTH / IMAGES_WIDTH; i++) {
+  for (let j = 0; j < BOARD_HEIGHT / IMAGES_HEIGHT; j++) {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.style.width = IMAGES_WIDTH + "px";
+    cell.style.height = IMAGES_HEIGHT + "px";
+    board.append(cell);
+    cells.push(cell);
+  }
+}
 
 function getCategory(pipe) {
   let pipeCat;
@@ -102,8 +110,8 @@ function getCategory(pipe) {
 
 function getNewCurvedPipe() {
   const pipe = new ImageElementWidget(
-    800,
-    600,
+    inventoryWidth/2 + gameContainerBoundingRect.left - IMAGES_WIDTH/2,
+    300,
     IMAGES_WIDTH,
     IMAGES_HEIGHT,
     0,
@@ -118,8 +126,8 @@ function getNewCurvedPipe() {
 
 function getNewStraightPipe() {
   const pipe = new ImageElementWidget(
-    550,
-    600,
+    inventoryWidth/2 + gameContainerBoundingRect.left - IMAGES_WIDTH/2,
+    500,
     IMAGES_WIDTH,
     IMAGES_HEIGHT,
     0,
@@ -134,8 +142,8 @@ function getNewStraightPipe() {
 
 function getNewTShapePipe() {
   const pipe = new ImageElementWidget(
-    300,
-    600,
+    inventoryWidth/2 + gameContainerBoundingRect.left - IMAGES_WIDTH/2,
+    750,
     IMAGES_WIDTH,
     IMAGES_HEIGHT,
     0,
