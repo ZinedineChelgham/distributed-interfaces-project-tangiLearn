@@ -21,6 +21,8 @@ export class PipeElementWidget extends ImageElementWidget {
         break;
     }
     super(x, y, 100, 100, 0, 1, src);
+    this.tagFirstPosition = { x: 0, y: 0 }
+    this.tagOffset = { x: 0, y: 0 }
     this.category = category
     this.angle = 0
     this.tagCurrentAngle = 0

@@ -75,12 +75,24 @@ function addPipeListeners(pipe) {
   pipe.onTagCreation((tuioTag) => {
     pipe.domElem.get(0).classList.add(`drag-${tuioTag.id}`);
     pipe.tagCurrentAngle = tuioTag.angle;
+    const pipeX = pipe.domElem.get(0).style.left.replace("px", "");
+    const pipeY = pipe.domElem.get(0).style.top.replace("px", "");
+    pipe.tagOffset = {
+      x: pipeX - tuioTag.x,
+      y: pipeY - tuioTag.y
+    };
+    pipe.tagFirstPosition = {
+      x: tuioTag.x,
+      y: tuioTag.y
+    };
     console.log(pipeCounts);
   });
 
   pipe.onTagUpdate((tuioTag) => {
-    pipe.domElem.get(0).style.left = `${tuioTag.x}px`;
-    pipe.domElem.get(0).style.top = `${tuioTag.y}px`;
+    if (Math.sqrt(Math.pow(Math.abs(pipe.tagFirstPosition.x - tuioTag.x), 2) + Math.pow(Math.abs(pipe.tagFirstPosition.y - tuioTag.y), 2)) > 50) {
+      pipe.domElem.get(0).style.left = `${tuioTag.x + pipe.tagOffset.x}px`;
+      pipe.domElem.get(0).style.top = `${tuioTag.y + pipe.tagOffset.y}px`;
+    }
     if (tuioTag.angle !== pipe.tagCurrentAngle) {
       pipe.domElem.get(0).style.transform = `rotate(${tuioTag.angle * 180 / Math.PI}deg)`;
       pipe.angle = tuioTag.angle;
@@ -111,8 +123,7 @@ function addPipeListeners(pipe) {
     console.log(pipeCounts);
     switch (pipe.category) {
       case "curved":
-        if (pipeCounts[pipe.category] > 0)
-          getNewCurvedPipe();
+        getNewCurvedPipe();
         break;
       case "straight":
         getNewStraightPipe();
