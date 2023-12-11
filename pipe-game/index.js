@@ -116,7 +116,7 @@ function getNewCurvedPipe() {
     IMAGES_HEIGHT,
     0,
     1,
-    "./assets/images/pipeCurved.png"
+    "./assets/images/pipe_curved.svg"
   );
   pipe.addTo(board);
   pipe.domElem.get(0).classList.add("pipe-cat-1");
@@ -132,7 +132,7 @@ function getNewStraightPipe() {
     IMAGES_HEIGHT,
     0,
     1,
-    "./assets/images/pipeStraight.png"
+    "./assets/images/pipe_straight.svg"
   );
   pipe.addTo(board);
   pipe.domElem.get(0).classList.add("pipe-cat-2");
@@ -148,7 +148,7 @@ function getNewTShapePipe() {
     IMAGES_HEIGHT,
     0,
     1,
-    "./assets/images/pipeTshape.png"
+    "./assets/images/pipe_t_shape.svg"
   );
   pipe.addTo(board);
   pipe.domElem.get(0).classList.add("pipe-cat-3");
