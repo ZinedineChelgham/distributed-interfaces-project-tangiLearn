@@ -1,5 +1,5 @@
 import { TUIOManager } from "@dj256/tuiomanager";
-import { ImageElementWidget } from "@dj256/tuiomanager/widgets";
+import { PipeElementWidget } from "./src/pipeElementWidget.js";
 
 const BOARD_WIDTH = 1400;
 const BOARD_HEIGHT = 800;
@@ -109,7 +109,7 @@ function getCategory(pipe) {
 }
 
 function getNewCurvedPipe() {
-  const pipe = new ImageElementWidget(
+  const pipe = new PipeElementWidget(
     inventoryWidth/2 + gameContainerBoundingRect.left - IMAGES_WIDTH/2,
     300,
     IMAGES_WIDTH,
@@ -125,7 +125,7 @@ function getNewCurvedPipe() {
 }
 
 function getNewStraightPipe() {
-  const pipe = new ImageElementWidget(
+  const pipe = new PipeElementWidget(
     inventoryWidth/2 + gameContainerBoundingRect.left - IMAGES_WIDTH/2,
     500,
     IMAGES_WIDTH,
@@ -141,7 +141,7 @@ function getNewStraightPipe() {
 }
 
 function getNewTShapePipe() {
-  const pipe = new ImageElementWidget(
+  const pipe = new PipeElementWidget(
     inventoryWidth/2 + gameContainerBoundingRect.left - IMAGES_WIDTH/2,
     750,
     IMAGES_WIDTH,
@@ -159,15 +159,19 @@ function getNewTShapePipe() {
 function addPipeListeners(pipe) {
   pipe.onTagCreation((tuioTag) => {
     pipe.domElem.get(0).classList.add(`drag-${tuioTag.id}`);
+    pipe.tagCurrentAngle = tuioTag.angle;
     console.log(pipeCounts);
-    setTimeout(() => {
-      //pipe.style.display = "none";
-    }, 0);
   });
 
   pipe.onTagUpdate((tuioTag) => {
     pipe.domElem.get(0).style.left = `${tuioTag.x}px`;
     pipe.domElem.get(0).style.top = `${tuioTag.y}px`;
+    if (tuioTag.angle !== pipe.tagCurrentAngle) {
+      pipe.domElem.get(0).style.transform = `rotate(${tuioTag.angle*180/Math.PI}deg)`;
+      pipe.angle = tuioTag.angle;
+      pipe.tagCurrentAngle = tuioTag.angle;
+    }
+    console.log(tuioTag);
   });
 
   pipe.onTagDeletion((tuioTagId) => {
