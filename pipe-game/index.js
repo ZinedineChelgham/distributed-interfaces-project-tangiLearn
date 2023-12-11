@@ -1,5 +1,6 @@
 import { TUIOManager } from "@dj256/tuiomanager";
 import { PipeElementWidget } from "./src/pipeElementWidget.js";
+import "./index.css";
 
 const BOARD_WIDTH = 1400;
 const BOARD_HEIGHT = 800;
@@ -71,6 +72,17 @@ function getNewTShapePipe() {
   return pipe;
 }
 
+function getNewBigPipe() {
+  const pipe = new PipeElementWidget(
+    BOARD_WIDTH + 3 * inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGES_WIDTH / 2,
+    540-100,
+    "long"
+  );
+  pipe.addTo(board);
+  addPipeListeners(pipe);
+  return pipe;
+}
+
 function addPipeListeners(pipe) {
   pipe.onTagCreation((tuioTag) => {
     pipe.domElem.get(0).classList.add(`drag-${tuioTag.id}`);
@@ -94,8 +106,9 @@ function addPipeListeners(pipe) {
       pipe.domElem.get(0).style.top = `${tuioTag.y + pipe.tagOffset.y}px`;
     }
     if (tuioTag.angle !== pipe.tagCurrentAngle) {
-      pipe.domElem.get(0).style.transform = `rotate(${tuioTag.angle * 180 / Math.PI}deg)`;
-      pipe.angle = tuioTag.angle;
+      console.log(tuioTag.angle);
+      pipe.angle = tuioTag.angle * 180 / Math.PI
+      pipe.domElem.get(0).style.transform = `rotate(${pipe.angle}deg)`;
       pipe.tagCurrentAngle = tuioTag.angle;
     }
   });
@@ -111,14 +124,26 @@ function addPipeListeners(pipe) {
       return prev.distance < currDist ? prev : { cell: curr, distance: currDist, coords: { x: currX, y: currY } };
     }, { cell: cells[0], distance: 1_000_000, coords: {} });
 
-    const cellX = closestCell.coords.x;
-    const cellY = closestCell.coords.y;
+    const closestAngle = Math.round(pipe.angle / 90) * 90;
+    pipe.domElem.get(0).style.transform = `rotate(${closestAngle}deg)`;
+    pipe.angle = closestAngle;
+
+    let cellX = closestCell.coords.x;
+    let cellY = closestCell.coords.y;
+
+    if (pipe.category === "long") {
+      if (pipe.angle === 90 || pipe.angle === 270) {
+        cellX -= IMAGES_WIDTH / 2;
+        cellY -= IMAGES_HEIGHT / 2;
+      }
+    }
+    pipe.oldAngle = closestAngle;
+
+
     pipe.domElem.get(0).style.left = cellX + "px";
     pipe.domElem.get(0).style.top = cellY + "px";
     pipe.domElem.get(0).classList.remove(`drag-${tuioTagId}`);
 
-    const closestAngle = Math.round(pipe.angle * 180 / Math.PI / 90) * 90;
-    pipe.domElem.get(0).style.transform = `rotate(${closestAngle}deg)`;
     // countSpan.textContent = `*${pipeCounts[pipeCat] || 0}`;
     console.log(pipeCounts);
     switch (pipe.category) {
@@ -131,6 +156,9 @@ function addPipeListeners(pipe) {
       case "t-shape":
         getNewTShapePipe();
         break;
+      case "long":
+        getNewBigPipe();
+        break;
     }
   });
 }
@@ -139,4 +167,5 @@ function initInventory() {
   getNewCurvedPipe();
   getNewStraightPipe();
   getNewTShapePipe();
+  getNewBigPipe()
 }
