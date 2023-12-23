@@ -1,24 +1,24 @@
 import { TUIOManager } from "@dj256/tuiomanager";
 import { PipeElementWidget } from "./src/pipeElementWidget.js";
+import {
+  BOARD_HEIGHT,
+  BOARD_WIDTH,
+  GAME_WIDTH,
+  IMAGE_SIZE,
+  PIPE_TYPES,
+} from "./src/constants.js";
 import "./index.css";
 
-const BOARD_WIDTH = 1400;
-const BOARD_HEIGHT = 800;
+const inventoryWidth = (GAME_WIDTH - BOARD_WIDTH) / 2;
 
-const IMAGES_WIDTH = 100;
-const IMAGES_HEIGHT = 100;
-
-const inventoryWidth = (1920 - BOARD_WIDTH) / 2;
-
-let gameContainer = document.getElementById("game-container");
+const gameContainer = document.getElementById("game-container");
 const gameContainerBoundingRect = gameContainer.getBoundingClientRect();
 new TUIOManager(gameContainer).start();
-
 
 let pipeCounts = {
   1: 5,
   2: 5,
-  3: 5
+  3: 5,
 };
 
 let board = document.getElementById("board");
@@ -28,12 +28,12 @@ let cells = [];
 
 initInventory();
 
-for (let i = 0; i < BOARD_WIDTH / IMAGES_WIDTH; i++) {
-  for (let j = 0; j < BOARD_HEIGHT / IMAGES_HEIGHT; j++) {
+for (let i = 0; i < BOARD_WIDTH / IMAGE_SIZE; i++) {
+  for (let j = 0; j < BOARD_HEIGHT / IMAGE_SIZE; j++) {
     const cell = document.createElement("div");
     cell.classList.add("cell");
-    cell.style.width = IMAGES_WIDTH + "px";
-    cell.style.height = IMAGES_HEIGHT + "px";
+    cell.style.width = IMAGE_SIZE + "px";
+    cell.style.height = IMAGE_SIZE + "px";
     board.append(cell);
     cells.push(cell);
   }
@@ -41,9 +41,9 @@ for (let i = 0; i < BOARD_WIDTH / IMAGES_WIDTH; i++) {
 
 function getNewCurvedPipe() {
   const pipe = new PipeElementWidget(
-    inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGES_WIDTH / 2,
+    inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGE_SIZE / 2,
     300,
-    "curved"
+    PIPE_TYPES.CURVED,
   );
   pipe.addTo(board);
   addPipeListeners(pipe);
@@ -52,9 +52,9 @@ function getNewCurvedPipe() {
 
 function getNewStraightPipe() {
   const pipe = new PipeElementWidget(
-    inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGES_WIDTH / 2,
+    inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGE_SIZE / 2,
     500,
-    "straight"
+    PIPE_TYPES.STRAIGHT,
   );
   pipe.addTo(board);
   addPipeListeners(pipe);
@@ -63,9 +63,9 @@ function getNewStraightPipe() {
 
 function getNewTShapePipe() {
   const pipe = new PipeElementWidget(
-    inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGES_WIDTH / 2,
+    inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGE_SIZE / 2,
     700,
-    "t-shape"
+    PIPE_TYPES.T_SHAPE,
   );
   pipe.addTo(board);
   addPipeListeners(pipe);
@@ -74,9 +74,12 @@ function getNewTShapePipe() {
 
 function getNewBigPipe() {
   const pipe = new PipeElementWidget(
-    BOARD_WIDTH + 3 * inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGES_WIDTH / 2,
-    540-100,
-    "long"
+    BOARD_WIDTH +
+      (3 * inventoryWidth) / 2 +
+      gameContainerBoundingRect.left -
+      IMAGE_SIZE / 2,
+    540 - 100,
+    PIPE_TYPES.LONG,
   );
   pipe.addTo(board);
   addPipeListeners(pipe);
@@ -91,23 +94,28 @@ function addPipeListeners(pipe) {
     const pipeY = pipe.domElem.get(0).style.top.replace("px", "");
     pipe.tagOffset = {
       x: pipeX - tuioTag.x,
-      y: pipeY - tuioTag.y
+      y: pipeY - tuioTag.y,
     };
     pipe.tagFirstPosition = {
       x: tuioTag.x,
-      y: tuioTag.y
+      y: tuioTag.y,
     };
     console.log(pipeCounts);
   });
 
   pipe.onTagUpdate((tuioTag) => {
-    if (Math.sqrt(Math.pow(Math.abs(pipe.tagFirstPosition.x - tuioTag.x), 2) + Math.pow(Math.abs(pipe.tagFirstPosition.y - tuioTag.y), 2)) > 50) {
+    if (
+      Math.sqrt(
+        Math.pow(Math.abs(pipe.tagFirstPosition.x - tuioTag.x), 2) +
+          Math.pow(Math.abs(pipe.tagFirstPosition.y - tuioTag.y), 2),
+      ) > 50
+    ) {
       pipe.domElem.get(0).style.left = `${tuioTag.x + pipe.tagOffset.x}px`;
       pipe.domElem.get(0).style.top = `${tuioTag.y + pipe.tagOffset.y}px`;
     }
     if (tuioTag.angle !== pipe.tagCurrentAngle) {
       console.log(tuioTag.angle);
-      pipe.angle = tuioTag.angle * 180 / Math.PI
+      pipe.angle = (tuioTag.angle * 180) / Math.PI;
       pipe.domElem.get(0).style.transform = `rotate(${pipe.angle}deg)`;
       pipe.tagCurrentAngle = tuioTag.angle;
     }
@@ -116,13 +124,21 @@ function addPipeListeners(pipe) {
   pipe.onTagDeletion((tuioTagId) => {
     const pipeX = pipe.domElem.get(0).style.left.replace("px", "");
     const pipeY = pipe.domElem.get(0).style.top.replace("px", "");
-    const closestCell = cells.reduce((prev, curr) => {
-      const boundingRect = curr.getBoundingClientRect();
-      const currX = boundingRect.left;
-      const currY = boundingRect.top;
-      const currDist = Math.sqrt(Math.pow(Math.abs(pipeX - currX), 2) + Math.pow(Math.abs(pipeY - currY), 2));
-      return prev.distance < currDist ? prev : { cell: curr, distance: currDist, coords: { x: currX, y: currY } };
-    }, { cell: cells[0], distance: 1_000_000, coords: {} });
+    const closestCell = cells.reduce(
+      (prev, curr) => {
+        const boundingRect = curr.getBoundingClientRect();
+        const currX = boundingRect.left;
+        const currY = boundingRect.top;
+        const currDist = Math.sqrt(
+          Math.pow(Math.abs(pipeX - currX), 2) +
+            Math.pow(Math.abs(pipeY - currY), 2),
+        );
+        return prev.distance < currDist
+          ? prev
+          : { cell: curr, distance: currDist, coords: { x: currX, y: currY } };
+      },
+      { cell: cells[0], distance: 1_000_000, coords: {} },
+    );
 
     const closestAngle = Math.round(pipe.angle / 90) * 90;
     pipe.domElem.get(0).style.transform = `rotate(${closestAngle}deg)`;
@@ -131,14 +147,13 @@ function addPipeListeners(pipe) {
     let cellX = closestCell.coords.x;
     let cellY = closestCell.coords.y;
 
-    if (pipe.category === "long") {
+    if (pipe.category === PIPE_TYPES.LONG) {
       if (pipe.angle === 90 || pipe.angle === 270) {
-        cellX -= IMAGES_WIDTH / 2;
-        cellY -= IMAGES_HEIGHT / 2;
+        cellX -= IMAGE_SIZE / 2;
+        cellY -= IMAGE_SIZE / 2;
       }
     }
     pipe.oldAngle = closestAngle;
-
 
     pipe.domElem.get(0).style.left = cellX + "px";
     pipe.domElem.get(0).style.top = cellY + "px";
@@ -147,16 +162,16 @@ function addPipeListeners(pipe) {
     // countSpan.textContent = `*${pipeCounts[pipeCat] || 0}`;
     console.log(pipeCounts);
     switch (pipe.category) {
-      case "curved":
+      case PIPE_TYPES.CURVED:
         getNewCurvedPipe();
         break;
-      case "straight":
+      case PIPE_TYPES.STRAIGHT:
         getNewStraightPipe();
         break;
-      case "t-shape":
+      case PIPE_TYPES.T_SHAPE:
         getNewTShapePipe();
         break;
-      case "long":
+      case PIPE_TYPES.LONG:
         getNewBigPipe();
         break;
     }
@@ -167,5 +182,5 @@ function initInventory() {
   getNewCurvedPipe();
   getNewStraightPipe();
   getNewTShapePipe();
-  getNewBigPipe()
+  getNewBigPipe();
 }
