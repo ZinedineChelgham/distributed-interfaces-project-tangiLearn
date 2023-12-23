@@ -38,4 +38,13 @@ export class PipeElementWidget extends ImageElementWidget {
     this.angle = 0;
     this.tagCurrentAngle = 0;
   }
+
+  // eslint-disable-next-line no-unused-vars
+  _onTouchCreation(_) {}
+
+  // eslint-disable-next-line no-unused-vars
+  _onTouchUpdate(_) {}
+
+  // eslint-disable-next-line no-unused-vars
+  _onTouchDeletion(_) {}
 }
