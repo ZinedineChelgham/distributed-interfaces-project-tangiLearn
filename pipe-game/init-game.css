@@ -16,6 +16,21 @@ body {
     justify-content: space-between;
     align-items: center;
     background-image: url("./assets/images/water.png");
+    background-size: cover;
+    animation: waterWave 20s linear infinite;
+
+}
+
+@keyframes waterWave {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 50px 50px;
+    }
+    100% {
+        background-position: 0 0;
+    }
 }
 
 #circle-container {
