@@ -5,11 +5,11 @@ repos:
     rev: v3.1.0
     hooks:
       - id: prettier
-        files: '^back/.*\.(js)$'
+        files: '^(back|pipe-game)/.*\.js$'
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: 'v8.54.0'
     hooks:
       - id: eslint
-        files: '^back/.*\.(js)$'
+        files: '^(back|pipe-game)/.*\.js$'
         args: ['--fix']
     
