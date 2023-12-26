@@ -1,10 +1,18 @@
+import React, { useState } from "react";
 import "./App.css";
 import TablesPreview from "./components/TablesPreview";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { Typography } from "@mui/material";
+import { Typography, Tabs, Tab } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
+import PupilBinding from "./components/PupilBinding";
 
 function App() {
+  const [activeTab, setActiveTab] = useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
   return (
     <Grid2
       container
@@ -16,33 +24,25 @@ function App() {
       wrap="nowrap"
     >
       <Typography variant="h2" textAlign={"center"}>
-        Monitoring
+        TangiLearn Monitoring
       </Typography>
-      <Grid2
-        container
-        xs={4}
-        direction={"row"}
-        justifyContent={"flex-start"}
-        alignItems={"center"}
-        spacing={3}
+
+      <Tabs
+        value={activeTab}
+        onChange={handleTabChange}
+        left
+        sx={{ "& .MuiTab-root": { textTransform: "none" } }} // Apply custom styles to Tab components
       >
-        <Grid2>
-          <Avatar
-            alt="bob"
-            src="https://api.dicebear.com/avatar.svg"
-            style={{
-              width: "4rem", // Set the desired width
-              height: "4rem", // Set the desired height
-            }}
-          />
-        </Grid2>
-        <Grid2>
-          <Typography variant={"body1"}>Mr Bob Delanois</Typography>
-        </Grid2>
-      </Grid2>
+        <Tab label="Gestion des tables" />
+        <Tab label="Couplage élève/tangible" />
+      </Tabs>
+
       <Grid2 xs={12}>
-        <TablesPreview />
+        {activeTab === 0 && <TablesPreview />}
+        {activeTab === 1 && <PupilBinding />}
       </Grid2>
+
+      {/* Rest of your existing Grid2 components */}
     </Grid2>
   );
 }

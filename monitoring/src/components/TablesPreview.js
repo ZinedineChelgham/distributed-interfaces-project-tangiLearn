@@ -25,7 +25,6 @@ function TablesPreview() {
             alignItems={"center"}
             gap={4}
         >
-            <Typography variant="h4">Tables Preview</Typography>
             <Grid2
                 container
                 direction={"row"}

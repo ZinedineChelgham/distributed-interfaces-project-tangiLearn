@@ -8,6 +8,7 @@ import { exec } from "child_process";
 const router = express.Router();
 
 router.get("/start-stream", (req, res) => {
+  /*
   const executableName = process.env.OBS_EXECUTABLE_NAME;
   const rootDirectory = process.env.OBS_ROOT_DIR;
   let executablePath = findExecutable(executableName, rootDirectory);
@@ -25,13 +26,14 @@ router.get("/start-stream", (req, res) => {
     }
     console.log(stdout)
   })
+   */
 
 });
 router.get("/table", (req, res) => {
   //
   res.send({
     id: 1,
-    name: "Table NORD",
+    name: "PolyTable",
     games: [
       {
         id: 1,
@@ -54,6 +56,10 @@ router.get("/stream-link", (req, res) => {
     "https://www.youtube.com/embed/live_stream?channel=" +
       process.env.YT_CHANNEL_ID,
   );
+});
+
+router.get("/current-players", (req, res) => {
+
 });
 
 export default router;
