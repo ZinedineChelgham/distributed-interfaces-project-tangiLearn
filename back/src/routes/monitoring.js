@@ -3,7 +3,7 @@ import express from "express";
 import "dotenv/config";
 import { findExecutable } from "../lib/executableFinder.js";
 import { exec } from "child_process";
-
+import { Pupil } from "../model/pupil.js";
 
 const router = express.Router();
 
@@ -27,7 +27,6 @@ router.get("/start-stream", (req, res) => {
     console.log(stdout)
   })
    */
-
 });
 router.get("/table", (req, res) => {
   //
@@ -54,12 +53,18 @@ router.get("/table", (req, res) => {
 router.get("/stream-link", (req, res) => {
   res.send(
     "https://www.youtube.com/embed/live_stream?channel=" +
-      process.env.YT_CHANNEL_ID,
+      process.env.YT_CHANNEL_ID
   );
 });
 
-router.get("/current-players", (req, res) => {
-
+// Route to get all current players who are playing
+router.get("/current-players", async (req, res) => {
+  try {
+    const currentPlayers = await Pupil.find({ isPlaying: true });
+    res.json(currentPlayers);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
 });
 
 export default router;

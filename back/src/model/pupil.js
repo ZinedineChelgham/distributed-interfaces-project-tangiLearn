@@ -13,6 +13,15 @@ const pupilSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  isPlaying : {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  avatar: {
+    type: String,
+    required: false,
+  },
   teacher: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Teacher",
