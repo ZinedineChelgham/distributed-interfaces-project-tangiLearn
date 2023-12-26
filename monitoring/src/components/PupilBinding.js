@@ -9,6 +9,7 @@ import {
   Paper,
   TextField,
   Button,
+  Avatar,
 } from "@mui/material";
 import { IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -42,7 +43,7 @@ function PupilBinding() {
           return { ...pupil, tokenId: event.target.value };
         }
         return pupil;
-      }),
+      })
     );
 
     const targetPupil = pupils.filter((pupil) => pupil._id === id)[0];
@@ -77,8 +78,8 @@ function PupilBinding() {
 
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <TableContainer component={Paper} sx={{ maxWidth: "80%" }}>
+        <Table sx={{ minWidth: 400 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Eleve</TableCell>
@@ -91,7 +92,22 @@ function PupilBinding() {
                 key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <Avatar
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      marginRight: 1,
+                    }}
+                    src={pupil.avatar}
+                    alt={pupil.surname + " " + pupil.name}
+                  >
+                    {pupil.surname[0] + pupil.name[0]}
+                  </Avatar>
                   {pupil.surname + " " + pupil.name}
                 </TableCell>
                 <TableCell>
