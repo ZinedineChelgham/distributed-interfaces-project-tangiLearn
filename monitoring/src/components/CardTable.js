@@ -1,10 +1,52 @@
+import React, { useEffect, useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import Typography from "@mui/material/Typography";
-import React from "react";
 import CardGame from "./CardGame";
+import CardVideoStream from "./CardVideoStream";
+import Box from "@mui/material/Box";
 
 function CardTable({ table }) {
-  console.log(table, "sasa");
+  const [isClicked, setIsClicked] = useState(false);
+
+  const onClick = () => {
+    setIsClicked(!isClicked);
+  };
+
+  const [needHelp, setNeedHelp] = useState(false);
+  const [helpAcknowledged, setHelpAcknowledged] = useState(false);
+
+  useEffect(() => {
+    // Function to fetch current players
+    const fetchPlayers = () => {
+      fetch("http://localhost:3000/api/monitoring/need-help")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json(); // Assuming the response is JSON
+        })
+        .then((data) => {
+          // Update state with the retrieved current players
+          setNeedHelp(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching current players:", error);
+        });
+    };
+
+    // Call the function when the component mounts
+    fetchPlayers();
+
+    // Set an interval to call the function every 5 seconds
+    const interval = setInterval(fetchPlayers, 5000);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleHelpBubbleClick = () => {
+    setHelpAcknowledged(true);
+  };
 
   return (
     <Grid2
@@ -12,28 +54,83 @@ function CardTable({ table }) {
       direction={"column"}
       justifyContent={"center"}
       alignItems={"center"}
-      spacing={3}
+      width={"50%"}
+      height={"90%"}
+      spacing={4}
       backgroundColor={"#808080"}
       borderRadius={2}
+      overflow={"scroll"}
+      sx={{ "&::-webkit-scrollbar": { display: "none" } }}
     >
-      <Grid2>
-        <Typography variant={"h4"}>{table.name}</Typography>
+      <Grid2
+        container
+        alignItems={"center"}
+        textAlign={"center"}
+        justifyContent={"center"}
+        width={"100%"}
+        xs={12}
+      >
+        <Typography
+          variant={"h4"}
+          style={{
+            position: "sticky",
+            zIndex: 1,
+          }}
+        >
+          {table.name}
+        </Typography>
+        {needHelp && !helpAcknowledged && (
+          <Box
+            onClick={handleHelpBubbleClick}
+            alignSelf={"end"}
+            sx={{
+              cursor: "pointer",
+              background: "red",
+              color: "white",
+              borderRadius: "50%",
+              width: "60px",
+              height: "60px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "0.75rem",
+              zIndex: 1,
+              margin: "5px",
+              textAlign: "center",
+              animation: "blink 2s infinite",
+              "@keyframes blink": {
+                "0%": { opacity: 1 },
+                "50%": { opacity: 0 },
+                "100%": { opacity: 1 },
+              },
+              // Add more styling as needed to resemble a dialog bubble
+            }}
+          >
+            Besoin d&apos;aide
+          </Box>
+        )}
       </Grid2>
 
       <Grid2
         container
         direction={"row"}
-        width={"500px"}
-        height={"300px"}
+        xs={12}
+        height={"80%"}
         gap={2}
         justifyContent={"center"}
         alignItems={"center"}
       >
-        {table.games.map((game) => (
-          <Grid2 key={game.id}>
-            <CardGame game={game} />
+        {!isClicked ? (
+          table.games.map((game) => (
+            <Grid2 key={game.id}>
+              <CardGame game={game} handleClick={onClick} />
+            </Grid2>
+          ))
+        ) : (
+          <Grid2 xs={12} sx={{ height: "100%" }}>
+            <CardVideoStream handleClick={onClick} />
           </Grid2>
-        ))}
+        )}
       </Grid2>
     </Grid2>
   );

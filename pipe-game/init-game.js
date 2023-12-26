@@ -16,7 +16,7 @@ function createMagnetImage(
   zIndex,
   imagePath,
   container,
-  classToAdd,
+  classToAdd
 ) {
   const img = new ImageElementWidget(
     x,
@@ -25,7 +25,7 @@ function createMagnetImage(
     height,
     angle,
     zIndex,
-    imagePath,
+    imagePath
   );
   img.canMove(false, false);
   img.domElem.get(0).classList.add(classToAdd);
@@ -42,7 +42,7 @@ const magnetTopImg = createMagnetImage(
   1,
   "./assets/images/magnet.png",
   containers[0],
-  "magnet-top",
+  "magnet-top"
 );
 const magnetBopImg = createMagnetImage(
   60,
@@ -53,16 +53,18 @@ const magnetBopImg = createMagnetImage(
   1,
   "./assets/images/magnet.png",
   containers[1],
-  "magnet-bot",
+  "magnet-bot"
 );
 
 const containersState = { top: false, bot: false };
+const tagIds = { top: "", bot: "" };
 
 function setupMagnetEvents(magnetImg, outerCircle, stateKey) {
-  magnetImg.onTagCreation(() => {
+  magnetImg.onTagCreation((tag) => {
     if (!containersState[stateKey]) {
       outerCircle.style.backgroundColor = "green";
       containersState[stateKey] = true;
+      tagIds[stateKey] = tag._id;
       checkAndNavigate();
     }
   });
@@ -77,11 +79,20 @@ function setupMagnetEvents(magnetImg, outerCircle, stateKey) {
 
 function checkAndNavigate() {
   if (containersState.top && containersState.bot) {
-    //wait 500ms before navigating to index.js
+    updatePupilState(tagIds.top);
+    updatePupilState(tagIds.bot);
     setTimeout(() => {
       window.location.href = "index.html"; // Navigate to index.js
     }, 500);
   }
+}
+
+function updatePupilState(tagId) {
+  fetch(`http://localhost:3000/api/pupil/playing/${tagId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ isPlaying: true }),
+  }).then((r) => console.log(r));
 }
 
 setupMagnetEvents(magnetTopImg, outerCircles[0], "top");
