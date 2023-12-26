@@ -30,33 +30,56 @@ function CardVideoStream({ handleClick }) {
   }, []); // Empty dependency array ensures the effect runs only once on mount
 
   useEffect(() => {
-    // Fetch current players when the component mounts
-    fetch("http://localhost:3000/api/monitoring/current-players")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json(); // Assuming the response is JSON
-      })
-      .then((data) => {
-        // Update state with the retrieved current players
-        setPlayers(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching current players:", error);
-      });
-  }, []); // Empty dependency array ensures the effect runs only once on mount
+    // Function to fetch current players
+    const fetchPlayers = () => {
+      fetch("http://localhost:3000/api/monitoring/current-players")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json(); // Assuming the response is JSON
+        })
+        .then((data) => {
+          // Update state with the retrieved current players
+          setPlayers(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching current players:", error);
+        });
+    };
 
+    // Call the function when the component mounts
+    fetchPlayers();
+
+    // Set an interval to call the function every 5 seconds
+    const interval = setInterval(fetchPlayers, 5000);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, []);
+
+  const [helpAcknowledged, setHelpAcknowledged] = useState(false);
+
+  const handleHelpBubbleClick = () => {
+    setHelpAcknowledged(true);
+  };
   return (
     <Box
-      component="ul"
-      sx={{ display: "flex", gap: 2, flexWrap: "wrap", p: 0, m: 0 }}
+      sx={{
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        gap: 2,
+        flexWrap: "wrap",
+        p: 0,
+        m: 0,
+      }}
     >
-      <Card component="li" sx={{ minWidth: 300, flexGrow: 1 }}>
+      <Card sx={{ position: "relative", flexGrow: 1, width: "100%" }}>
         <iframe
           width="100%"
-          height="75%"
-          //src={`${streamLink}`}
+          height="80%"
+          src="https://www.youtube.com/embed/nhUJnPprSqA?si=uS4B8-AdCCmQqt3S"
           title="YouTube video player"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

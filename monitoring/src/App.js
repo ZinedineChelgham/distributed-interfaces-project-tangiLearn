@@ -19,7 +19,7 @@ function App() {
       direction={"column"}
       width={"100%"}
       height={"100%"}
-      padding={5}
+      padding={4}
       gap={2}
       wrap="nowrap"
     >
@@ -41,8 +41,6 @@ function App() {
         {activeTab === 0 && <TablesPreview />}
         {activeTab === 1 && <PupilBinding />}
       </Grid2>
-
-      {/* Rest of your existing Grid2 components */}
     </Grid2>
   );
 }
