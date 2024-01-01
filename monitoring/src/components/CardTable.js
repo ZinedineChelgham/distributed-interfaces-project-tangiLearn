@@ -22,7 +22,7 @@ function CardTable({ table }) {
    */
   const onClick = (game) => {
     setIsClicked(!isClicked);
-    if (isClicked) {
+    if (!isClicked) {
       if (game.includes("tuyaux")) {
         setCurrentGame("pipe");
       } else {
