@@ -16,7 +16,7 @@ function CardGame({ game, handleClick }) {
       <CardHeader sx={{ textAlign: "center" }} title={game.name} />
       <CardActionArea
         sx={{ textAlign: "center", justifyContent: "center" }}
-        onClick={handleClick}
+        onClick={() => handleClick(game.name)}
       >
         <CardMedia
           component="img"
@@ -27,7 +27,7 @@ function CardGame({ game, handleClick }) {
       </CardActionArea>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Tooltip title="Play" placement={"right"}>
-          <IconButton aria-label="play" onClick={handleClick}>
+          <IconButton aria-label="play" onClick={() => handleClick(game.name)}>
             <PlayCircleIcon />
           </IconButton>
         </Tooltip>

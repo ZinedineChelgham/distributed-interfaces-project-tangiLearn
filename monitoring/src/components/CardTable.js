@@ -8,8 +8,29 @@ import Box from "@mui/material/Box";
 function CardTable({ table }) {
   const [isClicked, setIsClicked] = useState(false);
 
-  const onClick = () => {
+  function setCurrentGame(game) {
+    fetch(`http://localhost:3000/api/monitoring/current-game`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ game: game }),
+    }).then((r) => console.log(r));
+  }
+
+  /**
+   *
+   * @param {String} game
+   */
+  const onClick = (game) => {
     setIsClicked(!isClicked);
+    if (isClicked) {
+      if (game.includes("tuyaux")) {
+        setCurrentGame("pipe");
+      } else {
+        setCurrentGame("tower");
+      }
+    } else {
+      setCurrentGame("");
+    }
   };
 
   const [needHelp, setNeedHelp] = useState(false);

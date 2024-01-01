@@ -79,7 +79,7 @@ function CardVideoStream({ handleClick }) {
         <iframe
           width="100%"
           height="80%"
-          src="https://www.youtube.com/embed/nhUJnPprSqA?si=uS4B8-AdCCmQqt3S"
+          src={streamLink} //"https://www.youtube.com/embed/nhUJnPprSqA?si=uS4B8-AdCCmQqt3S"
           title="YouTube video player"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

@@ -7,27 +7,28 @@ import { Pupil } from "../model/pupil.js";
 
 const router = express.Router();
 let needHelp = false;
+let currentGame = "";
 
 router.get("/start-stream", (req, res) => {
   /*
-  const executableName = process.env.OBS_EXECUTABLE_NAME;
-  const rootDirectory = process.env.OBS_ROOT_DIR;
-  let executablePath = findExecutable(executableName, rootDirectory);
-  let arg = "--startstreaming";
-  if (!executablePath) {
-    res.send("Executable not found");
-    return;
-  }
-  let command = `start /d ${executablePath} ${executableName} ${arg}`
-  console.log(command)
-  exec(command, (err, stdout) => {
-    if (err) {
-      console.log(err)
+    const executableName = process.env.OBS_EXECUTABLE_NAME;
+    const rootDirectory = process.env.OBS_ROOT_DIR;
+    let executablePath = findExecutable(executableName, rootDirectory);
+    let arg = "--startstreaming";
+    if (!executablePath) {
+      res.send("Executable not found");
       return;
     }
-    console.log(stdout)
-  })
-   */
+    let command = `start /d ${executablePath} ${executableName} ${arg}`
+    console.log(command)
+    exec(command, (err, stdout) => {
+      if (err) {
+        console.log(err)
+        return;
+      }
+      console.log(stdout)
+    })
+     */
 });
 router.get("/table", (req, res) => {
   //
@@ -54,7 +55,7 @@ router.get("/table", (req, res) => {
 router.get("/stream-link", (req, res) => {
   res.send(
     "https://www.youtube.com/embed/live_stream?channel=" +
-      process.env.YT_CHANNEL_ID
+      process.env.YT_CHANNEL_ID,
   );
 });
 
@@ -66,6 +67,15 @@ router.get("/current-players", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
+});
+
+router.post("/current-game", async (req, res) => {
+  currentGame = req.body.game;
+  res.json(currentGame);
+});
+
+router.get("/current-game", async (req, res) => {
+    res.json(currentGame);
 });
 
 // Route to get if the player needs help
