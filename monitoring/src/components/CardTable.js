@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import CardGame from "./CardGame";
 import CardVideoStream from "./CardVideoStream";
 import Box from "@mui/material/Box";
+import bip from "../assets/sounds/bip.mp3";
+import useSound from "use-sound";
 
 function CardTable({ table }) {
   const [isClicked, setIsClicked] = useState(false);
@@ -35,12 +37,15 @@ function CardTable({ table }) {
 
   const [needHelp, setNeedHelp] = useState(false);
   const [helpAcknowledged, setHelpAcknowledged] = useState(false);
+  const [play, { stop }] = useSound(bip);
+  const inputRef = React.useRef(null);
 
   useEffect(() => {
     // Function to fetch current players
     const fetchPlayers = () => {
       fetch("http://localhost:3000/api/monitoring/need-help")
         .then((response) => {
+          inputRef.current.click();
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
@@ -48,25 +53,28 @@ function CardTable({ table }) {
         })
         .then((data) => {
           // Update state with the retrieved current players
+          inputRef.current.click();
           setNeedHelp(data);
         })
         .catch((error) => {
           console.error("Error fetching current players:", error);
         });
     };
-
     // Call the function when the component mounts
     fetchPlayers();
-
     // Set an interval to call the function every 5 seconds
-    const interval = setInterval(fetchPlayers, 5000);
-
+    const interval = setInterval(fetchPlayers, 2000);
     // Clear the interval when the component unmounts
     return () => clearInterval(interval);
   }, []);
 
   const handleHelpBubbleClick = () => {
     setHelpAcknowledged(true);
+    fetch(`http://localhost:3000/api/monitoring/need-help`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ needHelp: false }),
+    }).then((r) => console.log(r));
   };
 
   return (
@@ -82,6 +90,11 @@ function CardTable({ table }) {
       borderRadius={2}
       overflow={"scroll"}
       sx={{ "&::-webkit-scrollbar": { display: "none" } }}
+      ref={inputRef}
+      onClick={() => {
+        if(needHelp && !helpAcknowledged) play();
+        else stop();
+      }}
     >
       <Grid2
         container
