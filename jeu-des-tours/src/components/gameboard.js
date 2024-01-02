@@ -3,7 +3,8 @@ import React, {useState} from 'react';
 import './gameboard.css';
 const socket = new WebSocket('ws://localhost:8080/connection');
 
-const GameBoard = () => {
+const GameBoard = (stateGame) => {
+    console.log(stateGame)
     const [cellValues, setCellValues] = useState(Array(9).fill(0));
 
     const handleIncrement = (index) => {
@@ -90,7 +91,7 @@ const GameBoard = () => {
     };
     const renderCells = () => {
             return cellValues.map((value, index) => (
-                <div key={index}  id={`cell-${index}`} className="grid-item">
+                <div key={index}  id={`cell-${index}`} className="grid-item case">
                     <button onClick={() => handleDecrement(index)}>-</button>
                     <span>{value}</span>
                     <button onClick={() => handleIncrement(index)}>+</button>
@@ -101,7 +102,7 @@ const GameBoard = () => {
 
 
     return (
-        <div className="grid-container">
+        <div className="conteneur-central">
             {renderCells()}
         </div>
     );

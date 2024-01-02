@@ -6,23 +6,14 @@
     margin-top: 13%;
     margin-left: 30%;
 }
-
-.grid-item {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 200px;
-    height: 200px;
-    border: 2px solid #000;
-    font-size: 20px;
-    font-weight: bold;
-    background-color: white ;
-
+.conteneur-central {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 20px;
 }
 
 button {
-    position: absolute;
     top: 5px;
     left: 5px;
 }
@@ -44,4 +35,78 @@ button:last-child {
     50% {
         background-color: blue; /* Couleur d'arrière-plan pendant le clignotement */
     }
+}
+
+/* style.css */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#jeu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.case {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    width: 100px;
+    height: 100px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: white ;
+}
+
+.conteneur-lateral {
+    display: flex;
+}
+
+.conteneur-numeros {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    margin-top: 16px;
+}
+
+.conteneur-numeros.haut, .conteneur-numeros.bas {
+    justify-content: center;
+}
+
+.conteneur-numeros.gauche, .conteneur-numeros.droite {
+    flex-direction: row;
+    align-items: center;
+}
+
+.numero {
+    border: 1px solid black;
+    text-align: center;
+    background-color: yellow;
+    padding: 35px 35px;
+    font-size: 40px;
+}
+
+.bouton {
+    margin: 10px;
+    padding: 5px 15px;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+    transition: transform 0.5s ease-in-out;
+}
+
+.rotate-90 {
+    transform: rotate(90deg);
+    transition: transform 0.5s ease-in-out;
+}
+.rotate-moins-90 {
+    transform: rotate(-90deg);
+    transition: transform 0.5s ease-in-out;
 }

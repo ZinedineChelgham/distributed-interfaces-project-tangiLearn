@@ -2,6 +2,7 @@ import GameBoard from '../components/gameboard.js';
 import EyeIcon from "../components/eyeIcon";
 import React, {useEffect} from 'react';
 import { useParams } from 'react-router-dom';
+import Grille from "../components/Grille";
 
 function GamePage() {
     const queryParameters = new URLSearchParams(window.location.search)
@@ -21,6 +22,7 @@ function GamePage() {
             .catch(error => console.log(error));
 
     }
+    console.log(values);
 
     useEffect(() => {
         getGameData();
@@ -32,7 +34,7 @@ function GamePage() {
             <p>Game ID: {id}</p>
             <p>Values: {values}</p>
             <p>State: {state_game}</p>
-            <GameBoard stateGame={state_game}/>
+            <Grille StateGame={state_game} Values={values}/>
         </div>
     );
 }

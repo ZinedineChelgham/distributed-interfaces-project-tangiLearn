@@ -48,6 +48,7 @@ const NewGame = () => {
                 console.error('Erreur lors de la requête au backend :', error);
             });
         } else {
+            window.alert('Veuillez remplir tous les champs.');
             console.log('Veuillez remplir tous les champs.');
         }
     };
