@@ -59,8 +59,8 @@ body {
 }
 
 #board {
-    display: flex;
-    flex-wrap: wrap;
+    display: block;
+    position: relative;
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 2;
@@ -69,6 +69,7 @@ body {
 }
 
 .cell {
+    position: absolute;
     border: 1px solid rgba(0, 0, 0, 0.1);
     width: 100px;
     height: 100px;

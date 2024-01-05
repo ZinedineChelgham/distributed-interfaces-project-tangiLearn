@@ -8,8 +8,10 @@ import {
   PIPE_TYPES,
 } from "./src/constants.js";
 import "./index.css";
+import { Cell } from "./src/cell.js";
 
-const inventoryWidth = (GAME_WIDTH - BOARD_WIDTH) / 2;
+const INVENTORY_WIDTH = (GAME_WIDTH - BOARD_WIDTH) / 2;
+console.log("INVENTORY_WIDTH", INVENTORY_WIDTH);
 
 const gameContainer = document.getElementById("game-container");
 const gameContainerBoundingRect = gameContainer.getBoundingClientRect();
@@ -24,16 +26,14 @@ let pipeCounts = {
 let board = document.getElementById("board");
 board.style.width = BOARD_WIDTH + "px";
 board.style.height = BOARD_HEIGHT + "px";
+/** @type {Cell[]} */
 let cells = [];
 
 initInventory();
 
 for (let i = 0; i < BOARD_WIDTH / IMAGE_SIZE; i++) {
   for (let j = 0; j < BOARD_HEIGHT / IMAGE_SIZE; j++) {
-    const cell = document.createElement("div");
-    cell.classList.add("cell");
-    cell.style.width = IMAGE_SIZE + "px";
-    cell.style.height = IMAGE_SIZE + "px";
+    const cell = new Cell(i * IMAGE_SIZE, j * IMAGE_SIZE);
     board.append(cell);
     cells.push(cell);
   }
@@ -41,7 +41,7 @@ for (let i = 0; i < BOARD_WIDTH / IMAGE_SIZE; i++) {
 
 function getNewCurvedPipe() {
   const pipe = new PipeElementWidget(
-    inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGE_SIZE / 2,
+    -(INVENTORY_WIDTH / 2) + gameContainerBoundingRect.left - IMAGE_SIZE / 2,
     300,
     PIPE_TYPES.CURVED,
   );
@@ -52,7 +52,7 @@ function getNewCurvedPipe() {
 
 function getNewStraightPipe() {
   const pipe = new PipeElementWidget(
-    inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGE_SIZE / 2,
+    -(INVENTORY_WIDTH / 2) + gameContainerBoundingRect.left - IMAGE_SIZE / 2,
     500,
     PIPE_TYPES.STRAIGHT,
   );
@@ -63,7 +63,7 @@ function getNewStraightPipe() {
 
 function getNewTShapePipe() {
   const pipe = new PipeElementWidget(
-    inventoryWidth / 2 + gameContainerBoundingRect.left - IMAGE_SIZE / 2,
+    -(INVENTORY_WIDTH / 2) + gameContainerBoundingRect.left - IMAGE_SIZE / 2,
     700,
     PIPE_TYPES.T_SHAPE,
   );
@@ -75,7 +75,7 @@ function getNewTShapePipe() {
 function getNewBigPipe() {
   const pipe = new PipeElementWidget(
     BOARD_WIDTH +
-      (3 * inventoryWidth) / 2 +
+      INVENTORY_WIDTH / 2 +
       gameContainerBoundingRect.left -
       IMAGE_SIZE / 2,
     540 - 100,
@@ -124,39 +124,35 @@ function addPipeListeners(pipe) {
   pipe.onTagDeletion((tuioTagId) => {
     const pipeX = pipe.domElem.get(0).style.left.replace("px", "");
     const pipeY = pipe.domElem.get(0).style.top.replace("px", "");
-    const closestCell = cells.reduce(
+    const closest = cells.reduce(
       (prev, curr) => {
-        const boundingRect = curr.getBoundingClientRect();
-        const currX = boundingRect.left;
-        const currY = boundingRect.top;
         const currDist = Math.sqrt(
-          Math.pow(Math.abs(pipeX - currX), 2) +
-            Math.pow(Math.abs(pipeY - currY), 2),
+          Math.pow(Math.abs(pipeX - curr.x), 2) +
+            Math.pow(Math.abs(pipeY - curr.y), 2),
         );
         return prev.distance < currDist
           ? prev
-          : { cell: curr, distance: currDist, coords: { x: currX, y: currY } };
+          : {
+              cell: curr,
+              distance: currDist,
+            };
       },
-      { cell: cells[0], distance: 1_000_000, coords: {} },
+      { cell: cells[0], distance: 1_000_000 },
     );
-
+    const closestCell = closest.cell;
     const closestAngle = Math.round(pipe.angle / 90) * 90;
     pipe.domElem.get(0).style.transform = `rotate(${closestAngle}deg)`;
     pipe.angle = closestAngle;
 
-    let cellX = closestCell.coords.x;
-    let cellY = closestCell.coords.y;
-
     if (pipe.category === PIPE_TYPES.LONG) {
       if (pipe.angle === 90 || pipe.angle === 270) {
-        cellX -= IMAGE_SIZE / 2;
-        cellY -= IMAGE_SIZE / 2;
+        closestCell.x -= IMAGE_SIZE / 2;
+        closestCell.y -= IMAGE_SIZE / 2;
       }
     }
     pipe.oldAngle = closestAngle;
-
-    pipe.domElem.get(0).style.left = cellX + "px";
-    pipe.domElem.get(0).style.top = cellY + "px";
+    pipe.domElem.get(0).style.left = closestCell.x + "px";
+    pipe.domElem.get(0).style.top = closestCell.y + "px";
     pipe.domElem.get(0).classList.remove(`drag-${tuioTagId}`);
 
     // countSpan.textContent = `*${pipeCounts[pipeCat] || 0}`;
