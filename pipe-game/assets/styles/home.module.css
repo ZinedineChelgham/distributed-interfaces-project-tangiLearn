@@ -12,27 +12,52 @@
     transform: rotate(180deg);
 }
 
-.waitingMessage {
+.loader-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 30vw;
+    height: 30vw;
+}
+
+.waiting-message {
     width: 26rem;
     font-size: 2.3rem;
     font-weight: 500;
     color: var(--white);
+    text-align: center;
+    animation: rotate-text 20s linear infinite;
 }
 
 .loader {
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
     border: 16px solid var(--white);
     border-top: 16px solid rgba(255, 255, 2555, 0.2);
-    border-radius: 50%;
-    width: 30vw;
-    height: 30vw;
-    animation: spin 25s linear infinite;
+    border-radius: 20rem;
+    width: 100%;
+    height: 100%;
+    animation: spin 2s ease-in-out infinite;
     text-align: center;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotate-text {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(-360deg);
+    }
 }

@@ -1,9 +1,8 @@
-import { GameManager } from "./src/gameManager.js";
-import { levels } from "./src/levels.js";
+import { TangiLearnApp } from "./src/tangiLearnApp.js";
 
-const gameManager = new GameManager(document.getElementById("root"), levels);
+const app = new TangiLearnApp(document.getElementById("root"));
 
-gameManager.displayHomeScreen();
+app.displayHomeScreen();
 
 // const INVENTORY_WIDTH = (GAME_WIDTH - BOARD_WIDTH) / 2;
 //

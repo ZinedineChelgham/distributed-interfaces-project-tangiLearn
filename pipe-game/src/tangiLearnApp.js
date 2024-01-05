@@ -1,14 +1,12 @@
 import Home from "../assets/styles/home.module.css";
 import logo from "/logo.svg";
 
-export class GameManager {
+export class TangiLearnApp {
   /**
    * @param {HTMLElement} root
-   * @param {import("./levels.js").GameLevel[]} levels
    */
-  constructor(root, levels) {
+  constructor(root) {
     this.root = root;
-    this.levels = levels;
   }
   displayHomeScreen() {
     const homeScreen = document.createElement("div");
@@ -17,7 +15,8 @@ export class GameManager {
       <div class="logo">
         <img src=${logo} alt="Logo TangiLearn" />
       </div>
-      <div class=${Home.loader}>
+      <div class=${Home.loaderContainer}>
+        <div class=${Home.loader}></div>
         <p class=${Home.waitingMessage}>En attente d'un lancement de jeu</p>
       </div>
      <div class=${Home.reversed}>
@@ -28,4 +27,8 @@ export class GameManager {
     this.root.innerHTML = "";
     this.root.append(homeScreen);
   }
+
+  removeHomeScreen() {}
+
+  loadPipeGame() {}
 }
