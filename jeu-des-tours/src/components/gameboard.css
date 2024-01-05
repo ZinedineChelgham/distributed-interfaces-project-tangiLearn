@@ -37,13 +37,6 @@ button:last-child {
     }
 }
 
-/* style.css */
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
 
 #jeu {
     display: flex;
@@ -91,12 +84,9 @@ body {
 
 .conteneur-numeros.haut {
     position: relative;
-    bottom: 1vh;
 }
 .conteneur-numeros.bas {
-
     position: relative;
-    top: 1vh;
 }
 
 .conteneur-numeros.gauche {

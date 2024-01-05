@@ -1,0 +1,42 @@
+.code-couleur{
+    position: relative;
+    display: flex;
+    height: 10vh;
+    justify-content: space-between;
+
+}
+
+.haut-code-couleur{
+}
+
+.bas-code-couleur{
+}
+
+.gauchehaut-code-couleur{
+    width: auto;
+    height: 10vh;
+}
+
+.droitehaut-code-couleur{
+    width: 10vh;
+    height: fit-content;
+}
+
+.droitebas-code-couleur{
+    width: auto;
+    height: 10vh;
+}
+
+.gauchebas-code-couleur{
+    width: 10vh;
+    height: fit-content;
+    position: relative;
+    top: -27vh;
+}
+
+.full{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-around;
+}

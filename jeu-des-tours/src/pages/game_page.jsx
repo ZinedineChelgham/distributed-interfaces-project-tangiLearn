@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
 import Grille from "../components/Grille.jsx";
+import "./game_page.css";
+import color from "../img/color.png";
+import color180 from "../img/color180.png";
+import color90 from "../img/color90.png";
+import color270 from "../img/color270.png";
 
 function GamePage() {
   const queryParameters = new URLSearchParams(window.location.search);
@@ -25,9 +30,18 @@ function GamePage() {
   }, []);
 
   return (
-    <div>
-      <Grille StateGame={state_game} Values={values} />
+    <div className="full">
+        <div className="code-couleur haut-code-couleur">
+            <img className="gauchehaut-code-couleur" src={color180}/>
+            <img className="droitehaut-code-couleur" src={color270}/>
+        </div>
+        <Grille StateGame={state_game} Values={values} />
+        <div className="code-couleur bas-code-couleur">
+            <img className="gauchebas-code-couleur" src={color90}/>
+            <img className="droitebas-code-couleur" src={color}/>
+        </div>
     </div>
+
   );
 }
 
