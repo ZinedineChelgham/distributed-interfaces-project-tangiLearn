@@ -1,0 +1,38 @@
+.home {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: linear-gradient(180deg, var(--blue) 0%, var(--green) 100%);
+}
+
+.reversed {
+    transform: rotate(180deg);
+}
+
+.waitingMessage {
+    width: 26rem;
+    font-size: 2.3rem;
+    font-weight: 500;
+    color: var(--white);
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 16px solid var(--white);
+    border-top: 16px solid rgba(255, 255, 2555, 0.2);
+    border-radius: 50%;
+    width: 30vw;
+    height: 30vw;
+    animation: spin 25s linear infinite;
+    text-align: center;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

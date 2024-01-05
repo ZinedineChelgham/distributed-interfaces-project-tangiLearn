@@ -1,16 +1,64 @@
+:root {
+    --yellow: #F9C80E;
+    --orange: #F86624;
+    --red: #EA3546;
+    --purple: #662E9B;
+    --green: #78BC38;
+    --blue: #43BCCD;
+
+    --white: #FFFFFF;
+}
+
+@font-face {
+    font-family: "Wendy One";
+    src: url("./assets/fonts/WendyOne-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("./assets/fonts/Poppins-Regular.ttf");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("./assets/fonts/Poppins-Medium.ttf");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("./assets/fonts/Poppins-Bold.ttf");
+    font-weight: bold;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-html,
+html {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Poppins", Helvetica, "Helvetica Neue", sans-serif;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+#root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
 
@@ -24,6 +72,7 @@ body {
     height: 100%;
     width: auto;
 }
+
 .inventory.left {
     grid-row-start: 1;
     grid-row-end: 4;
