@@ -1,10 +1,5 @@
-// new_game.js
 import React, { useState } from 'react';
-import GameBoard from '../components/gameboard.js';
-import EyeIcon from "../components/eyeIcon";
 import styles from './new_game.css';
-import {useHistory} from "react-router-dom";
-import {useEffect} from "react";
 
 const NewGame = () => {
     const generateEmptyBoard = () => {

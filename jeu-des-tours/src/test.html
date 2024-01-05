@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Title</title></head>
+<body style="width: 99vw; height:99vh">
+<div style="width: 500px;height: 500px; display: flex; border: #1e365e 1px">
+    <div style="width:250px;height: 250px; background-color: #3498db" id="child-1"></div>
+    <div style="width:250px;height: 250px;background-color: aqua" id="child-2"></div>
+</div></body></html><script type="module">
+    import {TUIOManager} from "@dj256/tuiomanager";
+    import {ImageElementWidget} from "@dj256/tuiomanager/widgets";
+    const managerAnchor = document.querySelector("body");
+    new TUIOManager(managerAnchor).start();
+    const square1Div = document.getElementById('child-1');
+    const position = square1Div.getBoundingClientRect();
+    const square1Img = new ImageElementWidget(position.x, position.y, position.width, position.height, 0, 1, './assets/pipe.png');
+    square1Img.domElem.get(0).style.opacity = "0"
+    square1Img.addTo(square1Div);
+    square1Img.onTagCreation((tagId) => {
+        console.log(`Tag ${tagId} created`);
+    });
+    square1Img.onTagDeletion((tagId) => {
+        console.log(`Tag ${tagId} deleted`);
+    });
+</script>

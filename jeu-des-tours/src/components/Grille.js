@@ -1,10 +1,23 @@
 // GameBoard.js
 import React, {useEffect, useState} from 'react';
 import './gameboard.css';
-import Gameboard from "./gameboard";
+import Gameboard from "./gameboard.js";
+import {TUIOManager} from "@dj256/tuiomanager";
+
+
 
 
 const Grille = ({StateGame, Values}) => {
+    useEffect(() => {
+        const tuioManager = new TUIOManager();
+        tuioManager.start();
+
+        // Fonction de nettoyage
+        return () => {
+            // Arrêtez ou nettoyez tuioManager ici si nécessaire
+        };
+    }, []); // Le tableau vide signifie que cet effet s'exécute une fois au montage
+
     return (
         <div id="jeu">
             <div className="conteneur-numeros haut rotate-180">

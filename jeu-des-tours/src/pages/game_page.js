@@ -1,8 +1,5 @@
-import GameBoard from '../components/gameboard.js';
-import EyeIcon from "../components/eyeIcon";
 import React, {useEffect} from 'react';
-import { useParams } from 'react-router-dom';
-import Grille from "../components/Grille";
+import Grille from "../components/Grille.js";
 
 function GamePage() {
     const queryParameters = new URLSearchParams(window.location.search)
