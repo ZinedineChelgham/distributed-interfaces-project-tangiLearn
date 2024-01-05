@@ -23,7 +23,6 @@ function GamePage() {
       })
       .catch((error) => console.log(error));
   }
-  console.log(values);
 
   useEffect(() => {
     getGameData();

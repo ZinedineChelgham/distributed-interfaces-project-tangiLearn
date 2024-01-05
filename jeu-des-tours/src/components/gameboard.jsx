@@ -1,25 +1,54 @@
 // Gameboard.js
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./gameboard.css";
+import {ImageElementBis} from "./ImageElementBis.js";
+import {render} from "@testing-library/react";
 
 const socket = new WebSocket("ws://localhost:8080/connection");
 
 const Gameboard = (stateGame) => {
-  console.log(stateGame);
+  console.log("stateGame : " + stateGame.stateGame)
   const [cellValues, setCellValues] = useState(Array(9).fill(0));
+  const [tangibleObjectsCount, setTangibleObjectsCount] = useState({});
 
-  const handleIncrement = (index) => {
+
+  useEffect(() => {
+    cellValues.forEach((_, index) => {
+      const square1Div = document.getElementById(`cell-${index}`);
+      const position = square1Div.getBoundingClientRect();
+      const square1Img = new ImageElementBis(position.x, position.y, position.width, position.height, 0, 1, './assets/pipe.png', `img-${index}`);
+      square1Img.canMove(true,false);
+      square1Img.domElem.get(0).style.opacity = "0";
+      square1Img.addTo(square1Div);
+      console.log("id d'image : " + square1Img.idImage);
+      square1Img.onTagCreation((tagId) => {
+        tangibleObjectsCount[square1Img.idImage] = (tangibleObjectsCount[square1Img.idImage] || 0) + 1;
+        console.log("objet tangibleObjects : " + tangibleObjectsCount[square1Img.idImage]);
+        handleIncrement(index);
+        console.log(`Tag ${tagId} created on image ${square1Img.idImage}`);
+      });
+      square1Img.onTagDeletion((tagId) => {
+        tangibleObjectsCount[square1Img.idImage] = (tangibleObjectsCount[square1Img.idImage] || 0) - 1;
+        console.log("objet tangibleObjects : " + tangibleObjectsCount[square1Img.idImage]);
+        handleDecrement(index);
+        console.log(`Tag ${tagId} deleted on image ${square1Img.idImage}`);
+      });
+    });
+  }, []); // Le tableau vide indique que cet effet ne s'exécute qu'après le premier rendu
+
+const handleIncrement = (index) => {
     const newCellValues = [...cellValues];
     newCellValues[index] = Math.min(newCellValues[index] + 1, 4);
     setCellValues(newCellValues);
-    updateGameData(index, "increment");
+    updateGameData(index, "increment").then(r => renderCells());
+
   };
 
   const handleDecrement = (index) => {
     const newCellValues = [...cellValues];
     newCellValues[index] = Math.max(newCellValues[index] - 1, 0);
     setCellValues(newCellValues);
-    updateGameData(index, "decrement");
+    updateGameData(index, "decrement").then(r => renderCells());
   };
   const convertIndexToCoordinates = (index) => {
     const row = Math.floor(index / 3); // Obtenez la ligne en divisant l'index par la largeur de la grille
@@ -100,6 +129,7 @@ const Gameboard = (stateGame) => {
   };
   const renderCells = () => {
     return cellValues.map((value, index) => (
+        value = cellValues[index],
       <div key={index} id={`cell-${index}`} className="grid-item case">
         <button onClick={() => handleDecrement(index)}>-</button>
         <span>{value}</span>
