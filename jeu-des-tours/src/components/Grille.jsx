@@ -5,6 +5,7 @@ import Gameboard from "./gameboard.jsx";
 
 
 const Grille = ({ StateGame, Values }) => {
+    console.log("stateGame de la grille  : " + StateGame);
   return (
     <div id="jeu">
       <div className="conteneur-numeros haut rotate-180">

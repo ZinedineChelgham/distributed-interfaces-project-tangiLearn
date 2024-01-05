@@ -7,7 +7,12 @@ import {render} from "@testing-library/react";
 const socket = new WebSocket("ws://localhost:8080/connection");
 
 const Gameboard = (stateGame) => {
-  console.log("stateGame : " + stateGame.stateGame)
+  let flattenedArray = [0,0,0,0,0,0,0,0,0];
+  if (stateGame && stateGame.stateGame) {
+    flattenedArray = Object.values(stateGame.stateGame).flat();
+  }
+
+  console.log("flattened : " + flattenedArray)
   const [cellValues, setCellValues] = useState(Array(9).fill(0));
   const [tangibleObjectsCount, setTangibleObjectsCount] = useState({});
 
@@ -129,10 +134,9 @@ const handleIncrement = (index) => {
   };
   const renderCells = () => {
     return cellValues.map((value, index) => (
-        value = cellValues[index],
       <div key={index} id={`cell-${index}`} className="grid-item case">
         <button onClick={() => handleDecrement(index)}>-</button>
-        <span>{value}</span>
+        <span>{flattenedArray[index]}</span>
         <button onClick={() => handleIncrement(index)}>+</button>
       </div>
     ));
