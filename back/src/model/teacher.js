@@ -7,11 +7,15 @@ const teacherSchema = new mongoose.Schema({
   },
   surname: {
     type: String,
-    required: true
+    required: true,
   },
   password: {
     type: String,
     required: true,
+  },
+  avatar: {
+    type: String,
+    required: false,
   },
 });
 

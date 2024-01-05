@@ -7,13 +7,20 @@ import teacherRoutes from "./routes/teachers.js";
 import pupilRoutes from "./routes/pupils.js";
 import mongoose from "mongoose";
 import cors from "cors";
+import { populateDb } from "../db/init.js";
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL, {});
 
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
-db.once("open", () => console.log("Connected to Database"));
+db.once("open", async () => {
+  console.log("Connected to Database");
+  // Populate database with initial data
+  await db.dropDatabase();
+  await populateDb();
+});
 
 // Create Express app
 const app = express();
@@ -21,7 +28,6 @@ const app = express();
 // Allow Express to understand JSON
 app.use(express.json());
 app.use(cors());
-
 
 // Registering routes
 app.use("/api/front", monitoringRoutes);
