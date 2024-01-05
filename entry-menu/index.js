@@ -1,6 +1,6 @@
 const GAME_URL_MAPPER = {
     pipe: 'http://localhost:5173/',
-    tower: 'http://localhost:', // TODO : Ajouter le port du jeu des tours
+    tower: 'http://localhost:5174',
 }
 
 const API = "http://localhost:3000/api/monitoring/"
