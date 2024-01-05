@@ -28,12 +28,15 @@ function GamePage() {
         getGameData();
     }, []);
 
+    /**
+     * <h1>Game Page</h1>
+     * <p>Game ID: {id}</p>
+     * <p>Values: {values}</p>
+     * <p>State: {state_game}</p>
+     */
+
     return (
         <div>
-            <h1>Game Page</h1>
-            <p>Game ID: {id}</p>
-            <p>Values: {values}</p>
-            <p>State: {state_game}</p>
             <Grille StateGame={state_game} Values={values}/>
         </div>
     );
