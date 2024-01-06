@@ -32,7 +32,7 @@ function App() {
     >
       <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
         <Box flexGrow={1} display="flex" justifyContent="center" alignItems="center">
-          <Typography variant="h2" marginLeft={'7vw'}>
+          <Typography variant="h2" marginLeft={'15vw'}>
             TangiLearn Monitoring
           </Typography>
         </Box>

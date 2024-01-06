@@ -1,6 +1,5 @@
 import "./App.css";
 import React from "react";
-import NewGame from "./pages/new_game.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import GamePage from "./pages/game_page.jsx";
 
@@ -12,8 +11,8 @@ const App = () => {
           {/*<Route exact path="/">*/}
           {/*  <Navigate to="/startgame" />*/}
           {/*</Route>*/}
-          <Route exact path={"/"} element={<NewGame />} />
-          <Route path="/startgame" element={<NewGame />} />
+          <Route exact path={"/"} element={<GamePage />} />
+          <Route path="/startgame" element={<GamePage />} />
           <Route path="/gamepage" element={<GamePage />} />
         </Routes>
       </div>

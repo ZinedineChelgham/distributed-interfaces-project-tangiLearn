@@ -29,7 +29,7 @@ function CardGame({game, handleClick}) {
     // State for dialog visibility
     const [openDialog, setOpenDialog] = useState(false);
     const [isTowerParamClicked, setIsTowerParamClicked] = useState(false);
-    const [towerParams, setTowerParams] = useState([]);
+    const [towerParams, setTowerParams] = useState([1,1,1,1,2,2,2,2,4,4,4,4]);
 
     // Function to handle opening and closing dialog
     const handleDialog = () => {
@@ -103,7 +103,7 @@ function CardGame({game, handleClick}) {
                 aria-labelledby="dialog-title"
                 aria-describedby="dialog-description"
             >
-                <DialogTitle id="dialog-title">
+                <DialogTitle id="dialog-title" marginBottom={'1rem'}>
                     {"Configuration du jeu des tours"}
                 </DialogTitle>
                 <DialogContent>
@@ -114,10 +114,11 @@ function CardGame({game, handleClick}) {
                                     <Grid item xs={4} key={index}>
                                         <TextField
                                             fullWidth
-                                            label={`${index + 1}`}
+                                            //label={`${index + 1}`}
                                             variant="outlined"
                                             required={true}
                                             type={"number"}
+                                            value={towerParams[index]}
                                             onChange={(e) => {
                                                 const newTowerParams = [...towerParams];
                                                 newTowerParams[index] = e.target.value;
@@ -137,6 +138,7 @@ function CardGame({game, handleClick}) {
                             display: "flex",
                             justifyContent: "space-between",
                             width: "100%",
+                            padding: "0 1rem",
                         }}
                     >
                         <Button
