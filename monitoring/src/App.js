@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import TablesPreview from "./components/TablesPreview";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { Typography, Tabs, Tab } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
+import { Typography, Tabs, Tab, Avatar, Box } from "@mui/material";
 import PupilBinding from "./components/PupilBinding";
 
 function App() {
   const [activeTab, setActiveTab] = useState(0);
+  const [teacher, setTeacher] = useState({});
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/teacher/")
+      .then((response) => response.json())
+      .then((data) => setTeacher(data[0]))
+      .catch((error) => console.error("Error fetching teacher data:", error));
+  }, []);
 
   return (
     <Grid2
@@ -23,9 +30,21 @@ function App() {
       gap={2}
       wrap="nowrap"
     >
-      <Typography variant="h2" textAlign={"center"}>
-        TangiLearn Monitoring
-      </Typography>
+      <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
+        <Box flexGrow={1} display="flex" justifyContent="center" alignItems="center">
+          <Typography variant="h2" marginLeft={'7vw'}>
+            TangiLearn Monitoring
+          </Typography>
+        </Box>
+
+        <Box display="flex" alignItems="center">
+          <Avatar src={teacher?.avatar} />
+          <Box ml={1}>Professeur {teacher.surname} {teacher.name?.toLocaleUpperCase()} </Box>
+        </Box>
+      </Box>
+
+
+
 
       <Tabs
         value={activeTab}
