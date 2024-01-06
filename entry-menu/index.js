@@ -3,7 +3,7 @@ const GAME_URL_MAPPER = {
     tower: 'http://localhost:5173/',
 }
 
-const API = "http://localhost:3000/api/monitoring/"
+const API = "http://localhost:3000/api/monitoring"
 
 
 function checkGameStatus() {
@@ -11,7 +11,7 @@ function checkGameStatus() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            const gameName = data; // Supposons que l'API renvoie un champ 'gameName'
+            const gameName = data;
             if (!gameName) return;
 
             if (gameName === 'tower') {
@@ -23,10 +23,10 @@ function checkGameStatus() {
                             window.location.href = GAME_URL_MAPPER[gameName] + "gamepage?id=" + data.gameId;
                         }
                     })
-            } else window.location.href = GAME_URL_MAPPER[gameName]; // Rediriger vers l'URL du jeu
+            } else window.location.href = GAME_URL_MAPPER[gameName];
         })
         .catch(error => console.error('Error checking game status:', error));
 }
 
 
-setInterval(checkGameStatus, 100);
+setInterval(checkGameStatus, 200);

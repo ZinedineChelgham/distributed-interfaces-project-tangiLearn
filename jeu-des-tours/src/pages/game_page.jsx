@@ -10,13 +10,11 @@ function GamePage() {
     const [gameData, setGameData] = React.useState(null);
     const [values, setValues] = React.useState(null);
     const [state_game, setState_game] = React.useState(null);
-    //const [gameId, setGameId] = useState("");
     const queryParameters = new URLSearchParams(window.location.search);
     const gameId = queryParameters.get('id');
 
 
     function getGameData() {
-        console.log("gameIdIsosu", gameId);
         if(!gameId) return;
         fetch(`http://localhost:3000/api/tower-game/get-game-data/${gameId}`)
             .then((response) => response.json())
