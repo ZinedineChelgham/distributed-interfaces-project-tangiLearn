@@ -26,6 +26,24 @@ import {
 } from "./constants.js";
 import { Cell } from "./cell.js";
 
+// Pipe default rotation states:
+//
+//   == STRAIGHT ==          == CURVED ==          == T-SHAPE ==          == LONG ==
+//
+//       ######                          ##            ######               ######
+//        ####                     ########             ####                 ####
+//        ####                  ###########      ##     ####     ##          ####
+//        ####                 #######   ##      ##################          ####
+//        ####                 #######           ##              ##          ####
+//       ######              ##########                                      ####
+//                                                                           ####
+//                                                                           ####
+//                                                                           ####
+//                                                                           ####
+//                                                                           ####
+//                                                                           ####
+//                                                                          ######
+
 const pipeData = {
   straight: {
     images: {
@@ -69,18 +87,22 @@ const pipeData = {
   },
 };
 
+let classId = 0;
+
 export class PipeGameManager {
   constructor() {
     this.root = document.getElementById("root");
     this.pipesGameContainer = document.createElement("div");
     this.cells = [];
-    /** @type {Map<PipeType, number>} */
+    /** @type {{[p: PipeType]: number}} */
     this.pipeCounts = {
       [PIPE_TYPES.CURVED]: 0,
       [PIPE_TYPES.STRAIGHT]: 0,
       [PIPE_TYPES.T_SHAPE]: 0,
       [PIPE_TYPES.LONG]: 0,
     };
+    this.equivalenceClasses = new Map();
+    this.graphNodes = new Map();
   }
 
   displayLogo() {
@@ -218,6 +240,17 @@ export class PipeGameManager {
         .querySelector(`.margin.${gateDescription.side}`)
         .append(gateElement);
       gateElement.style.transform = `translateX(${gateDescription.x * 100}px)`;
+      const id = classId++;
+      this.graphNodes.set(
+        (gateDescription.x + 1) * 100 + (gateDescription.side === "up" ? 0 : 9),
+        {
+          equivalenceClass: id,
+          pipe: undefined,
+        },
+      );
+      this.equivalenceClasses.set(id, [
+        (gateDescription.x + 1) * 100 + (gateDescription.side === "up" ? 0 : 9),
+      ]);
     }
   }
 
@@ -234,6 +267,13 @@ export class PipeGameManager {
       pipeElement.style.left = `${pipeDescription.x * 100}px`;
       pipeElement.style.top = `${pipeDescription.y * 100}px`;
       pipeElement.style.transform = `rotate(${pipeDescription.rotation}deg)`;
+
+      this.addNewPipeToGraph(
+        pipeDescription.x,
+        pipeDescription.y,
+        pipeDescription.type,
+        pipeDescription.rotation,
+      );
     });
   }
 
@@ -267,13 +307,13 @@ export class PipeGameManager {
 
     pipeWidget.addOnTagDownListener((tuioTag) => {
       pipeWidget.domElem.classList.add(`drag-${tuioTag.id}`);
-      pipeWidget.tagCurrentAngle = tuioTag.angle;
       const pipeX = pipeWidget.domElem.style.left.match(/\d+/)[0];
       const pipeY = pipeWidget.domElem.style.top.match(/\d+/)[0];
       console.log(pipeX, pipeY);
       pipeWidget.tagOffset = {
         x: pipeX - tuioTag.x,
         y: pipeY - tuioTag.y,
+        angle: pipeWidget.angle - tuioTag.angle,
       };
     });
 
@@ -294,9 +334,9 @@ export class PipeGameManager {
     });
 
     pipeWidget.addOnTagRotateListener((tuioTag) => {
-      pipeWidget.angle = (tuioTag.angle * 180) / Math.PI;
-      pipeWidget.domElem.style.transform = `rotate(${pipeWidget.angle}deg)`;
-      pipeWidget.tagCurrentAngle = tuioTag.angle;
+      pipeWidget.domElem.style.transform = `rotate(${
+        tuioTag.angle + pipeWidget.tagOffset.angle
+      }rad)`;
     });
 
     pipeWidget.addOnTagUpListener((tuioTagId) => {
@@ -320,9 +360,8 @@ export class PipeGameManager {
         { cell: this.cells[0], distance: 1_000_000 },
       );
       const closestCell = closest.cell;
-      const closestAngle = Math.round(pipeWidget.angle / 90) * 90;
+      const closestAngle = Math.round((pipeWidget.angle * 2) / Math.PI) * 90;
       pipeWidget.domElem.style.transform = `rotate(${closestAngle}deg)`;
-      pipeWidget.angle = closestAngle;
 
       // if (pipeWidget.category === PIPE_TYPES.LONG) {
       //   if (pipeWidget.angle === 90 || pipeWidget.angle === 270) {
@@ -334,17 +373,150 @@ export class PipeGameManager {
       pipeWidget.domElem.style.left = closestCell.x + INVENTORY_WIDTH + "px";
       pipeWidget.domElem.style.top =
         closestCell.y + HORIZONTAL_MARGIN_HEIGHT + "px";
+      const pipeXBoard = closestCell.x / 100;
+      const pipeYBoard = closestCell.y / 100;
+      pipeWidget.positionOnBoard = { x: pipeXBoard, y: pipeYBoard };
       pipeWidget.domElem.classList.remove(`drag-${tuioTagId}`);
+      this.addNewPipeToGraph(pipeXBoard, pipeYBoard, pipeType, closestAngle);
 
       // countSpan.textContent = `*${pipeCounts[pipeCat] || 0}`;
       if (pipeWidget.domElem.classList.contains("new")) {
-        console.log("is new");
         pipeWidget.domElem.classList.remove("new");
         if (level.pipes[pipeType] - this.pipeCounts[pipeType] > 0) {
           this.getNewPipe(level, pipeType);
         }
       }
     });
+  }
+
+  /**
+   * @param {number} pipeX
+   * @param {number} pipeY
+   * @param {PipeType} pipeType
+   * @param {0|90|180|270} rotation
+   * @returns {{x: number, y: number}[]}
+   */
+  getNeighbours(pipeX, pipeY, pipeType, rotation) {
+    const allNeighbours = {
+      up: { x: pipeX, y: pipeY - 1 },
+      down: { x: pipeX, y: pipeY + 1 },
+      left: { x: pipeX - 1, y: pipeY },
+      right: { x: pipeX + 1, y: pipeY },
+    };
+    switch (pipeType) {
+      case PIPE_TYPES.STRAIGHT:
+        switch (rotation) {
+          case 0:
+          case 180:
+            delete allNeighbours.left;
+            delete allNeighbours.right;
+            break;
+          case 90:
+          case 270:
+            delete allNeighbours.up;
+            delete allNeighbours.down;
+            break;
+        }
+        break;
+      case PIPE_TYPES.CURVED:
+        switch (rotation) {
+          case 0:
+            delete allNeighbours.left;
+            delete allNeighbours.up;
+            break;
+          case 90:
+            delete allNeighbours.up;
+            delete allNeighbours.right;
+            break;
+          case 180:
+            delete allNeighbours.right;
+            delete allNeighbours.down;
+            break;
+          case 270:
+            delete allNeighbours.down;
+            delete allNeighbours.left;
+            break;
+        }
+        break;
+      case PIPE_TYPES.T_SHAPE:
+        switch (rotation) {
+          case 0:
+            delete allNeighbours.down;
+            break;
+          case 90:
+            delete allNeighbours.left;
+            break;
+          case 180:
+            delete allNeighbours.up;
+            break;
+          case 270:
+            delete allNeighbours.right;
+            break;
+        }
+        break;
+      case PIPE_TYPES.LONG:
+        switch (rotation) {
+          case 0:
+          case 180:
+            delete allNeighbours.left;
+            delete allNeighbours.right;
+            break;
+          case 90:
+          case 270:
+            delete allNeighbours.up;
+            delete allNeighbours.down;
+            break;
+        }
+        break;
+    }
+    return Object.values(allNeighbours);
+  }
+
+  /**
+   * @param {number} newPipeX
+   * @param {number} newPipeY
+   * @param {PipeType} pipeType
+   * @param {0|90|180|270} rotation
+   */
+  addNewPipeToGraph(newPipeX, newPipeY, pipeType, rotation) {
+    const id = classId++;
+    this.graphNodes.set((newPipeX + 1) * 100 + newPipeY + 1, {
+      equivalenceClass: id,
+      pipe: { pipeType, rotation },
+    });
+    this.equivalenceClasses.set(id, [(newPipeX + 1) * 100 + newPipeY + 1]);
+    const neighbours = this.getNeighbours(
+      newPipeX,
+      newPipeY,
+      pipeType,
+      rotation,
+    );
+    for (const neighbour of neighbours) {
+      if (this.graphNodes.has((neighbour.x + 1) * 100 + neighbour.y + 1)) {
+        this.mergeEquivalenceClasses(
+          this.graphNodes.get((neighbour.x + 1) * 100 + neighbour.y + 1)
+            .equivalenceClass,
+          this.graphNodes.get((newPipeX + 1) * 100 + newPipeY + 1)
+            .equivalenceClass,
+        );
+      }
+    }
+  }
+
+  mergeEquivalenceClasses(equivalenceClass1, equivalenceClass2) {
+    const equivalenceClass1Set = this.equivalenceClasses.get(equivalenceClass1);
+    const equivalenceClass2Set = this.equivalenceClasses.get(equivalenceClass2);
+    for (const node of equivalenceClass2Set) {
+      this.graphNodes.set(node, {
+        equivalenceClass: equivalenceClass1,
+        pipe: this.graphNodes.get(node).pipe,
+      });
+    }
+    this.equivalenceClasses.set(
+      equivalenceClass1,
+      equivalenceClass1Set.concat(equivalenceClass2Set),
+    );
+    this.equivalenceClasses.delete(equivalenceClass2);
   }
 
   start(onFinish) {
