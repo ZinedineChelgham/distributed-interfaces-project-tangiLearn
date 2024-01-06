@@ -1,5 +1,5 @@
 /**
- * @typedef {"curve" | "straight" | "tshape" | "long" } PipeType
+ * @typedef {"curved" | "straight" | "tshape" | "long" } PipeType
  */
 export class GameLevel {
   /**

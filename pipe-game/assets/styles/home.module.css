@@ -27,7 +27,15 @@
     font-weight: 500;
     color: var(--white);
     text-align: center;
+    transition: transform ease-out 300ms;
+}
+
+.loading {
     animation: rotate-text 20s linear infinite;
+}
+
+.ready {
+    animation-play-state: paused;
 }
 
 .loader {
@@ -44,6 +52,17 @@
     text-align: center;
 }
 
+.fade-out {
+    animation: fade-out 500ms ease-out forwards;
+}
+
+@keyframes reset-rotate {
+    to {
+        rotate: 0;
+    }
+}
+
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -55,9 +74,19 @@
 
 @keyframes rotate-text {
     0% {
-        transform: rotate(0deg);
+        rotate: 0deg;
     }
     100% {
-        transform: rotate(-360deg);
+        rotate: -360deg;
     }
 }
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+

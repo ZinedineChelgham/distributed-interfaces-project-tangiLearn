@@ -1,0 +1,96 @@
+.pipes-game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-image: url("../../assets/images/water.png");
+    background-size: cover;
+}
+
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 5rem;
+}
+
+.logo {
+    animation: logo-entry 1s ease-in-out;
+}
+
+.player-start {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 2rem;
+    color: var(--white);
+    font-weight: 500;
+}
+
+.token-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10rem;
+    width: 10rem;
+}
+
+.token-container-background {
+    position: absolute;
+    height: 8rem;
+    width: 8rem;
+    background: var(--white);
+    clip-path: circle(50% at 50% 50%);
+    transition: width 0.2s ease-out, height 0.2s ease-out;
+}
+
+.token-container-background-active {
+    background: var(--green);
+    height: 10rem;
+    width: 10rem;
+}
+
+.token-container-inner-background {
+    z-index: 1;
+    position: absolute;
+    height: 7rem;
+    width: 7rem;
+    background: var(--deep-blue);
+    clip-path: circle(50% at 50% 50%);
+    transition: width 0.2s ease-out, height 0.2s ease-out;
+}
+
+.token-container img {
+    z-index: 2;
+    height: 4rem;
+    width: auto;
+}
+
+.game-container {
+    display: grid;
+    grid-template-columns: 1fr 1400px 1fr;
+    grid-template-rows: 1fr 800px 1fr;
+    width: 1920px;
+    height: 1080px;
+    background: transparent;
+}
+
+.water-gate {
+    display: flex;
+}
+
+@keyframes logo-entry {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

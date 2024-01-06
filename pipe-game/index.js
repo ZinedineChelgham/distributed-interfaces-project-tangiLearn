@@ -1,14 +1,14 @@
-import { TangiLearnApp } from "./src/tangiLearnApp.js";
+import { PipeGameManager } from "./src/pipeGameManager.js";
+import { TUIOManager } from "@dj256/tuiomanager";
 
-const app = new TangiLearnApp(document.getElementById("root"));
+const root = document.getElementById("root");
+new TUIOManager(root).start();
 
-app.displayHomeScreen();
-
+new PipeGameManager().start(() => {});
 // const INVENTORY_WIDTH = (GAME_WIDTH - BOARD_WIDTH) / 2;
 //
 // const gameContainer = document.getElementById("game-container");
 // const gameContainerBoundingRect = gameContainer.getBoundingClientRect();
-// new TUIOManager(gameContainer).start();
 //
 // let pipeCounts = {
 //   1: 5,

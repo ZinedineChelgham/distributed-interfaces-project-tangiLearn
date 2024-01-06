@@ -5,6 +5,8 @@
     --purple: #662E9B;
     --green: #78BC38;
     --blue: #43BCCD;
+    --deep-blue: #112F34;
+    --grey: #435153;
 
     --white: #FFFFFF;
 }
@@ -68,7 +70,7 @@ body {
 /*}*/
 
 .inventory {
-    background: #c7c7c7;
+    background: var(--grey);
     height: 100%;
     width: auto;
 }
@@ -80,22 +82,34 @@ body {
     grid-column-end: 2;
 }
 
+.inventory.right {
+    grid-row-start: 1;
+    grid-row-end: 4;
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
 .margin {
-    background-image: url("./assets/images/water.png");
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .margin.up {
+    justify-content: flex-end;
     grid-row-start: 1;
     grid-row-end: 2;
-    grid-column-start: 1;
-    grid-column-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
 .margin.down {
+    justify-content: flex-start;
     grid-row-start: 3;
     grid-row-end: 4;
-    grid-column-start: 1;
-    grid-column-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
 #game-container {
@@ -104,7 +118,6 @@ body {
     grid-template-rows: 1fr 2fr 1fr;
     width: 1920px;
     height: 1080px;
-    background-color: antiquewhite;
 }
 
 #board {
@@ -114,7 +127,7 @@ body {
     grid-column-end: 3;
     grid-row-start: 2;
     grid-row-end: 3;
-    background-color: lightblue;
+    background: #969696;
 }
 
 .cell {
@@ -128,6 +141,9 @@ body {
     align-items: center;
 }
 
+.reverse {
+    transform: rotate(180deg);
+}
 
 /*.cell,*/
 /*img {*/
