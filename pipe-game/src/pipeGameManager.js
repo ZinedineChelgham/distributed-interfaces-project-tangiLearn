@@ -3,6 +3,7 @@ import magnet from "../assets/images/magnet.png";
 import Pipes from "../assets/styles/pipes.module.css";
 import Animations from "../assets/styles/animations.module.css";
 import inlet from "../assets/images/inlet.svg";
+import sign from "../assets/images/works_sign.png";
 import { HTMLElementWidget } from "@dj256/tuiomanager/widgets";
 import { levels } from "./levels.js";
 import straightFixed from "../assets/images/pipe_straight_fixed.svg";
@@ -101,11 +102,29 @@ export class PipeGameManager {
     const level = levels[0];
     this.pipesGameContainer.innerHTML = `
       <div class="${Pipes.gameContainer}">
-        <div class="inventory left"></div>
+        <div class="${Pipes.inventory} ${Pipes.inventoryLeft}">
+          <div class="${Pipes.inventorySign}">
+            <img src=${sign} alt="Works" />
+            <p>Inventaire</p>
+          </div>
+          <div class="${Pipes.inventorySign} reverse">
+            <img src=${sign} alt="Works" />
+            <p>Inventaire</p>
+          </div>
+        </div>
         <div class="margin up"></div>
         <div id="board"></div>
         <div class="margin down"></div>
-        <div class="inventory right"></div>
+        <div class="${Pipes.inventory} ${Pipes.inventoryRight}">
+          <div class="${Pipes.inventorySign}">
+            <img src=${sign} alt="Works" />
+            <p>Inventaire</p>
+          </div>
+          <div class="${Pipes.inventorySign} reverse">
+            <img src=${sign} alt="Works" />
+            <p>Inventaire</p>
+          </div>
+        </div>
       </div>
     `;
     this.placeWaterGates(level);

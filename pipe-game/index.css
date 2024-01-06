@@ -69,26 +69,6 @@ body {
 /*    width: 400px;*/
 /*}*/
 
-.inventory {
-    background: var(--grey);
-    height: 100%;
-    width: auto;
-}
-
-.inventory.left {
-    grid-row-start: 1;
-    grid-row-end: 4;
-    grid-column-start: 1;
-    grid-column-end: 2;
-}
-
-.inventory.right {
-    grid-row-start: 1;
-    grid-row-end: 4;
-    grid-column-start: 3;
-    grid-column-end: 4;
-}
-
 .margin {
     background: transparent;
     display: flex;
