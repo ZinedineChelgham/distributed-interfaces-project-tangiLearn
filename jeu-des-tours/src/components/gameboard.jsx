@@ -135,9 +135,7 @@ const handleIncrement = (index) => {
   const renderCells = () => {
     return cellValues.map((value, index) => (
       <div key={index} id={`cell-${index}`} className="grid-item case">
-        <button onClick={() => handleDecrement(index)}>-</button>
         <span>{flattenedArray[index]}</span>
-        <button onClick={() => handleIncrement(index)}>+</button>
       </div>
     ));
   };

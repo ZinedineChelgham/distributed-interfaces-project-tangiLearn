@@ -34,6 +34,7 @@ wss.on('connection', (ws) => {
 router.post("/start-game", async (req, res) => {
   try {
     const { selectedValues, gameId,state_game } = req.body;
+    await TowerGame.deleteMany({});
     // Enregistrez les données dans la base de données
       const TowerGameInstance = new TowerGame({
         selectedValues,
@@ -127,4 +128,24 @@ router.post('/ping', async (req, res) => {
     console.error('Erreur lors de la gestion du ping :', error);
     res.status(500).json({ success: false, message: 'Erreur lors de la gestion du ping.' });
   }
-});export default router;
+});
+
+router.get("/get-id", async (req, res) => {
+  try {
+    // Rechercher la seule instance de jeu dans la base de données
+    const gameInstance = await TowerGame.findOne({});
+
+    if (gameInstance) {
+      // Si l'instance de jeu est trouvée, renvoyer l'ID
+      res.status(200).json({ success: true, gameId: gameInstance.gameId });
+    } else {
+      // Si aucune instance de jeu n'est trouvée
+      res.status(404).json({ success: false, message: "Aucune instance de jeu trouvée." });
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'ID :", error);
+    res.status(500).json({ success: false, message: "Erreur lors de la récupération de l'ID." });
+  }
+});
+
+export default router;
