@@ -300,7 +300,9 @@ export class PipeGameManager {
     pipeElement.style.left = `${pipeData[pipeType].inventoryPosition.x}px`;
     pipeElement.style.top = `${pipeData[pipeType].inventoryPosition.y}px`;
     pipeElement.style.width = `${IMAGE_SIZE}px`;
-    pipeElement.style.height = `${IMAGE_SIZE}px`;
+    pipeElement.style.height = `${
+      pipeType === PIPE_TYPES.LONG ? IMAGE_SIZE * 2 : IMAGE_SIZE
+    }px`;
     pipeElement.classList.add("new");
     this.gameContainer.append(pipeElement);
     const pipeWidget = new HTMLElementWidget(pipeElement);
@@ -360,15 +362,16 @@ export class PipeGameManager {
         { cell: this.cells[0], distance: 1_000_000 },
       );
       const closestCell = closest.cell;
-      const closestAngle = Math.round((pipeWidget.angle * 2) / Math.PI) * 90;
+      const closestAngle =
+        (Math.round((pipeWidget.angle * 2) / Math.PI) * 90) % 360;
       pipeWidget.domElem.style.transform = `rotate(${closestAngle}deg)`;
 
-      // if (pipeWidget.category === PIPE_TYPES.LONG) {
-      //   if (pipeWidget.angle === 90 || pipeWidget.angle === 270) {
-      //     closestCell.x -= IMAGE_SIZE / 2;
-      //     closestCell.y -= IMAGE_SIZE / 2;
-      //   }
-      // }
+      if (pipeType === PIPE_TYPES.LONG) {
+        if (closestAngle === 90 || closestAngle === 270) {
+          closestCell.x -= IMAGE_SIZE / 2;
+          closestCell.y -= IMAGE_SIZE / 2;
+        }
+      }
       pipeWidget.oldAngle = closestAngle;
       pipeWidget.domElem.style.left = closestCell.x + INVENTORY_WIDTH + "px";
       pipeWidget.domElem.style.top =
