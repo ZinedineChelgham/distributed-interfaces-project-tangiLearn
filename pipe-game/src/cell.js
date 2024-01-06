@@ -1,8 +1,10 @@
+import { IMAGE_SIZE } from "./constants.js";
+
 export class Cell extends HTMLElement {
   constructor(x, y) {
     super();
-    this.x = x;
-    this.y = y;
+    this.x = x * IMAGE_SIZE;
+    this.y = y * IMAGE_SIZE;
   }
   connectedCallback() {
     this.classList.add("cell");

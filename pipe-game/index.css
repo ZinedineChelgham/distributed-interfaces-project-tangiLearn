@@ -1,16 +1,66 @@
+:root {
+    --yellow: #F9C80E;
+    --orange: #F86624;
+    --red: #EA3546;
+    --purple: #662E9B;
+    --green: #78BC38;
+    --blue: #43BCCD;
+    --deep-blue: #112F34;
+    --grey: #435153;
+
+    --white: #FFFFFF;
+}
+
+@font-face {
+    font-family: "Wendy One";
+    src: url("./assets/fonts/WendyOne-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("./assets/fonts/Poppins-Regular.ttf");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("./assets/fonts/Poppins-Medium.ttf");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("./assets/fonts/Poppins-Bold.ttf");
+    font-weight: bold;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-html,
+html {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Poppins", Helvetica, "Helvetica Neue", sans-serif;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+#root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
 
@@ -19,34 +69,27 @@ body {
 /*    width: 400px;*/
 /*}*/
 
-.inventory {
-    background: #c7c7c7;
-    height: 100%;
-    width: auto;
-}
-.inventory.left {
-    grid-row-start: 1;
-    grid-row-end: 4;
-    grid-column-start: 1;
-    grid-column-end: 2;
-}
-
 .margin {
-    background-image: url("./assets/images/water.png");
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .margin.up {
+    justify-content: flex-end;
     grid-row-start: 1;
     grid-row-end: 2;
-    grid-column-start: 1;
-    grid-column-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
 .margin.down {
+    justify-content: flex-start;
     grid-row-start: 3;
     grid-row-end: 4;
-    grid-column-start: 1;
-    grid-column-end: 4;
+    grid-column-start: 2;
+    grid-column-end: 3;
 }
 
 #game-container {
@@ -55,7 +98,6 @@ body {
     grid-template-rows: 1fr 2fr 1fr;
     width: 1920px;
     height: 1080px;
-    background-color: antiquewhite;
 }
 
 #board {
@@ -65,7 +107,7 @@ body {
     grid-column-end: 3;
     grid-row-start: 2;
     grid-row-end: 3;
-    background-color: lightblue;
+    background: #969696;
 }
 
 .cell {
@@ -79,6 +121,9 @@ body {
     align-items: center;
 }
 
+.reverse {
+    transform: rotate(180deg);
+}
 
 /*.cell,*/
 /*img {*/
