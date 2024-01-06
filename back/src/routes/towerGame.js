@@ -130,6 +130,15 @@ router.post('/ping', async (req, res) => {
   }
 });
 
+function setCurrentGame() {
+  fetch(`http://localhost:3000/api/monitoring/current-game`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({game : "tower"}),
+  }).then((r) => console.log(r));
+}
+
+
 router.get("/get-id", async (req, res) => {
   try {
     // Rechercher la seule instance de jeu dans la base de données
@@ -137,10 +146,12 @@ router.get("/get-id", async (req, res) => {
 
     if (gameInstance) {
       // Si l'instance de jeu est trouvée, renvoyer l'ID
+      console.log("ID existant :", gameInstance.gameId)
+      setCurrentGame();
       res.status(200).json({ success: true, gameId: gameInstance.gameId });
     } else {
       // Si aucune instance de jeu n'est trouvée
-      res.status(404).json({ success: false, message: "Aucune instance de jeu trouvée." });
+      res.status(200).json({ success: true, gameId: "" });
     }
   } catch (error) {
     console.error("Erreur lors de la récupération de l'ID :", error);

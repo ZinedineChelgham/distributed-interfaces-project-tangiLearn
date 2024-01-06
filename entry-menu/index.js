@@ -1,6 +1,6 @@
 const GAME_URL_MAPPER = {
-    pipe: 'http://localhost:5173/',
-    tower: 'http://localhost:5174',
+    pipe: 'http://localhost:5174/',
+    tower: 'http://localhost:5173/',
 }
 
 const API = "http://localhost:3000/api/monitoring/"
