@@ -29,6 +29,7 @@ function App() {
       padding={4}
       gap={2}
       wrap="nowrap"
+      sx={{ background: "linear-gradient(to top, #0a5cff, #ffffff)" }}
     >
       <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
 

@@ -76,7 +76,7 @@ export default function LoginPage() {
     <Box
       width={"100vw"}
       height={"100vh"}
-      sx={{ background: "linear-gradient(to top, #1e365e, #095dca)" }}
+      sx={{ background: "linear-gradient(to top, #0a5cff, #ffffff)" }}
     >
       <ThemeProvider theme={defaultTheme}>
         <Typography variant="h2" textAlign={"center"}>
