@@ -101,7 +101,9 @@ export class PipeGameManager {
       [PIPE_TYPES.T_SHAPE]: 0,
       [PIPE_TYPES.LONG]: 0,
     };
+    /** @type {Map<number, number[]>} */
     this.equivalenceClasses = new Map();
+    /** @type {Map<number, {equivalenceClass: number, pipe: {pipeType: PipeType, rotation: 0|90|180|270}}>} */
     this.graphNodes = new Map();
   }
 
@@ -378,16 +380,29 @@ export class PipeGameManager {
         closestCell.y + HORIZONTAL_MARGIN_HEIGHT + "px";
       const pipeXBoard = closestCell.x / 100;
       const pipeYBoard = closestCell.y / 100;
-      pipeWidget.positionOnBoard = { x: pipeXBoard, y: pipeYBoard };
       pipeWidget.domElem.classList.remove(`drag-${tuioTagId}`);
-      this.addNewPipeToGraph(pipeXBoard, pipeYBoard, pipeType, closestAngle);
-
       // countSpan.textContent = `*${pipeCounts[pipeCat] || 0}`;
       if (pipeWidget.domElem.classList.contains("new")) {
         pipeWidget.domElem.classList.remove("new");
+        this.addNewPipeToGraph(pipeXBoard, pipeYBoard, pipeType, closestAngle);
         if (level.pipes[pipeType] - this.pipeCounts[pipeType] > 0) {
           this.getNewPipe(level, pipeType);
         }
+      } else {
+        this.movePipe(pipeXBoard, pipeYBoard, closestAngle, pipeWidget);
+      }
+      pipeWidget.positionOnBoard = {
+        x: pipeXBoard,
+        y: pipeYBoard,
+        angle: closestAngle,
+      };
+
+      if (this.checkWin(level)) {
+        console.log("////////////////////////////////////////////////");
+        console.log("//                                            //");
+        console.log("//                   WIN                      //");
+        console.log("//                                            //");
+        console.log("////////////////////////////////////////////////");
       }
     });
   }
@@ -463,11 +478,13 @@ export class PipeGameManager {
           case 180:
             delete allNeighbours.left;
             delete allNeighbours.right;
+            allNeighbours.down.y += 1;
             break;
           case 90:
           case 270:
             delete allNeighbours.up;
             delete allNeighbours.down;
+            allNeighbours.right.x += 1;
             break;
         }
         break;
@@ -488,6 +505,27 @@ export class PipeGameManager {
       pipe: { pipeType, rotation },
     });
     this.equivalenceClasses.set(id, [(newPipeX + 1) * 100 + newPipeY + 1]);
+    if (pipeType === PIPE_TYPES.LONG) {
+      if (rotation === 0 || rotation === 180) {
+        this.graphNodes.set((newPipeX + 1) * 100 + newPipeY + 2, {
+          equivalenceClass: id,
+          pipe: { pipeType, rotation },
+        });
+        this.equivalenceClasses.set(id, [
+          (newPipeX + 1) * 100 + newPipeY + 1,
+          (newPipeX + 1) * 100 + newPipeY + 2,
+        ]);
+      } else {
+        this.graphNodes.set((newPipeX + 2) * 100 + newPipeY + 1, {
+          equivalenceClass: id,
+          pipe: { pipeType, rotation },
+        });
+        this.equivalenceClasses.set(id, [
+          (newPipeX + 1) * 100 + newPipeY + 1,
+          (newPipeX + 2) * 100 + newPipeY + 1,
+        ]);
+      }
+    }
     const neighbours = this.getNeighbours(
       newPipeX,
       newPipeY,
@@ -506,7 +544,47 @@ export class PipeGameManager {
     }
   }
 
+  movePipe(newPipeX, newPipeY, newAngle, pipeWidget) {
+    const oldPipeX = pipeWidget.positionOnBoard.x;
+    const oldPipeY = pipeWidget.positionOnBoard.y;
+    this.removeNode(oldPipeX, oldPipeY);
+    this.addNewPipeToGraph(newPipeX, newPipeY, pipeWidget.pipeType, newAngle);
+  }
+
+  removeNode(x, y, removingLong = false) {
+    const id = this.graphNodes.get((x + 1) * 100 + y + 1).equivalenceClass;
+    this.equivalenceClasses
+      .get(id)
+      .splice(
+        this.equivalenceClasses.get(id).indexOf((x + 1) * 100 + y + 1),
+        1,
+      );
+    const node = this.graphNodes.get((x + 1) * 100 + y + 1);
+    this.graphNodes.delete((x + 1) * 100 + y + 1);
+    if (this.equivalenceClasses.get(id).length === 0) {
+      this.equivalenceClasses.delete(id);
+    }
+    if (!removingLong && node.pipe.pipeType === PIPE_TYPES.LONG) {
+      if (node.pipe.rotation === 0 || node.pipe.rotation === 180) {
+        this.removeNode(x, y + 1, true);
+      } else {
+        this.removeNode(x + 1, y, true);
+      }
+    }
+  }
+
+  checkWin(level) {
+    const inletEquivalenceClass = this.graphNodes.get(
+      (level.inlet.x + 1) * 100 + (level.inlet.side === "up" ? 0 : 9),
+    ).equivalenceClass;
+    const outletEquivalenceClass = this.graphNodes.get(
+      (level.outlet.x + 1) * 100 + (level.outlet.side === "up" ? 0 : 9),
+    ).equivalenceClass;
+    return inletEquivalenceClass === outletEquivalenceClass;
+  }
+
   mergeEquivalenceClasses(equivalenceClass1, equivalenceClass2) {
+    if (equivalenceClass1 === equivalenceClass2) return;
     const equivalenceClass1Set = this.equivalenceClasses.get(equivalenceClass1);
     const equivalenceClass2Set = this.equivalenceClasses.get(equivalenceClass2);
     for (const node of equivalenceClass2Set) {
