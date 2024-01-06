@@ -22,17 +22,46 @@ import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import { useState } from "react";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { nanoid } from "nanoid";
 
 function CardGame({ game, handleClick }) {
   // State for modal visibility
   // State for dialog visibility
   const [openDialog, setOpenDialog] = useState(false);
   const [isTowerParamClicked, setIsTowerParamClicked] = useState(false);
+  const [towerParams, setTowerParams] = useState([]);
 
   // Function to handle opening and closing dialog
   const handleDialog = () => {
     setOpenDialog(!openDialog);
     setIsTowerParamClicked(!openDialog);
+  };
+
+  const sendGameDataToBackend = async (data) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:3000/api/tower-game/start-game`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        },
+      );
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Réponse du backend :", responseData);
+      } else {
+        console.error(
+          "Erreur lors de la requête au backend :",
+          response.statusText,
+        );
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'envoi des données au backend :", error);
+    }
   };
   return (
     <Card sx={{ maxWidth: 200, maxHeight: 230 }}>
@@ -61,7 +90,7 @@ function CardGame({ game, handleClick }) {
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="Settings" placement={"right"}>
+        <Tooltip title="Paramètres" placement={"right"}>
           <IconButton aria-label="settings" onClick={handleDialog}>
             <SettingsIcon />
           </IconButton>
@@ -87,6 +116,14 @@ function CardGame({ game, handleClick }) {
                       fullWidth
                       label={`${index + 1}`}
                       variant="outlined"
+                      required={true}
+                      type={"number"}
+                      onChange={(e) => {
+                        const newTowerParams = [...towerParams];
+                        newTowerParams[index] = e.target.value;
+                        setTowerParams(newTowerParams);
+                        console.log(towerParams);
+                      }}
                     />
                   </Grid>
                 );
@@ -102,8 +139,29 @@ function CardGame({ game, handleClick }) {
               width: "100%",
             }}
           >
-            <Button onClick={handleDialog}>Sauvegarder</Button>
-            <Button onClick={handleDialog}>Fermer</Button>
+            <Button
+              variant={"contained"}
+              onClick={() => {
+                handleDialog();
+                const initialGameState = Array.from({ length: 3 }, () =>
+                  Array(3).fill(0),
+                );
+                const id = nanoid(8);
+                console.log("id", id);
+                console.log("towerParams", towerParams);
+                console.log("initialGameState", initialGameState);
+                /* sendGameDataToBackend({
+                                   id,
+                                   towerParams,
+                                   initialGameState,
+                                 });*/
+              }}
+            >
+              Sauvegarder
+            </Button>
+            <Button variant={"contained"} onClick={handleDialog}>
+              Fermer
+            </Button>
           </Box>
         </DialogActions>
       </Dialog>
