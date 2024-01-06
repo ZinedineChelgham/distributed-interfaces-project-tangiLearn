@@ -1,14 +1,15 @@
 // db.js - Database initialization module
 import { Teacher } from "../src/model/teacher.js";
 import { Pupil } from "../src/model/pupil.js";
+import {hashPassword} from "../src/lib/util.js";
 
 async function populateDb() {
   const newTeacher = await Teacher.create({
-    name: "BenTen",
+    name: "benten",
     surname: "Weel",
-    password: "123",
+    password: await hashPassword("123"),
     avatar:
-      "https://media.licdn.com/dms/image/D4D03AQETaVmZgTMgfw/profile-displayphoto-shrink_400_400/0/1693578410747?e=1709164800&v=beta&t=ULSCAagCxVKn92wv8GkzsH-iwepCxIhkE5xembuWGgs",
+      "https://prod.api.assets.riotgames.com/public/v1/asset/lol/13.24.1/CHAMPION/27/ICON",
   });
   console.log("Teacher added to the database");
 

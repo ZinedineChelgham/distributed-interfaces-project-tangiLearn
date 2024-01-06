@@ -31,15 +31,15 @@ function App() {
       wrap="nowrap"
     >
       <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
-        <Box flexGrow={1} display="flex" justifyContent="center" alignItems="center">
-          <Typography variant="h2" marginLeft={'15vw'}>
-            TangiLearn Monitoring
-          </Typography>
-        </Box>
 
         <Box display="flex" alignItems="center">
-          <Avatar src={teacher?.avatar} />
+          <Avatar src={teacher.avatar} />
           <Box ml={1}>Professeur {teacher.surname} {teacher.name?.toLocaleUpperCase()} </Box>
+        </Box>
+        <Box flexGrow={1} display="flex" justifyContent="center" alignItems="center">
+          <Typography variant="h2" marginRight={'15vw'}>
+            TangiLearn Monitoring
+          </Typography>
         </Box>
       </Box>
 
@@ -50,7 +50,7 @@ function App() {
         value={activeTab}
         onChange={handleTabChange}
         left
-        sx={{ "& .MuiTab-root": { textTransform: "none" } }} // Apply custom styles to Tab components
+        sx={{ "& .MuiTab-root": { textTransform: "none", } }} // Apply custom styles to Tab components
       >
         <Tab label="Gestion des tables" />
         <Tab label="Couplage élève/tangible" />
