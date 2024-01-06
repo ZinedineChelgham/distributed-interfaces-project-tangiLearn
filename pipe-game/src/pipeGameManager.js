@@ -10,18 +10,77 @@ import straightFixed from "../assets/images/pipe_straight_fixed.svg";
 import curvedFixed from "../assets/images/pipe_curved_fixed.svg";
 import tshapeFixed from "../assets/images/pipe_t_shape_fixed.svg";
 import longFixed from "../assets/images/pipe_long_fixed.svg";
+import straight from "../assets/images/pipe_straight.svg";
+import curved from "../assets/images/pipe_curved.svg";
+import tshape from "../assets/images/pipe_t_shape.svg";
+import long from "../assets/images/pipe_long.svg";
+import {
+  BOARD_HEIGHT,
+  BOARD_WIDTH,
+  GAME_HEIGHT,
+  GAME_WIDTH,
+  HORIZONTAL_MARGIN_HEIGHT,
+  IMAGE_SIZE,
+  INVENTORY_WIDTH,
+  PIPE_TYPES,
+} from "./constants.js";
+import { Cell } from "./cell.js";
 
-const pipeImages = {
-  straight: straightFixed,
-  curved: curvedFixed,
-  tshape: tshapeFixed,
-  long: longFixed,
+const pipeData = {
+  straight: {
+    images: {
+      fixed: straightFixed,
+      movable: straight,
+    },
+    inventoryPosition: {
+      x: INVENTORY_WIDTH / 2 - IMAGE_SIZE / 2,
+      y: GAME_HEIGHT / 2 - (5 / 2) * IMAGE_SIZE,
+    },
+  },
+  curved: {
+    images: {
+      fixed: curvedFixed,
+      movable: curved,
+    },
+    inventoryPosition: {
+      x: INVENTORY_WIDTH / 2 - IMAGE_SIZE / 2,
+      y: GAME_HEIGHT / 2 - IMAGE_SIZE / 2,
+    },
+  },
+  tshape: {
+    images: {
+      fixed: tshapeFixed,
+      movable: tshape,
+    },
+    inventoryPosition: {
+      x: INVENTORY_WIDTH / 2 - IMAGE_SIZE / 2,
+      y: GAME_HEIGHT / 2 + (3 / 2) * IMAGE_SIZE,
+    },
+  },
+  long: {
+    images: {
+      fixed: longFixed,
+      movable: long,
+    },
+    inventoryPosition: {
+      x: GAME_WIDTH - INVENTORY_WIDTH / 2 - IMAGE_SIZE / 2,
+      y: GAME_HEIGHT / 2 - IMAGE_SIZE,
+    },
+  },
 };
 
 export class PipeGameManager {
   constructor() {
     this.root = document.getElementById("root");
     this.pipesGameContainer = document.createElement("div");
+    this.cells = [];
+    /** @type {Map<PipeType, number>} */
+    this.pipeCounts = {
+      [PIPE_TYPES.CURVED]: 0,
+      [PIPE_TYPES.STRAIGHT]: 0,
+      [PIPE_TYPES.T_SHAPE]: 0,
+      [PIPE_TYPES.LONG]: 0,
+    };
   }
 
   displayLogo() {
@@ -127,8 +186,22 @@ export class PipeGameManager {
         </div>
       </div>
     `;
+    this.board = this.pipesGameContainer.querySelector("#board");
+    this.gameContainer = this.pipesGameContainer.querySelector(
+      `.${Pipes.gameContainer}`,
+    );
+
+    for (let i = 0; i < BOARD_WIDTH / IMAGE_SIZE; i++) {
+      for (let j = 0; j < BOARD_HEIGHT / IMAGE_SIZE; j++) {
+        const cell = new Cell(i, j);
+        this.board.append(cell);
+        this.cells.push(cell);
+      }
+    }
+
     this.placeWaterGates(level);
     this.placeUnmovablePipes(level);
+    this.initInventory(level);
   }
 
   /**
@@ -154,13 +227,123 @@ export class PipeGameManager {
   placeUnmovablePipes(level) {
     level.unmovablePipes.forEach((pipeDescription) => {
       const pipeElement = document.createElement("img");
-      pipeElement.src = pipeImages[pipeDescription.type];
+      pipeElement.src = pipeData[pipeDescription.type].images.fixed;
       pipeElement.classList.add(Pipes[pipeDescription.type]);
-      this.pipesGameContainer.querySelector("#board").append(pipeElement);
+      this.board.append(pipeElement);
       pipeElement.style.position = "absolute";
       pipeElement.style.left = `${pipeDescription.x * 100}px`;
       pipeElement.style.top = `${pipeDescription.y * 100}px`;
       pipeElement.style.transform = `rotate(${pipeDescription.rotation}deg)`;
+    });
+  }
+
+  /**
+   * @param {import("./gameLevel.js").GameLevel} level
+   */
+  initInventory(level) {
+    for (const [pipeType, pipeCount] of Object.entries(level.pipes)) {
+      if (pipeCount > 0) {
+        this.getNewPipe(level, pipeType);
+      }
+    }
+  }
+
+  /**
+   * @param {import("./gameLevel.js").GameLevel} level
+   * @param {PipeType} pipeType
+   */
+  getNewPipe(level, pipeType) {
+    this.pipeCounts[pipeType] += 1;
+    const pipeElement = document.createElement("img");
+    pipeElement.src = pipeData[pipeType].images.movable;
+    pipeElement.style.position = "absolute";
+    pipeElement.style.left = `${pipeData[pipeType].inventoryPosition.x}px`;
+    pipeElement.style.top = `${pipeData[pipeType].inventoryPosition.y}px`;
+    pipeElement.style.width = `${IMAGE_SIZE}px`;
+    pipeElement.style.height = `${IMAGE_SIZE}px`;
+    pipeElement.classList.add("new");
+    this.gameContainer.append(pipeElement);
+    const pipeWidget = new HTMLElementWidget(pipeElement);
+
+    pipeWidget.addOnTagDownListener((tuioTag) => {
+      pipeWidget.domElem.classList.add(`drag-${tuioTag.id}`);
+      pipeWidget.tagCurrentAngle = tuioTag.angle;
+      const pipeX = pipeWidget.domElem.style.left.match(/\d+/)[0];
+      const pipeY = pipeWidget.domElem.style.top.match(/\d+/)[0];
+      console.log(pipeX, pipeY);
+      pipeWidget.tagOffset = {
+        x: pipeX - tuioTag.x,
+        y: pipeY - tuioTag.y,
+      };
+    });
+
+    pipeWidget.addOnTagDragListener((tuioTag, oldPos) => {
+      if (
+        Math.sqrt(
+          Math.pow(Math.abs(oldPos.x - tuioTag.x), 2) +
+            Math.pow(Math.abs(oldPos.y - tuioTag.y), 2),
+        ) > 50
+      ) {
+        pipeWidget.domElem.style.left = `${
+          tuioTag.x + pipeWidget.tagOffset.x
+        }px`;
+        pipeWidget.domElem.style.top = `${
+          tuioTag.y + pipeWidget.tagOffset.y
+        }px`;
+      }
+    });
+
+    pipeWidget.addOnTagRotateListener((tuioTag) => {
+      pipeWidget.angle = (tuioTag.angle * 180) / Math.PI;
+      pipeWidget.domElem.style.transform = `rotate(${pipeWidget.angle}deg)`;
+      pipeWidget.tagCurrentAngle = tuioTag.angle;
+    });
+
+    pipeWidget.addOnTagUpListener((tuioTagId) => {
+      const pipeX =
+        pipeWidget.domElem.style.left.match(/\d+/)[0] - INVENTORY_WIDTH;
+      const pipeY =
+        pipeWidget.domElem.style.top.match(/\d+/)[0] - HORIZONTAL_MARGIN_HEIGHT;
+      const closest = this.cells.reduce(
+        (prev, curr) => {
+          const currDist = Math.sqrt(
+            Math.pow(Math.abs(pipeX - curr.x), 2) +
+              Math.pow(Math.abs(pipeY - curr.y), 2),
+          );
+          return prev.distance < currDist
+            ? prev
+            : {
+                cell: curr,
+                distance: currDist,
+              };
+        },
+        { cell: this.cells[0], distance: 1_000_000 },
+      );
+      const closestCell = closest.cell;
+      const closestAngle = Math.round(pipeWidget.angle / 90) * 90;
+      pipeWidget.domElem.style.transform = `rotate(${closestAngle}deg)`;
+      pipeWidget.angle = closestAngle;
+
+      // if (pipeWidget.category === PIPE_TYPES.LONG) {
+      //   if (pipeWidget.angle === 90 || pipeWidget.angle === 270) {
+      //     closestCell.x -= IMAGE_SIZE / 2;
+      //     closestCell.y -= IMAGE_SIZE / 2;
+      //   }
+      // }
+      pipeWidget.oldAngle = closestAngle;
+      pipeWidget.domElem.style.left = closestCell.x + INVENTORY_WIDTH + "px";
+      pipeWidget.domElem.style.top =
+        closestCell.y + HORIZONTAL_MARGIN_HEIGHT + "px";
+      pipeWidget.domElem.classList.remove(`drag-${tuioTagId}`);
+
+      // countSpan.textContent = `*${pipeCounts[pipeCat] || 0}`;
+      if (pipeWidget.domElem.classList.contains("new")) {
+        console.log("is new");
+        pipeWidget.domElem.classList.remove("new");
+        if (level.pipes[pipeType] - this.pipeCounts[pipeType] > 0) {
+          this.getNewPipe(level, pipeType);
+        }
+      }
     });
   }
 
