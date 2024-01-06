@@ -133,11 +133,23 @@ const handleIncrement = (index) => {
     }
   };
   const renderCells = () => {
+    const getClass = (value) => {
+      switch (value) {
+        case 1: return 'color-1'; // Classe pour la valeur 1
+        case 2: return 'color-2'; // Classe pour la valeur 2
+        case 3: return 'color-3'; // Classe pour la valeur 3
+        case 4: return 'color-4'; // Classe pour la valeur 4
+        default: return 'color-default'; // Classe par défaut si aucune valeur ou valeur non reconnue
+
+      }
+    };
+
     return cellValues.map((value, index) => (
-      <div key={index} id={`cell-${index}`} className="grid-item case">
+      <div key={index} id={`cell-${index}`}  className={`grid-item case ${getClass(flattenedArray[index])}`}>
         <span>{flattenedArray[index]}</span>
       </div>
     ));
+
   };
 
   return <div className="conteneur-central">{renderCells()}</div>;
