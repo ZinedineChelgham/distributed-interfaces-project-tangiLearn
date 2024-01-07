@@ -1,13 +1,49 @@
-// Gameboard.js
-import React, { useEffect } from "react";
-import "./gameboard.css";
+
+import React, {useEffect, useState} from "react";
 import Gameboard from "./gameboard.jsx";
+import "./Grille.css";
 
 
 const Grille = ({ StateGame, Values }) => {
+  const [checkboxesChecked, setCheckboxesChecked] = useState({
+    top: false,
+    bottom: false,
+    left: false,
+    right: false
+  });
+  const handleCheckboxChange = (position) => {
+    const updatedCheckboxes = {
+      ...checkboxesChecked,
+      [position]: !checkboxesChecked[position]
+    };
+
+    setCheckboxesChecked(updatedCheckboxes);
+    console.log("État des cases à cocher:", updatedCheckboxes);
+
+    if (Object.values(updatedCheckboxes).every(value => value)) {
+      console.log("Toutes les cases sont cochées, envoi de la requête...");
+      fetch('http://localhost:3000/api/monitoring/need-help', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ needHelp: true })
+      })
+          .then(response => {
+            console.log("Réponse reçue:", response);
+            return response.json();
+          })
+          .then(data => console.log("Données reçues:", data))
+          .catch(error => console.error('Erreur:', error));
+    } else {
+      console.log("Toutes les cases ne sont pas cochées.");
+    }
+  };
    // console.log("stateGame de la grille  : " + StateGame);
   return (
+
     <div id="jeu">
+      <input type="checkbox" className="checkbox" onChange={() => handleCheckboxChange('top')} />
       <div className="conteneur-numeros haut rotate-180">
         <div className="numero" id="case2">
           {Values && Values[2]}
@@ -19,7 +55,7 @@ const Grille = ({ StateGame, Values }) => {
           {Values && Values[0]}
         </div>
       </div>
-
+      <input type="checkbox" id="checkboxleft" className="checkbox" onChange={() => handleCheckboxChange('left')} />
       <div className="conteneur-lateral">
         <div className="conteneur-numeros gauche rotate-90">
           <div className="numero" id="case11">
@@ -45,6 +81,7 @@ const Grille = ({ StateGame, Values }) => {
           </div>
         </div>
       </div>
+      <input type="checkbox" className="checkbox" onChange={() => handleCheckboxChange('right')} />
 
       <div className="conteneur-numeros bas ">
         <div className="numero" id="case8">
@@ -57,6 +94,7 @@ const Grille = ({ StateGame, Values }) => {
           {Values && Values[6]}
         </div>
       </div>
+      <input type="checkbox" className="checkbox" onChange={() => handleCheckboxChange('bottom')} />
     </div>
   );
 };

@@ -12,7 +12,7 @@ const Gameboard = (stateGame) => {
     flattenedArray = Object.values(stateGame.stateGame).flat();
   }
 
-  console.log("flattened : " + flattenedArray)
+  //console.log("flattened : " + flattenedArray)
   const [cellValues, setCellValues] = useState(Array(9).fill(0));
   const [tangibleObjectsCount, setTangibleObjectsCount] = useState({});
 
@@ -25,18 +25,13 @@ const Gameboard = (stateGame) => {
       square1Img.canMove(true,false);
       square1Img.domElem.get(0).style.opacity = "0";
       square1Img.addTo(square1Div);
-      console.log("id d'image : " + square1Img.idImage);
       square1Img.onTagCreation((tagId) => {
         tangibleObjectsCount[square1Img.idImage] = (tangibleObjectsCount[square1Img.idImage] || 0) + 1;
-        console.log("objet tangibleObjects : " + tangibleObjectsCount[square1Img.idImage]);
         handleIncrement(index);
-        console.log(`Tag ${tagId} created on image ${square1Img.idImage}`);
       });
       square1Img.onTagDeletion((tagId) => {
         tangibleObjectsCount[square1Img.idImage] = (tangibleObjectsCount[square1Img.idImage] || 0) - 1;
-        console.log("objet tangibleObjects : " + tangibleObjectsCount[square1Img.idImage]);
         handleDecrement(index);
-        console.log(`Tag ${tagId} deleted on image ${square1Img.idImage}`);
       });
     });
   }, []); // Le tableau vide indique que cet effet ne s'exécute qu'après le premier rendu

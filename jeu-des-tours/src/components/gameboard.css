@@ -30,10 +30,10 @@ button:last-child {
 /* Définissez l'animation elle-même */
 @keyframes blinkAnimation {
     0%, 100% {
-        background-color: initial; /* Couleur d'arrière-plan par défaut */
+        background-color: initial;
     }
     50% {
-        background-color: blue; /* Couleur d'arrière-plan pendant le clignotement */
+        border-color: blue;
     }
 }
 

@@ -19,7 +19,7 @@ function GamePage() {
         fetch(`http://localhost:3000/api/tower-game/get-game-data/${gameId}`)
             .then((response) => response.json())
             .then((data) => {
-                console.log("GameDAta", data);
+                //console.log("GameDAta", data);
                 setGameData(data);
                 setValues(data.gameData.selectedValues);
                 setState_game(data.gameData.state_game);
@@ -32,7 +32,7 @@ function GamePage() {
         return () => clearInterval(interval); // Nettoyer l'intervalle lors du démontage du composant
     }, []);
 
-    console.log("state_game de la game page : " + state_game);
+    //console.log("state_game de la game page : " + state_game);
 
     return (
         <div className="full">
