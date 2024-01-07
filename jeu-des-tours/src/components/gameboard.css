@@ -29,11 +29,8 @@ button:last-child {
 
 /* Définissez l'animation elle-même */
 @keyframes blinkAnimation {
-    0%, 100% {
-        background-color: initial;
-    }
     50% {
-        border-color: blue;
+        border: 4px solid blue;
     }
 }
 

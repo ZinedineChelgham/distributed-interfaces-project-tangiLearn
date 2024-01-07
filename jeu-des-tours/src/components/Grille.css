@@ -12,19 +12,27 @@ top: 50vh;
 
 #checkboxtop{
     position: absolute;
-    right: 50vw;
     bottom: 5vh;
 }
 
 #checkboxbottom{
     position: absolute;
-    right: 50vw;
+
     top: 5vh;
 }
 
 
 .checkbox {
-    transform: scale(4); /* Agrandit la checkbox de 50% */
-    z-index: 10000;
+    transform: scale(6); /* Agrandit la checkbox de 50% */
+    z-index: 0;
 }
+div > input + img {
+    position: absolute;
+    left : -1vw;
+    top: -2vh;
+    height: 6vh;
+    width: 6vh;
+    z-index: 100000000000000;
+}
+
 
