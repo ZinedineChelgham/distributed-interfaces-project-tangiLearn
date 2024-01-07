@@ -27,6 +27,7 @@
   align-items: center;
   gap: 1.5rem;
   font-size: 2rem;
+  text-shadow: 0 0 0.2rem var(--deep-blue);
   color: var(--white);
   font-weight: 500;
 }
@@ -130,6 +131,24 @@
 
 .inventory-sign img {
   width: 90%;
+}
+
+.win-overlay {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(var(--deep-blue), 0.4);
+  backdrop-filter: blur(15px);
+  z-index: 10;
+  font-size: 3rem;
+  color: var(--white);
+  font-weight: 500;
+  text-shadow: 0 0 0.2rem var(--deep-blue);
 }
 
 @keyframes logo-entry {

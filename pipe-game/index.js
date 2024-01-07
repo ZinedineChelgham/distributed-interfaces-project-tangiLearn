@@ -4,7 +4,9 @@ import { TUIOManager } from "@dj256/tuiomanager";
 const root = document.getElementById("root");
 new TUIOManager(root).start();
 
-new PipeGameManager().start(() => {});
+new PipeGameManager().start(() => {
+  window.location.reload();
+});
 // const INVENTORY_WIDTH = (GAME_WIDTH - BOARD_WIDTH) / 2;
 //
 // const gameContainer = document.getElementById("game-container");
