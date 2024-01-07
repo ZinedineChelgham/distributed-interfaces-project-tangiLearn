@@ -195,9 +195,13 @@ export class PipeGameManager {
             <p>Inventaire</p>
           </div>
         </div>
-        <div class="margin up"></div>
+        <div class="margin up">
+          <div class="${Pipes.helpButton} reverse">Demander de l'aide</div>
+        </div>
         <div id="board"></div>
-        <div class="margin down"></div>
+        <div class="margin down">
+          <div class="${Pipes.helpButton}">Demander de l'aide</div>
+        </div>
         <div class="${Pipes.inventory} ${Pipes.inventoryRight}">
           <div class="${Pipes.inventorySign}">
             <img src=${sign} alt="Works" />
@@ -226,6 +230,31 @@ export class PipeGameManager {
     this.placeWaterGates(level);
     this.placeUnmovablePipes(level);
     this.initInventory(level);
+    const helpButtons = this.gameContainer.querySelectorAll(
+      `.${Pipes.helpButton}`,
+    );
+    helpButtons.forEach(
+      (button) =>
+        (button.onclick = () => {
+          return fetch("http://localhost:3000/api/monitoring/need-help", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              needHelp: true,
+            }),
+          })
+            .then(() => {})
+            .catch((err) => console.error(err))
+            .finally(() => {
+              helpButtons.forEach((button) => {
+                button.classList.add(Pipes.helpButtonInactive);
+                button.innerText = "Demande envoyée";
+              });
+            });
+        }),
+    );
   }
 
   /**
@@ -241,7 +270,8 @@ export class PipeGameManager {
       this.pipesGameContainer
         .querySelector(`.margin.${gateDescription.side}`)
         .append(gateElement);
-      gateElement.style.transform = `translateX(${gateDescription.x * 100}px)`;
+      gateElement.style.left = `${gateDescription.x * 100}px`;
+      gateElement.style[gateDescription.side === "up" ? "bottom" : "top"] = 0;
       const id = classId++;
       this.graphNodes.set(
         (gateDescription.x + 1) * 100 + (gateDescription.side === "up" ? 0 : 9),

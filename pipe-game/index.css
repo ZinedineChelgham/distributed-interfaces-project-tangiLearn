@@ -1,68 +1,67 @@
 :root {
-    --yellow: #F9C80E;
-    --orange: #F86624;
-    --red: #EA3546;
-    --purple: #662E9B;
-    --green: #78BC38;
-    --blue: #43BCCD;
-    --deep-blue: #112F34;
-    --grey: #435153;
+  --yellow: #f9c80e;
+  --orange: #f86624;
+  --red: #ea3546;
+  --purple: #662e9b;
+  --green: #78bc38;
+  --blue: #43bccd;
+  --deep-blue: #112f34;
+  --grey: #435153;
 
-    --white: #FFFFFF;
+  --white: #ffffff;
 }
 
 @font-face {
-    font-family: "Wendy One";
-    src: url("./assets/fonts/WendyOne-Regular.ttf");
+  font-family: "Wendy One";
+  src: url("./assets/fonts/WendyOne-Regular.ttf");
 }
 
 @font-face {
-    font-family: "Poppins";
-    src: url("./assets/fonts/Poppins-Regular.ttf");
-    font-weight: normal;
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins-Regular.ttf");
+  font-weight: normal;
 }
 
 @font-face {
-    font-family: "Poppins";
-    src: url("./assets/fonts/Poppins-Medium.ttf");
-    font-weight: 500;
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins-Medium.ttf");
+  font-weight: 500;
 }
 
 @font-face {
-    font-family: "Poppins";
-    src: url("./assets/fonts/Poppins-Bold.ttf");
-    font-weight: bold;
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins-Bold.ttf");
+  font-weight: bold;
 }
 
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
 body {
-    font-family: "Poppins", Helvetica, "Helvetica Neue", sans-serif;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
+  font-family: "Poppins", Helvetica, "Helvetica Neue", sans-serif;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
 #root {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
-
 
 /*#title {*/
 /*    height: 150px;*/
@@ -70,59 +69,61 @@ body {
 /*}*/
 
 .margin {
-    background: transparent;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  position: relative;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
 }
 
 .margin.up {
-    justify-content: flex-end;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    grid-column-start: 2;
-    grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  align-items: flex-end;
 }
 
 .margin.down {
-    justify-content: flex-start;
-    grid-row-start: 3;
-    grid-row-end: 4;
-    grid-column-start: 2;
-    grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  align-items: flex-start;
 }
 
 #game-container {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 1fr 2fr 1fr;
-    width: 1920px;
-    height: 1080px;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr 2fr 1fr;
+  width: 1920px;
+  height: 1080px;
 }
 
 #board {
-    display: block;
-    position: relative;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    background: #969696;
+  display: block;
+  position: relative;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  background: #969696;
 }
 
 .cell {
-    position: absolute;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    width: 100px;
-    height: 100px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: absolute;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .reverse {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 /*.cell,*/
