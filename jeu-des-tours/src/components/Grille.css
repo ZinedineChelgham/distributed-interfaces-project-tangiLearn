@@ -1,5 +1,30 @@
-checkboxleft{
+#checkboxleft{
 position: absolute;
 left: 20vh;
 top: 50vh;
 }
+
+#checkboxright{
+    position: absolute;
+    right: 20vh;
+    top: 50vh;
+}
+
+#checkboxtop{
+    position: absolute;
+    right: 50vw;
+    bottom: 5vh;
+}
+
+#checkboxbottom{
+    position: absolute;
+    right: 50vw;
+    top: 5vh;
+}
+
+
+.checkbox {
+    transform: scale(4); /* Agrandit la checkbox de 50% */
+    z-index: 10000;
+}
+

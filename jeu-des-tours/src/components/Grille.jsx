@@ -1,5 +1,5 @@
 
-import React, {useEffect, useState} from "react";
+import  React, {useEffect, useState} from "react";
 import Gameboard from "./gameboard.jsx";
 import "./Grille.css";
 
@@ -43,7 +43,7 @@ const Grille = ({ StateGame, Values }) => {
   return (
 
     <div id="jeu">
-      <input type="checkbox" className="checkbox" onChange={() => handleCheckboxChange('top')} />
+      <input type="checkbox" id="checkboxtop"className="checkbox" onChange={() => handleCheckboxChange('top')} />
       <div className="conteneur-numeros haut rotate-180">
         <div className="numero" id="case2">
           {Values && Values[2]}
@@ -81,7 +81,7 @@ const Grille = ({ StateGame, Values }) => {
           </div>
         </div>
       </div>
-      <input type="checkbox" className="checkbox" onChange={() => handleCheckboxChange('right')} />
+      <input type="checkbox" id="checkboxbottom" className="checkbox" onChange={() => handleCheckboxChange('right')} />
 
       <div className="conteneur-numeros bas ">
         <div className="numero" id="case8">
@@ -94,7 +94,7 @@ const Grille = ({ StateGame, Values }) => {
           {Values && Values[6]}
         </div>
       </div>
-      <input type="checkbox" className="checkbox" onChange={() => handleCheckboxChange('bottom')} />
+      <input type="checkbox" id="checkboxright" className="checkbox" onChange={() => handleCheckboxChange('bottom')} />
     </div>
   );
 };
