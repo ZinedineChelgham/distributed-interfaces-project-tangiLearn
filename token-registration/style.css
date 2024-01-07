@@ -1,0 +1,119 @@
+:root {
+  font-family: "Poppins", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  --yellow: #f9c80e;
+  --orange: #f86624;
+  --red: #ea3546;
+  --purple: #662e9b;
+  --green: #78bc38;
+  --blue: #43bccd;
+  --deep-blue: #112f34;
+  --grey: #435153;
+  --light-grey: #89999b;
+
+  --token-slot-inner-size: 5rem;
+  --token-slot-outer-size: 8rem;
+  --token-slot-inner-size-active: 7rem;
+  --token-slot-outer-size-active: 10rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: white;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10rem;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--deep-blue);
+}
+
+#instructions {
+  margin-top: 10rem;
+  font-size: 3rem;
+  width: 60rem;
+  text-align: center;
+}
+
+#token-and-hint-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+#token-slot-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: var(--token-slot-outer-size-active);
+  height: var(--token-slot-outer-size-active);
+}
+
+#token-slot-container * {
+  transition: all 0.1s ease-in-out;
+}
+
+#token-slot-container #hint {
+  font-size: 1.5rem;
+}
+
+#token-slot-outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--token-slot-outer-size);
+  height: var(--token-slot-outer-size);
+  border-radius: 100rem;
+  background-color: var(--grey);
+}
+
+#token-slot-inner {
+  width: var(--token-slot-inner-size);
+  height: var(--token-slot-inner-size);
+  border-radius: 100rem;
+  background-color: var(--light-grey);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.active #token-slot-outer {
+  background-color: var(--blue);
+  width: var(--token-slot-outer-size-active);
+  height: var(--token-slot-outer-size-active);
+}
+
+.active #token-slot-inner {
+  background-color: var(--green);
+  width: var(--token-slot-inner-size-active);
+  height: var(--token-slot-inner-size-active);
+}
+
+#token-info {
+  display: flex;
+  visibility: hidden;
+  align-items: center;
+  gap: 1rem;
+  font-size: 3rem;
+}
+
+#token-info #token-id {
+  font-size: 3.3rem;
+  font-weight: bold;
+  color: var(--yellow);
+}
