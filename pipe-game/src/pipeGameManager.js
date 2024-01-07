@@ -90,6 +90,8 @@ const pipeData = {
 
 let classId = 0;
 
+const tagIds = new Set();
+
 export class PipeGameManager {
   constructor() {
     this.root = document.getElementById("root");
@@ -155,13 +157,19 @@ export class PipeGameManager {
         .classList.add(Animations.slowSpin);
       slots.forEach((container) => {
         const playerSlot = new HTMLElementWidget(container);
-        playerSlot.addOnTagDownListener(() => {
+        playerSlot.addOnTagDownListener((tag) => {
+          console.log("isosu")
+          tagIds.add(tag.id); // Added by zine
           count += 1;
           playerSlot.domElem
             .querySelector(`.${Pipes.tokenContainerBackground}`)
             .classList.add(Pipes.tokenContainerBackgroundActive);
           if (count === 2) {
             gamePreStart();
+            // Added by zine
+            tagIds.forEach((tagId) => {
+              this.updatePupilState(tagId);
+            });
           }
         });
         playerSlot.addOnTagUpListener(() => {
@@ -686,4 +694,15 @@ export class PipeGameManager {
       cell.classList.remove(Animations.cellBlink);
     }, 1000);
   }
+
+  // Added by zine
+  updatePupilState(tagId) {
+    fetch(`http://localhost:3000/api/pupil/playing/${tagId}`, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({isPlaying: true}),
+    }).then((r) => console.log(r));
+  }
+
+
 }
