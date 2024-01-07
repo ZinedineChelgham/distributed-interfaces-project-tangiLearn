@@ -4,6 +4,7 @@ import Pipes from "../assets/styles/pipes.module.css";
 import Animations from "../assets/styles/animations.module.css";
 import inlet from "../assets/images/inlet.svg";
 import sign from "../assets/images/works_sign.png";
+import win from "../assets/images/win.svg";
 import { HTMLElementWidget } from "@dj256/tuiomanager/widgets";
 import { levels } from "./levels.js";
 import straightFixed from "../assets/images/pipe_straight_fixed.svg";
@@ -131,17 +132,27 @@ export class PipeGameManager {
          </div>
       </div>
 `;
+    const slots = this.root.querySelectorAll(
+      `.${Pipes.playerStart} .${Pipes.tokenContainer}`,
+    );
 
-    this.pipesGameContainer.classList.add(Pipes.pipesGameContainer);
-    this.root.innerHTML = "";
-    this.root.append(this.pipesGameContainer);
-    setTimeout(() => {
+    const gamePreStart = () => {
+      slots.forEach((slot) => {
+        slot.parentElement.querySelector("p").innerText = "C'est parti !";
+        setTimeout(() => {
+          this.pipesGameContainer
+            .querySelector(`.${Pipes.startScreen}`)
+            .classList.add(Animations.fadeOut);
+          setTimeout(() => {
+            this.launchGame();
+          }, 500);
+        }, 2500);
+      });
+    };
+    const startSpinAndAddListeners = () => {
       this.root
         .querySelector(`.${Pipes.logo}`)
         .classList.add(Animations.slowSpin);
-      const slots = this.root.querySelectorAll(
-        `.${Pipes.playerStart} .${Pipes.tokenContainer}`,
-      );
       slots.forEach((container) => {
         const playerSlot = new HTMLElementWidget(container);
         playerSlot.addOnTagDownListener(() => {
@@ -150,17 +161,7 @@ export class PipeGameManager {
             .querySelector(`.${Pipes.tokenContainerBackground}`)
             .classList.add(Pipes.tokenContainerBackgroundActive);
           if (count === 2) {
-            slots.forEach((slot) => {
-              slot.parentElement.querySelector("p").innerText = "C'est parti !";
-              setTimeout(() => {
-                this.pipesGameContainer
-                  .querySelector(`.${Pipes.startScreen}`)
-                  .classList.add(Animations.fadeOut);
-                setTimeout(() => {
-                  this.launchGame();
-                }, 500);
-              }, 2500);
-            });
+            gamePreStart();
           }
         });
         playerSlot.addOnTagUpListener(() => {
@@ -178,6 +179,14 @@ export class PipeGameManager {
           this.launchGame();
         }, 1000);
       }, 2000);
+    };
+
+    this.pipesGameContainer.classList.add(Pipes.pipesGameContainer);
+    this.root.innerHTML = "";
+    this.root.append(this.pipesGameContainer);
+
+    setTimeout(() => {
+      startSpinAndAddListeners();
     }, 500);
   }
 
@@ -403,6 +412,7 @@ export class PipeGameManager {
         console.log("//                   WIN                      //");
         console.log("//                                            //");
         console.log("////////////////////////////////////////////////");
+        this.onWin();
       }
     });
   }
@@ -603,5 +613,22 @@ export class PipeGameManager {
   start(onFinish) {
     this.onFinish = onFinish;
     this.displayLogo();
+  }
+
+  onWin() {
+    const winOverlay = document.createElement("div");
+    winOverlay.classList.add(Pipes.winOverlay);
+    winOverlay.innerHTML = `
+      <img src=${win} alt="win" />
+      <p>Vous avez gagné ! Félicitations !</p>
+    `;
+    this.pipesGameContainer.append(winOverlay);
+    setTimeout(() => {
+      winOverlay.classList.add(Animations.fadeOut);
+      setTimeout(() => {
+        this.pipesGameContainer.innerHTML = "";
+        this.onFinish();
+      }, 500);
+    }, 5000);
   }
 }
