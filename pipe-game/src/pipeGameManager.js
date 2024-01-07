@@ -239,31 +239,48 @@ export class PipeGameManager {
     this.placeWaterGates(level);
     this.placeUnmovablePipes(level);
     this.initInventory(level);
-    const helpButtons = this.gameContainer.querySelectorAll(
+    this.helpButtons = this.gameContainer.querySelectorAll(
       `.${Pipes.helpButton}`,
     );
-    helpButtons.forEach(
-      (button) =>
-        (button.onclick = () => {
-          return fetch("http://localhost:3000/api/monitoring/need-help", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              needHelp: true,
-            }),
-          })
-            .then(() => {})
-            .catch((err) => console.error(err))
-            .finally(() => {
-              helpButtons.forEach((button) => {
-                button.classList.add(Pipes.helpButtonInactive);
-                button.innerText = "Demande envoyée";
-              });
-            });
-        }),
+    this.helpButtons.forEach(
+      (button) => (button.onclick = () => this.onHelpRequested()),
     );
+  }
+
+  onHelpRequested() {
+    fetch("http://localhost:3000/api/monitoring/need-help", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        needHelp: true,
+      }),
+    })
+      .then(() => {
+        const interval = setInterval(
+          () =>
+            fetch("http://localhost:3000/api/monitoring/need-help")
+              .then((res) => res.json())
+              .then((res) => {
+                if (!res) {
+                  clearInterval(interval);
+                  this.helpButtons.forEach((button) => {
+                    button.classList.remove(Pipes.helpButtonInactive);
+                    button.innerText = "Demander de l'aide";
+                  });
+                }
+              }),
+          1000,
+        );
+      })
+      .catch((err) => console.error(err))
+      .finally(() => {
+        this.helpButtons.forEach((button) => {
+          button.classList.add(Pipes.helpButtonInactive);
+          button.innerText = "Demande envoyée";
+        });
+      });
   }
 
   /**
