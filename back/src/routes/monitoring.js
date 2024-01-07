@@ -54,8 +54,7 @@ router.get("/table", (req, res) => {
 
 router.get("/stream-link", (req, res) => {
   res.send(
-    "https://www.youtube.com/embed/live_stream?channel=" +
-      process.env.YT_CHANNEL_ID,
+    "https://www.youtube.com/embed/live_stream?channel=UCiFWydH1ISpBeqmA-OGmU0g"
   );
 });
 
