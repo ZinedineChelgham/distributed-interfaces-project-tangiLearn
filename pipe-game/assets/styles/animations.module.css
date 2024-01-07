@@ -1,25 +1,40 @@
 @keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fade-out {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes cell-blink {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: var(--orange);
+  }
+  100% {
+    background-color: transparent;
+  }
 }
 
 .slow-spin {
-    animation: spin 20s linear infinite;
+  animation: spin 20s linear infinite;
 }
 
 .fade-out {
-    animation: fade-out 500ms ease-out forwards;
+  animation: fade-out 500ms ease-out forwards;
+}
+
+.cell-blink {
+  animation: cell-blink 1s ease-out infinite;
 }

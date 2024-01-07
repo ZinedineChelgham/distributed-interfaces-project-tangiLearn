@@ -7,8 +7,10 @@
   --blue: #43bccd;
   --deep-blue: #112f34;
   --grey: #435153;
+  --light-grey: #89999b;
 
   --white: #ffffff;
+  --overlay: rgba(17, 47, 52, 0.4);
 }
 
 @font-face {
@@ -108,7 +110,7 @@ body {
   grid-column-end: 3;
   grid-row-start: 2;
   grid-row-end: 3;
-  background: #969696;
+  background: var(--light-grey);
 }
 
 .cell {

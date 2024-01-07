@@ -168,17 +168,17 @@ export class PipeGameManager {
           count -= 1;
         });
       });
-      setTimeout(() => {
-        this.pipesGameContainer
-          .querySelector(`.${Pipes.startScreen}`)
-          .classList.add(Animations.fadeOut);
-        setTimeout(() => {
-          this.pipesGameContainer
-            .querySelector(`.${Pipes.startScreen}`)
-            .remove();
-          this.launchGame();
-        }, 1000);
-      }, 2000);
+      // setTimeout(() => {
+      //   this.pipesGameContainer
+      //     .querySelector(`.${Pipes.startScreen}`)
+      //     .classList.add(Animations.fadeOut);
+      //   setTimeout(() => {
+      //     this.pipesGameContainer
+      //       .querySelector(`.${Pipes.startScreen}`)
+      //       .remove();
+      //     this.launchGame();
+      //   }, 1000);
+      // }, 2000);
     };
 
     this.pipesGameContainer.classList.add(Pipes.pipesGameContainer);
@@ -660,5 +660,13 @@ export class PipeGameManager {
         this.onFinish();
       }, 500);
     }, 5000);
+  }
+
+  blinkCell(x, y) {
+    const cell = this.cells.find((cell) => cell.x === x && cell.y === y);
+    cell.classList.add(Animations.cellBlink);
+    setTimeout(() => {
+      cell.classList.remove(Animations.cellBlink);
+    }, 1000);
   }
 }
