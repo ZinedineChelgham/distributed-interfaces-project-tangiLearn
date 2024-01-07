@@ -86,7 +86,7 @@ function CardTable({ table }) {
       width={"50%"}
       height={"90%"}
       spacing={4}
-      backgroundColor={"#808080"}
+      backgroundColor={"#3c9cf7f7"}
       borderRadius={2}
       overflow={"scroll"}
       sx={{ "&::-webkit-scrollbar": { display: "none" } }}

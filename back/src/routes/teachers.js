@@ -41,7 +41,7 @@ router.post("/login", (req, res) => {
                 .then(isMatch => {
                     if (isMatch) {
                         // Login successful, handle session or token creation here
-                        res.send('Login successful');
+                        res.send(teacher);
                     } else {
                         res.status(401).send('Invalid password');
                     }

@@ -12,6 +12,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -40,6 +41,7 @@ const defaultTheme = createTheme({
 });
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -61,14 +63,16 @@ export default function LoginPage() {
       .then((response) => {
         console.log(response);
         if (response.status === 200) {
-          window.location.href = "/monitoring";
+          response.json().then((data) => {
+            localStorage.setItem("prof", JSON.stringify(data));
+            navigate("/monitoring");
+          });
         } else {
           alert("Identifiants incorrects");
         }
       })
       .catch((error) => {
-        console.error("Error:", error)
-
+        console.error("Error:", error);
       });
   };
 

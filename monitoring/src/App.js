@@ -20,6 +20,8 @@ function App() {
       .catch((error) => console.error("Error fetching teacher data:", error));
   }, []);
 
+  const teacherFromLocalStorage = JSON.parse(localStorage.getItem("prof"));
+
   return (
     <Grid2
       container
@@ -27,40 +29,48 @@ function App() {
       width={"100%"}
       height={"100%"}
       padding={4}
-      gap={2}
+      gap={6}
       wrap="nowrap"
       sx={{ background: "linear-gradient(to top, #0a5cff, #ffffff)" }}
     >
-      <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
-
-        <Box display="flex" alignItems="center">
-          <Avatar src={teacher.avatar} />
-          <Box ml={1}>Professeur {teacher.surname} {teacher.name?.toLocaleUpperCase()} </Box>
-        </Box>
-        <Box flexGrow={1} display="flex" justifyContent="center" alignItems="center">
-          <Typography variant="h2" marginRight={'15vw'}>
-            TangiLearn Monitoring
-          </Typography>
+      <Box left={0} display="flex" alignItems="center" width={"fit-content"}>
+        <Avatar src={teacherFromLocalStorage?.avatar} />
+        <Box ml={1}>
+          Professeur {teacherFromLocalStorage?.surname}{" "}
+          {teacherFromLocalStorage.name?.toLocaleUpperCase()}{" "}
         </Box>
       </Box>
 
-
-
-
-      <Tabs
-        value={activeTab}
-        onChange={handleTabChange}
-        left
-        sx={{ "& .MuiTab-root": { textTransform: "none", } }} // Apply custom styles to Tab components
+      <Typography
+        variant="h4"
+        sx={{
+          transform: "translateX(-50%)",
+          position: "absolute",
+          left: "50%",
+          textAlign: "center",
+          top: 28,
+          fontWeight: "bold",
+        }}
       >
-        <Tab label="Gestion des tables" />
-        <Tab label="Couplage élève/tangible" />
-      </Tabs>
+        TangiLearn Monitoring
+      </Typography>
 
-      <Grid2 xs={12}>
-        {activeTab === 0 && <TablesPreview />}
-        {activeTab === 1 && <PupilBinding />}
-      </Grid2>
+      <Box>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          left
+          sx={{ "& .MuiTab-root": { textTransform: "none" } }} // Apply custom styles to Tab components
+        >
+          <Tab label="Gestion des tables" />
+          <Tab label="Couplage élève/tangible" />
+        </Tabs>
+
+        <Grid2 xs={12} marginTop={"0.5rem"}>
+          {activeTab === 0 && <TablesPreview />}
+          {activeTab === 1 && <PupilBinding />}
+        </Grid2>
+      </Box>
     </Grid2>
   );
 }
