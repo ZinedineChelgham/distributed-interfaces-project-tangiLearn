@@ -1,9 +1,14 @@
+import {BACKEND_URL} from "./util";
+
+// Get the IP address and port separately
+const ipAddress = BACKEND_URL.substring(0, BACKEND_URL.lastIndexOf(':'));
+
 const GAME_URL_MAPPER = {
-    pipe: 'http://192.168.1.14:5174/',
-    tower: 'http://192.168.1.14:5173/',
+    pipe: `${ipAddress}:5174/`,
+    tower: `${ipAddress}:5173/`,
 }
 
-const API = "http://192.168.1.14:3000/api/monitoring"
+const API = `${BACKEND_URL}/api/monitoring`
 
 
 function checkGameStatus() {
