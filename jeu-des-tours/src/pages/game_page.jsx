@@ -5,6 +5,7 @@ import color from "../img/color.png";
 import color180 from "../img/color180.png";
 import color90 from "../img/color90.png";
 import color270 from "../img/color270.png";
+import {BACKEND_URL} from "../util.js";
 
 function GamePage() {
     const [gameData, setGameData] = React.useState(null);
@@ -16,7 +17,7 @@ function GamePage() {
 
     function getGameData() {
         if(!gameId) return;
-        fetch(`http://localhost:3000/api/tower-game/get-game-data/${gameId}`)
+        fetch(`${BACKEND_URL}/api/tower-game/get-game-data/${gameId}`)
             .then((response) => response.json())
             .then((data) => {
                 //console.log("GameDAta", data);

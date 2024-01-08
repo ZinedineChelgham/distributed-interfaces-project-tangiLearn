@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import "./gameboard.css";
 import {ImageElementBis} from "./ImageElementBis.js";
 import {render} from "@testing-library/react";
+import {BACKEND_URL} from "../util.js";
 
 const socket = new WebSocket("ws://localhost:8080/connection");
 
@@ -102,7 +103,7 @@ const handleIncrement = (index) => {
     const gameId = new URLSearchParams(window.location.search).get("id");
     try {
       const response = await fetch(
-        `http://192.168.1.14:3000/api/tower-game/update-data/${gameId}`,
+        `${BACKEND_URL}/api/tower-game/update-data/${gameId}`,
         {
           method: "POST",
           headers: {

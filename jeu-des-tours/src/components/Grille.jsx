@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import Gameboard from "./gameboard.jsx";
 import "./Grille.css";
 import {ImageElementBis} from "./ImageElementBis.js";
+import {BACKEND_URL} from "../util.js";
 
 
 const Grille = ({StateGame, Values}) => {
@@ -20,7 +21,7 @@ const Grille = ({StateGame, Values}) => {
         console.log("Valeurs des cases à cocher:", Object.values(updatedCheckboxes));
         if (Object.values(updatedCheckboxes).every(value => value)) {
             console.log("Toutes les cases sont cochées, envoi de la requête...");
-            fetch('http://192.168.1.14:3000/api/monitoring/need-help', {
+            fetch( BACKEND_URL+ '/api/monitoring/need-help', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
