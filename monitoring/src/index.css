@@ -1,21 +1,35 @@
+:root {
+  --yellow: #f9c80e;
+  --orange: #f86624;
+  --red: #ea3546;
+  --purple: #662e9b;
+  --green: #78bc38;
+  --blue: #43bccd;
+  --deep-blue: #112f34;
+  --grey: #435153;
+  --light-grey: #89999b;
+
+  --white: #ffffff;
+  --overlay: rgba(17, 47, 52, 0.4);
+}
+
 html,
 body {
-    margin: 0;
-    height: 100%;
-    width: 100%;
-    font-family: 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-family: "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-        monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 #root {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }

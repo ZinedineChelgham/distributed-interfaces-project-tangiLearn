@@ -84,7 +84,6 @@ function CardTable({ table }) {
       direction={"column"}
       justifyContent={"center"}
       alignItems={"center"}
-      width={"50%"}
       height={"90%"}
       spacing={4}
       backgroundColor={"#3c9cf7f7"}
@@ -163,7 +162,7 @@ function CardTable({ table }) {
           ))
         ) : (
           <Grid2 xs={12} sx={{ height: "100%" }}>
-            <CardVideoStream handleClick={onClick} />
+            <PipeGamePreview />
           </Grid2>
         )}
       </Grid2>

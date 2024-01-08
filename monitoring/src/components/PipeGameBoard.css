@@ -1,0 +1,10 @@
+#board {
+  display: block;
+  position: relative;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0;
+  background: var(--light-grey);
+  box-shadow: 0 0 10px #000;
+}

@@ -26,7 +26,8 @@ import {
   PIPE_TYPES,
 } from "./constants.js";
 import { Cell } from "./cell.js";
-import {BACKEND_URL} from "./util.js";
+import { BACKEND_URL } from "./util.js";
+import { GameState } from "./gameState.js";
 
 // Pipe default rotation states:
 //
@@ -93,7 +94,6 @@ let classId = 0;
 
 const tagIds = new Set();
 
-
 export class PipeGameManager {
   constructor() {
     this.root = document.getElementById("root");
@@ -110,6 +110,7 @@ export class PipeGameManager {
     this.equivalenceClasses = new Map();
     /** @type {Map<number, {equivalenceClass: number, pipe: {pipeType: PipeType, rotation: 0|90|180|270}}>} */
     this.graphNodes = new Map();
+    this.state = new GameState();
   }
 
   displayLogo() {
@@ -177,17 +178,17 @@ export class PipeGameManager {
           count -= 1;
         });
       });
-      // setTimeout(() => {
-      //   this.pipesGameContainer
-      //     .querySelector(`.${Pipes.startScreen}`)
-      //     .classList.add(Animations.fadeOut);
-      //   setTimeout(() => {
-      //     this.pipesGameContainer
-      //       .querySelector(`.${Pipes.startScreen}`)
-      //       .remove();
-      //     this.launchGame();
-      //   }, 1000);
-      // }, 2000);
+      setTimeout(() => {
+        this.pipesGameContainer
+          .querySelector(`.${Pipes.startScreen}`)
+          .classList.add(Animations.fadeOut);
+        setTimeout(() => {
+          this.pipesGameContainer
+            .querySelector(`.${Pipes.startScreen}`)
+            .remove();
+          this.launchGame();
+        }, 1000);
+      }, 2000);
     };
 
     this.pipesGameContainer.classList.add(Pipes.pipesGameContainer);
@@ -341,7 +342,22 @@ export class PipeGameManager {
         pipeDescription.type,
         pipeDescription.rotation,
       );
+      this.addNewPipeToState(
+        pipeDescription.type,
+        pipeDescription.x,
+        pipeDescription.y,
+        pipeDescription.rotation,
+      );
     });
+    console.log("State", this.state);
+  }
+
+  addNewPipeToState(pipeType, x, y, rotation) {
+    console.log(this.state);
+    this.state.board[y][x] = {
+      type: pipeType,
+      rotation,
+    };
   }
 
   /**
