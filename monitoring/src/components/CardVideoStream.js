@@ -13,7 +13,7 @@ function CardVideoStream({ handleClick }) {
   const [players, setPlayers] = useState([]);
   useEffect(() => {
     // Fetch stream link when the component mounts
-    fetch("http://localhost:3000/api/monitoring/stream-link")
+    fetch("http://192.168.1.14:3000/api/monitoring/stream-link")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -32,7 +32,7 @@ function CardVideoStream({ handleClick }) {
   useEffect(() => {
     // Function to fetch current players
     const fetchPlayers = () => {
-      fetch("http://localhost:3000/api/monitoring/current-players")
+      fetch("http://192.168.1.14:3000/api/monitoring/current-players")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");

@@ -102,7 +102,7 @@ const handleIncrement = (index) => {
     const gameId = new URLSearchParams(window.location.search).get("id");
     try {
       const response = await fetch(
-        `http://127.0.0.1:3000/api/tower-game/update-data/${gameId}`,
+        `http://192.168.1.14:3000/api/tower-game/update-data/${gameId}`,
         {
           method: "POST",
           headers: {

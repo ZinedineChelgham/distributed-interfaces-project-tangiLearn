@@ -11,7 +11,7 @@ function CardTable({ table }) {
   const [isClicked, setIsClicked] = useState(false);
 
   function setCurrentGame(game) {
-    fetch(`http://localhost:3000/api/monitoring/current-game`, {
+    fetch(`http://192.168.1.14:3000/api/monitoring/current-game`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ game: game }),
@@ -43,7 +43,7 @@ function CardTable({ table }) {
   useEffect(() => {
     // Function to fetch current players
     const fetchPlayers = () => {
-      fetch("http://localhost:3000/api/monitoring/need-help")
+      fetch("http://192.168.1.14:3000/api/monitoring/need-help")
         .then((response) => {
           inputRef.current.click();
           if (!response.ok) {
@@ -70,7 +70,7 @@ function CardTable({ table }) {
 
   const handleHelpBubbleClick = () => {
     setHelpAcknowledged(true);
-    fetch(`http://localhost:3000/api/monitoring/need-help`, {
+    fetch(`http://192.168.1.14:3000/api/monitoring/need-help`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ needHelp: false }),

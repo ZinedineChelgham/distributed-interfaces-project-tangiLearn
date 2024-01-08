@@ -26,7 +26,7 @@ function PupilBinding() {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/pupil/")
+    fetch("http://192.168.1.14:3000/api/pupil/")
       .then((res) => res.json())
       .then((data) => {
         setPupils(data);
@@ -48,7 +48,7 @@ function PupilBinding() {
 
     const targetPupil = pupils.filter((pupil) => pupil._id === id)[0];
     console.log(targetPupil);
-    fetch(`http://localhost:3000/api/pupil/${id}`, {
+    fetch(`http://192.168.1.14:3000/api/pupil/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tokenId: targetPupil.tokenId }),
@@ -58,7 +58,7 @@ function PupilBinding() {
   const handleAddPupil = () => {
     const [surname, name] = pupilToBeAdded.name.split(" ");
 
-    fetch(`http://localhost:3000/api/pupil/`, {
+    fetch(`http://192.168.1.14:3000/api/pupil/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

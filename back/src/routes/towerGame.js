@@ -163,7 +163,7 @@ router.post("/ping", async (req, res) => {
 });
 
 function setCurrentGame() {
-  fetch(`http://localhost:3000/api/monitoring/current-game`, {
+  fetch(`http://192.168.1.14:3000/api/monitoring/current-game`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ game: "tower" }),

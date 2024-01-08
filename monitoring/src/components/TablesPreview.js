@@ -7,7 +7,7 @@ function TablesPreview() {
   const [table, setTable] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/monitoring/table")
+    fetch("http://192.168.1.14:3000/api/monitoring/table")
       .then((res) => res.json())
       .then((data) => setTable(data))
       .catch((err) => console.log(err));

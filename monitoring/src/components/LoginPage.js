@@ -50,7 +50,7 @@ export default function LoginPage() {
       password: data.get("password"),
     });
 
-    fetch("http://localhost:3000/api/teacher/login", {
+    fetch("http://192.168.1.14:3000/api/teacher/login", {
       method: "POST",
       body: JSON.stringify({
         name: data.get("email"),

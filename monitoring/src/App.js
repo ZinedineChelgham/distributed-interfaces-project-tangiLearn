@@ -14,7 +14,7 @@ function App() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/teacher/")
+    fetch("http://192.168.1.14:3000/api/teacher/")
       .then((response) => response.json())
       .then((data) => setTeacher(data[0]))
       .catch((error) => console.error("Error fetching teacher data:", error));

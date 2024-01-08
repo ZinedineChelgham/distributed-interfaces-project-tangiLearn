@@ -20,7 +20,7 @@ const Grille = ({StateGame, Values}) => {
         console.log("Valeurs des cases à cocher:", Object.values(updatedCheckboxes));
         if (Object.values(updatedCheckboxes).every(value => value)) {
             console.log("Toutes les cases sont cochées, envoi de la requête...");
-            fetch('http://localhost:3000/api/monitoring/need-help', {
+            fetch('http://192.168.1.14:3000/api/monitoring/need-help', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
