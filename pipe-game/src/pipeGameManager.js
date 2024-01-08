@@ -92,6 +92,8 @@ let classId = 0;
 
 const tagIds = new Set();
 
+const BACKEND_URL = "http://192.168.1.14:3000";
+
 export class PipeGameManager {
   constructor() {
     this.root = document.getElementById("root");
@@ -255,7 +257,7 @@ export class PipeGameManager {
   }
 
   onHelpRequested() {
-    fetch("http://localhost:3000/api/monitoring/need-help", {
+    fetch(`${BACKEND_URL}/api/monitoring/need-help`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -267,7 +269,7 @@ export class PipeGameManager {
       .then(() => {
         const interval = setInterval(
           () =>
-            fetch("http://localhost:3000/api/monitoring/need-help")
+            fetch(`${BACKEND_URL}/api/monitoring/need-help`)
               .then((res) => res.json())
               .then((res) => {
                 if (!res) {
@@ -696,7 +698,7 @@ export class PipeGameManager {
 
   // Added by zine
   updatePupilState(tagId) {
-    fetch(`http://localhost:3000/api/pupil/playing/${tagId}`, {
+    fetch(`${BACKEND_URL}/api/pupil/playing/${tagId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ isPlaying: true }),
