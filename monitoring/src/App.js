@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import TablesPreview from "./components/TablesPreview";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { Typography, Tabs, Tab, Avatar, Box } from "@mui/material";
+import { Avatar, Box, Tab, Tabs, Typography } from "@mui/material";
 import PupilBinding from "./components/PupilBinding";
+import { BACKEND_URL } from "./util";
 
 function App() {
   const [activeTab, setActiveTab] = useState(0);
@@ -14,7 +15,7 @@ function App() {
   };
 
   useEffect(() => {
-    fetch("http://192.168.1.14:3000/api/teacher/")
+    fetch(`${BACKEND_URL}/api/teacher/`)
       .then((response) => response.json())
       .then((data) => setTeacher(data[0]))
       .catch((error) => console.error("Error fetching teacher data:", error));

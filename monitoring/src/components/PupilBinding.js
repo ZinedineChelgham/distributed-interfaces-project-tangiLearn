@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import {
+  Avatar,
+  Button,
+  IconButton,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   TextField,
-  Button,
-  Avatar,
 } from "@mui/material";
-import { IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { BACKEND_URL } from "../util";
 
 function PupilBinding() {
   const [pupils, setPupils] = useState([]);
@@ -26,7 +27,7 @@ function PupilBinding() {
   });
 
   useEffect(() => {
-    fetch("http://192.168.1.14:3000/api/pupil/")
+    fetch(`${BACKEND_URL}/api/pupil/`)
       .then((res) => res.json())
       .then((data) => {
         setPupils(data);
@@ -43,12 +44,12 @@ function PupilBinding() {
           return { ...pupil, tokenId: event.target.value };
         }
         return pupil;
-      })
+      }),
     );
 
     const targetPupil = pupils.filter((pupil) => pupil._id === id)[0];
     console.log(targetPupil);
-    fetch(`http://192.168.1.14:3000/api/pupil/${id}`, {
+    fetch(`${BACKEND_URL}/api/pupil/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tokenId: targetPupil.tokenId }),
@@ -58,7 +59,7 @@ function PupilBinding() {
   const handleAddPupil = () => {
     const [surname, name] = pupilToBeAdded.name.split(" ");
 
-    fetch(`http://192.168.1.14:3000/api/pupil/`, {
+    fetch(`${BACKEND_URL}/api/pupil/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

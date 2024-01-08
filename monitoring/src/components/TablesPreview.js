@@ -1,13 +1,13 @@
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { Typography } from "@mui/material";
 import CardTable from "./CardTable";
 import { useEffect, useState } from "react";
+import { BACKEND_URL } from "../util";
 
 function TablesPreview() {
   const [table, setTable] = useState(null);
 
   useEffect(() => {
-    fetch("http://192.168.1.14:3000/api/monitoring/table")
+    fetch(`${BACKEND_URL}/api/monitoring/table`)
       .then((res) => res.json())
       .then((data) => setTable(data))
       .catch((err) => console.log(err));

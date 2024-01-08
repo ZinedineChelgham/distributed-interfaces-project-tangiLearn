@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../util";
 
 function Copyright(props) {
   return (
@@ -50,7 +51,7 @@ export default function LoginPage() {
       password: data.get("password"),
     });
 
-    fetch("http://192.168.1.14:3000/api/teacher/login", {
+    fetch(`${BACKEND_URL}/api/teacher/login`, {
       method: "POST",
       body: JSON.stringify({
         name: data.get("email"),

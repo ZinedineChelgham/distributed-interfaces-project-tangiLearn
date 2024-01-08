@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import Typography from "@mui/material/Typography";
 import CardGame from "./CardGame";
-import CardVideoStream from "./CardVideoStream";
 import Box from "@mui/material/Box";
 import bip from "../assets/sounds/bip.mp3";
 import useSound from "use-sound";
+import { BACKEND_URL } from "../util";
+import PipeGamePreview from "./PipeGamePreview";
 
 function CardTable({ table }) {
   const [isClicked, setIsClicked] = useState(false);
 
   function setCurrentGame(game) {
-    fetch(`http://192.168.1.14:3000/api/monitoring/current-game`, {
+    fetch(`${BACKEND_URL}/api/monitoring/current-game`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ game: game }),
@@ -43,7 +44,7 @@ function CardTable({ table }) {
   useEffect(() => {
     // Function to fetch current players
     const fetchPlayers = () => {
-      fetch("http://192.168.1.14:3000/api/monitoring/need-help")
+      fetch(`${BACKEND_URL}/api/monitoring/need-help`)
         .then((response) => {
           inputRef.current.click();
           if (!response.ok) {
@@ -70,7 +71,7 @@ function CardTable({ table }) {
 
   const handleHelpBubbleClick = () => {
     setHelpAcknowledged(true);
-    fetch(`http://192.168.1.14:3000/api/monitoring/need-help`, {
+    fetch(`${BACKEND_URL}/api/monitoring/need-help`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ needHelp: false }),
@@ -92,7 +93,7 @@ function CardTable({ table }) {
       sx={{ "&::-webkit-scrollbar": { display: "none" } }}
       ref={inputRef}
       onClick={() => {
-        if(needHelp && !helpAcknowledged) play();
+        if (needHelp && !helpAcknowledged) play();
         else stop();
       }}
     >

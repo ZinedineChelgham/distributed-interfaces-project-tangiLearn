@@ -1,19 +1,20 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
+import { BACKEND_URL } from "../util";
 
 function CardVideoStream({ handleClick }) {
   const [streamLink, setStreamLink] = useState("");
   const [players, setPlayers] = useState([]);
   useEffect(() => {
     // Fetch stream link when the component mounts
-    fetch("http://192.168.1.14:3000/api/monitoring/stream-link")
+    fetch(`${BACKEND_URL}/api/monitoring/stream-link`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -32,7 +33,7 @@ function CardVideoStream({ handleClick }) {
   useEffect(() => {
     // Function to fetch current players
     const fetchPlayers = () => {
-      fetch("http://192.168.1.14:3000/api/monitoring/current-players")
+      fetch(`${BACKEND_URL}/api/monitoring/current-players`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
