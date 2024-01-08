@@ -141,11 +141,15 @@ export class PipeGameManager {
     const gamePreStart = () => {
       slots.forEach((slot) => {
         slot.parentElement.querySelector("p").innerText = "C'est parti !";
+      });
+      setTimeout(() => {
         this.pipesGameContainer
           .querySelector(`.${Pipes.startScreen}`)
           .classList.add(Animations.fadeOut);
-        this.launchGame();
-      });
+        setTimeout(() => {
+          this.launchGame();
+        }, 1000);
+      }, 2000);
     };
     const startSpinAndAddListeners = () => {
       this.root
