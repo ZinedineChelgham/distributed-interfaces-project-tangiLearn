@@ -21,5 +21,6 @@ widget.addOnTagDownListener((tag) => {
 
 widget.addOnTagUpListener((tag) => {
   tokenSlotContainer.classList.remove("active");
+  tokenInfoElement.style.visibility = "hidden";
   console.log("Tag up on widget", tag);
 });

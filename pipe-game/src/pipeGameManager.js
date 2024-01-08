@@ -134,21 +134,17 @@ export class PipeGameManager {
          </div>
       </div>
 `;
-    const slots = this.root.querySelectorAll(
+    const slots = this.pipesGameContainer.querySelectorAll(
       `.${Pipes.playerStart} .${Pipes.tokenContainer}`,
     );
 
     const gamePreStart = () => {
       slots.forEach((slot) => {
         slot.parentElement.querySelector("p").innerText = "C'est parti !";
-        setTimeout(() => {
-          this.pipesGameContainer
-            .querySelector(`.${Pipes.startScreen}`)
-            .classList.add(Animations.fadeOut);
-          setTimeout(() => {
-            this.launchGame();
-          }, 500);
-        }, 2500);
+        this.pipesGameContainer
+          .querySelector(`.${Pipes.startScreen}`)
+          .classList.add(Animations.fadeOut);
+        this.launchGame();
       });
     };
     const startSpinAndAddListeners = () => {
@@ -158,7 +154,6 @@ export class PipeGameManager {
       slots.forEach((container) => {
         const playerSlot = new HTMLElementWidget(container);
         playerSlot.addOnTagDownListener((tag) => {
-          console.log("isosu")
           tagIds.add(tag.id); // Added by zine
           count += 1;
           playerSlot.domElem
@@ -699,10 +694,8 @@ export class PipeGameManager {
   updatePupilState(tagId) {
     fetch(`http://localhost:3000/api/pupil/playing/${tagId}`, {
       method: "PUT",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({isPlaying: true}),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isPlaying: true }),
     }).then((r) => console.log(r));
   }
-
-
 }
