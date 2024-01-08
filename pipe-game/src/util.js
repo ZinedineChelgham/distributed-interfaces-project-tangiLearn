@@ -9,3 +9,8 @@ export const addPipe = (pipe, position, board) => {
   pipe.domElem.get(0).style.left = `${position.x}px`;
   pipe.domElem.get(0).style.top = `${position.y}px`;
 };
+
+
+export const BACKEND_URL =
+    // eslint-disable-next-line no-undef
+    process.env.REACT_APP_BACKEND_URL ?? "http://localhost:3000";

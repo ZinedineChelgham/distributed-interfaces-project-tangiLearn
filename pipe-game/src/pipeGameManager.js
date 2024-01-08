@@ -26,6 +26,7 @@ import {
   PIPE_TYPES,
 } from "./constants.js";
 import { Cell } from "./cell.js";
+import {BACKEND_URL} from "./util.js";
 
 // Pipe default rotation states:
 //
@@ -92,7 +93,6 @@ let classId = 0;
 
 const tagIds = new Set();
 
-const BACKEND_URL = "http://192.168.1.14:3000";
 
 export class PipeGameManager {
   constructor() {
