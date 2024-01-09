@@ -5,29 +5,17 @@ import Animations from "../assets/styles/animations.module.css";
 import inlet from "../assets/images/inlet.svg";
 import sign from "../assets/images/works_sign.png";
 import win from "../assets/images/win.svg";
-import { HTMLElementWidget } from "@dj256/tuiomanager/widgets";
 import { levels } from "./levels.js";
-import straightFixed from "../assets/images/pipe_straight_fixed.svg";
-import curvedFixed from "../assets/images/pipe_curved_fixed.svg";
-import tshapeFixed from "../assets/images/pipe_t_shape_fixed.svg";
-import longFixed from "../assets/images/pipe_long_fixed.svg";
-import straight from "../assets/images/pipe_straight.svg";
-import curved from "../assets/images/pipe_curved.svg";
-import tshape from "../assets/images/pipe_t_shape.svg";
-import long from "../assets/images/pipe_long.svg";
 import {
   BOARD_HEIGHT,
   BOARD_WIDTH,
-  GAME_HEIGHT,
-  GAME_WIDTH,
-  HORIZONTAL_MARGIN_HEIGHT,
   IMAGE_SIZE,
-  INVENTORY_WIDTH,
   PIPE_TYPES,
 } from "./constants.js";
 import { Cell } from "./cell.js";
-import { BACKEND_URL } from "./util.js";
+import { BACKEND_URL, PIPE_DATA } from "./util.js";
 import { GameState } from "./gameState.js";
+import { Pipe } from "./pipe.js";
 
 // Pipe default rotation states:
 //
@@ -47,58 +35,27 @@ import { GameState } from "./gameState.js";
 //                                                                           ####
 //                                                                          ######
 
-const pipeData = {
-  straight: {
-    images: {
-      fixed: straightFixed,
-      movable: straight,
-    },
-    inventoryPosition: {
-      x: INVENTORY_WIDTH / 2 - IMAGE_SIZE / 2,
-      y: GAME_HEIGHT / 2 - (5 / 2) * IMAGE_SIZE,
-    },
-  },
-  curved: {
-    images: {
-      fixed: curvedFixed,
-      movable: curved,
-    },
-    inventoryPosition: {
-      x: INVENTORY_WIDTH / 2 - IMAGE_SIZE / 2,
-      y: GAME_HEIGHT / 2 - IMAGE_SIZE / 2,
-    },
-  },
-  tshape: {
-    images: {
-      fixed: tshapeFixed,
-      movable: tshape,
-    },
-    inventoryPosition: {
-      x: INVENTORY_WIDTH / 2 - IMAGE_SIZE / 2,
-      y: GAME_HEIGHT / 2 + (3 / 2) * IMAGE_SIZE,
-    },
-  },
-  long: {
-    images: {
-      fixed: longFixed,
-      movable: long,
-    },
-    inventoryPosition: {
-      x: GAME_WIDTH - INVENTORY_WIDTH / 2 - IMAGE_SIZE / 2,
-      y: GAME_HEIGHT / 2 - IMAGE_SIZE,
-    },
-  },
-};
-
 let classId = 0;
 
 const tagIds = new Set();
 
 export class PipeGameManager {
+  /** @typedef Position
+   * @property {number} x
+   * @property {number} y
+   * @property {number} angle
+   */
+
+  /**
+   * @typedef TagInfo
+   * @property {Position} position
+   * @property {Position} offset
+   */
   constructor() {
     this.root = document.getElementById("root");
     this.pipesGameContainer = document.createElement("div");
     this.cells = [];
+    this.pipes = [];
     /** @type {{[p: PipeType]: number}} */
     this.pipeCounts = {
       [PIPE_TYPES.CURVED]: 0,
@@ -111,6 +68,8 @@ export class PipeGameManager {
     /** @type {Map<number, {equivalenceClass: number, pipe: {pipeType: PipeType, rotation: 0|90|180|270}}>} */
     this.graphNodes = new Map();
     this.state = new GameState();
+    /** @type {Map<number, TagInfo>} */
+    this.tagsInfo = new Map();
   }
 
   displayLogo() {
@@ -159,11 +118,10 @@ export class PipeGameManager {
         .querySelector(`.${Pipes.logo}`)
         .classList.add(Animations.slowSpin);
       slots.forEach((container) => {
-        const playerSlot = new HTMLElementWidget(container);
-        playerSlot.addOnTagDownListener((tag) => {
+        container.addEventListener("tuiotagdown", ({ detail: tag }) => {
           tagIds.add(tag.id); // Added by zine
           count += 1;
-          playerSlot.domElem
+          container
             .querySelector(`.${Pipes.tokenContainerBackground}`)
             .classList.add(Pipes.tokenContainerBackgroundActive);
           if (count === 2) {
@@ -174,7 +132,7 @@ export class PipeGameManager {
             });
           }
         });
-        playerSlot.addOnTagUpListener(() => {
+        container.addEventListener("tuiotagup", () => {
           count -= 1;
         });
       });
@@ -328,7 +286,7 @@ export class PipeGameManager {
   placeUnmovablePipes(level) {
     level.unmovablePipes.forEach((pipeDescription) => {
       const pipeElement = document.createElement("img");
-      pipeElement.src = pipeData[pipeDescription.type].images.fixed;
+      pipeElement.src = PIPE_DATA[pipeDescription.type].images.fixed;
       pipeElement.classList.add(Pipes[pipeDescription.type]);
       this.board.append(pipeElement);
       pipeElement.style.position = "absolute";
@@ -349,11 +307,9 @@ export class PipeGameManager {
         pipeDescription.rotation,
       );
     });
-    console.log("State", this.state);
   }
 
   addNewPipeToState(pipeType, x, y, rotation) {
-    console.log(this.state);
     this.state.board[y][x] = {
       type: pipeType,
       rotation,
@@ -377,107 +333,15 @@ export class PipeGameManager {
    */
   getNewPipe(level, pipeType) {
     this.pipeCounts[pipeType] += 1;
-    const pipeElement = document.createElement("img");
-    pipeElement.src = pipeData[pipeType].images.movable;
-    pipeElement.style.position = "absolute";
-    pipeElement.style.left = `${pipeData[pipeType].inventoryPosition.x}px`;
-    pipeElement.style.top = `${pipeData[pipeType].inventoryPosition.y}px`;
-    pipeElement.style.width = `${IMAGE_SIZE}px`;
-    pipeElement.style.height = `${
-      pipeType === PIPE_TYPES.LONG ? IMAGE_SIZE * 2 : IMAGE_SIZE
-    }px`;
-    pipeElement.classList.add("new");
-    this.gameContainer.append(pipeElement);
-    const pipeWidget = new HTMLElementWidget(pipeElement);
-
-    pipeWidget.addOnTagDownListener((tuioTag) => {
-      pipeWidget.domElem.classList.add(`drag-${tuioTag.id}`);
-      const pipeX = pipeWidget.domElem.style.left.match(/\d+/)[0];
-      const pipeY = pipeWidget.domElem.style.top.match(/\d+/)[0];
-      console.log(pipeX, pipeY);
-      pipeWidget.tagOffset = {
-        x: pipeX - tuioTag.x,
-        y: pipeY - tuioTag.y,
-        angle: pipeWidget.angle - tuioTag.angle,
-      };
-    });
-
-    pipeWidget.addOnTagDragListener((tuioTag, oldPos) => {
-      if (
-        Math.sqrt(
-          Math.pow(Math.abs(oldPos.x - tuioTag.x), 2) +
-            Math.pow(Math.abs(oldPos.y - tuioTag.y), 2),
-        ) > 50
-      ) {
-        pipeWidget.domElem.style.left = `${
-          tuioTag.x + pipeWidget.tagOffset.x
-        }px`;
-        pipeWidget.domElem.style.top = `${
-          tuioTag.y + pipeWidget.tagOffset.y
-        }px`;
-      }
-    });
-
-    pipeWidget.addOnTagRotateListener((tuioTag) => {
-      pipeWidget.domElem.style.transform = `rotate(${
-        tuioTag.angle + pipeWidget.tagOffset.angle
-      }rad)`;
-    });
-
-    pipeWidget.addOnTagUpListener((tuioTagId) => {
-      const pipeX =
-        pipeWidget.domElem.style.left.match(/\d+/)[0] - INVENTORY_WIDTH;
-      const pipeY =
-        pipeWidget.domElem.style.top.match(/\d+/)[0] - HORIZONTAL_MARGIN_HEIGHT;
-      const closest = this.cells.reduce(
-        (prev, curr) => {
-          const currDist = Math.sqrt(
-            Math.pow(Math.abs(pipeX - curr.x), 2) +
-              Math.pow(Math.abs(pipeY - curr.y), 2),
-          );
-          return prev.distance < currDist
-            ? prev
-            : {
-                cell: curr,
-                distance: currDist,
-              };
-        },
-        { cell: this.cells[0], distance: 1_000_000 },
-      );
-      const closestCell = closest.cell;
-      const closestAngle =
-        (Math.round((pipeWidget.angle * 2) / Math.PI) * 90) % 360;
-      pipeWidget.domElem.style.transform = `rotate(${closestAngle}deg)`;
-
-      if (pipeType === PIPE_TYPES.LONG) {
-        if (closestAngle === 90 || closestAngle === 270) {
-          closestCell.x -= IMAGE_SIZE / 2;
-          closestCell.y -= IMAGE_SIZE / 2;
-        }
-      }
-      pipeWidget.oldAngle = closestAngle;
-      pipeWidget.domElem.style.left = closestCell.x + INVENTORY_WIDTH + "px";
-      pipeWidget.domElem.style.top =
-        closestCell.y + HORIZONTAL_MARGIN_HEIGHT + "px";
-      const pipeXBoard = closestCell.x / 100;
-      const pipeYBoard = closestCell.y / 100;
-      pipeWidget.domElem.classList.remove(`drag-${tuioTagId}`);
-      // countSpan.textContent = `*${pipeCounts[pipeCat] || 0}`;
-      if (pipeWidget.domElem.classList.contains("new")) {
-        pipeWidget.domElem.classList.remove("new");
-        this.addNewPipeToGraph(pipeXBoard, pipeYBoard, pipeType, closestAngle);
+    const pipe = new Pipe(pipeType, (isNew, newPos) => {
+      if (isNew) {
         if (level.pipes[pipeType] - this.pipeCounts[pipeType] > 0) {
+          this.addNewPipeToGraph(newPos.x, newPos.y, pipe.pipeType, pipe.angle);
           this.getNewPipe(level, pipeType);
         }
       } else {
-        this.movePipe(pipeXBoard, pipeYBoard, closestAngle, pipeWidget);
+        this.movePipe(newPos.x, newPos.y, pipe.angle, pipe);
       }
-      pipeWidget.positionOnBoard = {
-        x: pipeXBoard,
-        y: pipeYBoard,
-        angle: closestAngle,
-      };
-
       if (this.checkWin(level)) {
         console.log("////////////////////////////////////////////////");
         console.log("//                                            //");
@@ -487,6 +351,8 @@ export class PipeGameManager {
         this.onWin();
       }
     });
+    this.gameContainer.append(pipe.element);
+    this.pipes.push(pipe);
   }
 
   /**
@@ -624,13 +490,21 @@ export class PipeGameManager {
         );
       }
     }
+    console.log(this.equivalenceClasses);
+    console.log(this.graphNodes);
   }
 
-  movePipe(newPipeX, newPipeY, newAngle, pipeWidget) {
-    const oldPipeX = pipeWidget.positionOnBoard.x;
-    const oldPipeY = pipeWidget.positionOnBoard.y;
+  /**
+   * @param {number} newPipeX
+   * @param {number} newPipeY
+   * @param {0|90|180|270} newAngle
+   * @param {Pipe} pipe
+   */
+  movePipe(newPipeX, newPipeY, newAngle, pipe) {
+    const oldPipeX = pipe.boardX;
+    const oldPipeY = pipe.boardY;
     this.removeNode(oldPipeX, oldPipeY);
-    this.addNewPipeToGraph(newPipeX, newPipeY, pipeWidget.pipeType, newAngle);
+    this.addNewPipeToGraph(newPipeX, newPipeY, pipe.pipeType, newAngle);
   }
 
   removeNode(x, y, removingLong = false) {
