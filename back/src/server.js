@@ -37,7 +37,7 @@ app.use("/api/tower-game", towerGameRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/pupil", pupilRoutes);
 // Serve at localhost:3000
-const PORT = BACKEND_URL.split(":")[1]
+const PORT = BACKEND_URL.split(":")[2]
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });

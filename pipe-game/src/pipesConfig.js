@@ -1,3 +1,4 @@
+
 export class PipesConfig {
   constructor(straight, curved, tshape, long) {
     this.straight = straight;
