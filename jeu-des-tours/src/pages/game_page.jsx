@@ -16,7 +16,7 @@ function GamePage() {
 
 
     function getGameData() {
-        if(!gameId) return;
+        if (!gameId) return;
         fetch(`${BACKEND_URL}/api/tower-game/get-game-data/${gameId}`)
             .then((response) => response.json())
             .then((data) => {
@@ -29,8 +29,6 @@ function GamePage() {
     }
 
     useEffect(() => {
-        const interval = setInterval(getGameData, 500); // Récupérer les données toutes les secondes
-        return () => clearInterval(interval); // Nettoyer l'intervalle lors du démontage du composant
     }, []);
 
     //console.log("state_game de la game page : " + state_game);
@@ -41,7 +39,7 @@ function GamePage() {
                 <img className="gauchehaut-code-couleur" src={color180}/>
                 <img className="droitehaut-code-couleur" src={color270}/>
             </div>
-            <Grille StateGame={state_game} Values={values}/>
+            <Grille StateGame={state_game} Values={values} setStateGame={setState_game} getGameData={getGameData}/>
             <div className="code-couleur bas-code-couleur">
                 <img className="gauchebas-code-couleur" src={color90}/>
                 <img className="droitebas-code-couleur" src={color}/>

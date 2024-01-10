@@ -7,7 +7,7 @@ import {BACKEND_URL} from "../util.js";
 
 const socket = new WebSocket("ws://localhost:8080/connection");
 
-const Gameboard = (stateGame) => {
+const Gameboard = (stateGame, setStateGame, getGameData) => {
   let flattenedArray = [0,0,0,0,0,0,0,0,0];
   if (stateGame && stateGame.stateGame) {
     flattenedArray = Object.values(stateGame.stateGame).flat();
@@ -41,7 +41,7 @@ const handleIncrement = (index) => {
     const newCellValues = [...cellValues];
     newCellValues[index] = Math.min(newCellValues[index] + 1, 4);
     setCellValues(newCellValues);
-    updateGameData(index, "increment").then(r => renderCells());
+    updateGameData(index, "increment").then();
 
   };
 
@@ -49,7 +49,7 @@ const handleIncrement = (index) => {
     const newCellValues = [...cellValues];
     newCellValues[index] = Math.max(newCellValues[index] - 1, 0);
     setCellValues(newCellValues);
-    updateGameData(index, "decrement").then(r => renderCells());
+    updateGameData(index, "decrement").then();
   };
   const convertIndexToCoordinates = (index) => {
     const row = Math.floor(index / 3); // Obtenez la ligne en divisant l'index par la largeur de la grille
@@ -126,6 +126,8 @@ const handleIncrement = (index) => {
         "Erreur lors de la mise à jour des données au backend :",
         error,
       );
+    } finally {
+      getGameData();
     }
   };
   const renderCells = () => {
