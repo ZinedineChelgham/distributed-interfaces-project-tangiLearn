@@ -1,4 +1,4 @@
-import {BACKEND_URL} from "./util";
+const BACKEND_URL = "http://localhost:3000";
 
 // Get the IP address and port separately
 const ipAddress = BACKEND_URL.substring(0, BACKEND_URL.lastIndexOf(':'));
@@ -7,8 +7,6 @@ const GAME_URL_MAPPER = {
     pipe: `${ipAddress}:5174/`,
     tower: `${ipAddress}:5173/`,
 }
-
-console.log(GAME_URL_MAPPER)
 
 const API = `${BACKEND_URL}/api`
 
@@ -34,6 +32,5 @@ function checkGameStatus() {
         })
         .catch(error => console.error('Error checking game status:', error));
 }
-
 
 setInterval(checkGameStatus, 200);

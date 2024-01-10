@@ -10,6 +10,7 @@ import cors from "cors";
 import { populateDb } from "../db/init.js";
 import { BACKEND_URL} from "./util.js";
 
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL, {});
 
@@ -36,7 +37,6 @@ app.use("/api/tower-game", towerGameRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/pupil", pupilRoutes);
 // Serve at localhost:3000
-
 const PORT = BACKEND_URL.split(":")[2]
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
