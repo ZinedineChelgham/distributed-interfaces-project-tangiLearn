@@ -42,6 +42,7 @@ const defaultTheme = createTheme({
 });
 
 export default function LoginPage() {
+  console.log(BACKEND_URL)
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
