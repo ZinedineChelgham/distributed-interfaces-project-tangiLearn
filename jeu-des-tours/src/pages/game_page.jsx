@@ -8,20 +8,18 @@ import color270 from "../img/color270.png";
 import {BACKEND_URL} from "../util.js";
 
 function GamePage() {
-    const [gameData, setGameData] = React.useState(null);
     const [values, setValues] = React.useState(null);
     const [state_game, setState_game] = React.useState(null);
     const queryParameters = new URLSearchParams(window.location.search);
     const gameId = queryParameters.get('id');
 
 
-    function getGameData() {
+    function fetchGameData() {
         if (!gameId) return;
         fetch(`${BACKEND_URL}/api/tower-game/get-game-data/${gameId}`)
             .then((response) => response.json())
             .then((data) => {
-                //console.log("GameDAta", data);
-                setGameData(data);
+                console.log("GameData", data);
                 setValues(data.gameData.selectedValues);
                 setState_game(data.gameData.state_game);
             })
@@ -29,9 +27,10 @@ function GamePage() {
     }
 
     useEffect(() => {
+        fetchGameData();
     }, []);
 
-    //console.log("state_game de la game page : " + state_game);
+
 
     return (
         <div className="full">
@@ -39,7 +38,7 @@ function GamePage() {
                 <img className="gauchehaut-code-couleur" src={color180}/>
                 <img className="droitehaut-code-couleur" src={color270}/>
             </div>
-            <Grille StateGame={state_game} Values={values} setStateGame={setState_game} getGameData={getGameData}/>
+            <Grille StateGame={state_game} Values={values} setStateGame={setState_game}/>
             <div className="code-couleur bas-code-couleur">
                 <img className="gauchebas-code-couleur" src={color90}/>
                 <img className="droitebas-code-couleur" src={color}/>

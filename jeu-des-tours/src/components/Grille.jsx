@@ -4,8 +4,10 @@ import "./Grille.css";
 import {ImageElementBis} from "./ImageElementBis.js";
 import {BACKEND_URL} from "../util.js";
 
+const Grille = ({StateGame, Values, setStateGame}) => {
 
-const Grille = ({StateGame, Values, setStateGame, getGameData={getGameData}}) => {
+    console.log("stateGame from grille : " + StateGame);
+
     const [checkboxesChecked, setCheckboxesChecked] = useState({
         top: false,
         bottom: false,
@@ -118,7 +120,7 @@ const Grille = ({StateGame, Values, setStateGame, getGameData={getGameData}}) =>
                         {Values && Values[9]}
                     </div>
                 </div>
-                <Gameboard stateGame={StateGame} setStateGame={setStateGame} getGameData={getGameData}/>
+                <Gameboard stateGame={StateGame} setStateGame={setStateGame}/>
                 <div className="conteneur-numeros droite rotate-moins-90">
                     <div className="numero" id="case5">
                         {Values && Values[5]}

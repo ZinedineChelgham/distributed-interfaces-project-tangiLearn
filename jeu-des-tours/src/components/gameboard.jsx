@@ -2,15 +2,17 @@
 import React, {useEffect, useState} from "react";
 import "./gameboard.css";
 import {ImageElementBis} from "./ImageElementBis.js";
-import {render} from "@testing-library/react";
 import {BACKEND_URL} from "../util.js";
 
 const socket = new WebSocket("ws://localhost:8080/connection");
 
-const Gameboard = (stateGame, setStateGame, getGameData) => {
+const Gameboard = ({stateGame, setStateGame}) => {
+
+
+  console.log("from gameboard", stateGame)
   let flattenedArray = [0,0,0,0,0,0,0,0,0];
-  if (stateGame && stateGame.stateGame) {
-    flattenedArray = Object.values(stateGame.stateGame).flat();
+  if (stateGame) {
+    flattenedArray = [...stateGame].flat();
   }
 
   //console.log("flattened : " + flattenedArray)
@@ -127,7 +129,15 @@ const handleIncrement = (index) => {
         error,
       );
     } finally {
-      getGameData();
+      const queryParameters = new URLSearchParams(window.location.search);
+      const gameId = queryParameters.get('id');
+      if (!gameId) return;
+      fetch(`${BACKEND_URL}/api/tower-game/get-game-data/${gameId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            setStateGame(data.gameData.state_game);
+          })
+          .catch((error) => console.log(error));
     }
   };
   const renderCells = () => {
