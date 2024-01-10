@@ -5,7 +5,7 @@ import {ImageElementBis} from "./ImageElementBis.js";
 import {BACKEND_URL} from "../util.js";
 
 
-const Grille = ({StateGame, Values}) => {
+const Grille = ({StateGame, Values, setStateGame, getGameData={getGameData}}) => {
     const [checkboxesChecked, setCheckboxesChecked] = useState({
         top: false,
         bottom: false,
@@ -118,7 +118,7 @@ const Grille = ({StateGame, Values}) => {
                         {Values && Values[9]}
                     </div>
                 </div>
-                <Gameboard stateGame={StateGame}/>
+                <Gameboard stateGame={StateGame} setStateGame={setStateGame} getGameData={getGameData}/>
                 <div className="conteneur-numeros droite rotate-moins-90">
                     <div className="numero" id="case5">
                         {Values && Values[5]}
