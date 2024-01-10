@@ -2,6 +2,7 @@ import express from "express";
 import { TowerGame } from "../model/towerGame.js";
 import { WebSocketServer } from "ws";
 import WebSocket from "ws";
+import {BACKEND_URL} from "../util.js"
 
 const app = express();
 import cors from "cors";
@@ -163,7 +164,7 @@ router.post("/ping", async (req, res) => {
 });
 
 function setCurrentGame() {
-  fetch(`http://192.168.1.14:3000/api/monitoring/current-game`, {
+  fetch(`${BACKEND_URL}/api/monitoring/current-game`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ game: "tower" }),
