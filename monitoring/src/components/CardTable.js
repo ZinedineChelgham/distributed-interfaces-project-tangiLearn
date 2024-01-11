@@ -7,6 +7,7 @@ import bip from "../assets/sounds/bip.mp3";
 import useSound from "use-sound";
 import { BACKEND_URL } from "../util";
 import PipeGamePreview from "./PipeGamePreview";
+import TowerGamePreview from "./towerGame/TowerGamePreview";
 
 function CardTable({ table }) {
   const [isClicked, setIsClicked] = useState(false);
@@ -162,7 +163,7 @@ function CardTable({ table }) {
           ))
         ) : (
           <Grid2 xs={12} sx={{ height: "100%" }}>
-            <PipeGamePreview />
+            <TowerGamePreview />
           </Grid2>
         )}
       </Grid2>
