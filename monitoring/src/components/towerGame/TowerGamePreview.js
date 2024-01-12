@@ -1,18 +1,38 @@
-import react from "react";
+import react, {useEffect} from "react";
 import TowerGameBoard from "./TowerGameBoard";
+import {BACKEND_URL} from "../../util";
 
 function TowerGamePreview() {
-    const towerGameState = {
-        selectedValues: [
-            '1', '1', '1', '1',
-            '2', '2', '2', '2',
-            '4', '4', '4', '4'
-        ],
-        gameId: '-mYmIgzp',
-        state_game: [[1, 2, 0], [1, 0, 0], [1, 0, 4]],
-    }
 
-    const firstEntryValues = towerGameState.selectedValues;
+    const [gameState, setGameState] = react.useState([]);
+    const [selectedValues, setSelectedValues] = react.useState([]);
+    const [gameId, setGameId] = react.useState('');
+
+    useEffect(() => {
+        fetch(`${BACKEND_URL}/api/tower-game/get-id`)
+            .then((response) => response.json())
+            .then((data) => {
+                setGameId(data.gameId)
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+    useEffect(() => {
+        const fetchData = () => {
+            fetch(`${BACKEND_URL}/api/tower-game/get-game-data/${gameId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setGameState(data.gameData.state_game);
+                    setSelectedValues(data.gameData.selectedValues);
+                })
+                .catch((error) => console.log(error));
+        };
+        fetchData();
+        const intervalId = setInterval(fetchData, 200);
+        return () => clearInterval(intervalId);
+    }, [gameId]);
+
+    const firstEntryValues = selectedValues || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const paramToCaseMapping = {
         "01": firstEntryValues[0],
         "02": firstEntryValues[1],
@@ -28,17 +48,19 @@ function TowerGamePreview() {
         "10": firstEntryValues[11]
     };
 
-
     return (
         <>
-            <TowerGameBoard
-                gameState={towerGameState.state_game}
-                dimensions={{rows: 5, columns: 5}}
-                cellSize={50}
-                paramToCaseMapping={paramToCaseMapping}
-            />
+            {gameState.length > 0 && selectedValues.length > 0 && (
+                <TowerGameBoard
+                    gameState={gameState}
+                    dimensions={{rows: 5, columns: 5}}
+                    cellSize={50}
+                    paramToCaseMapping={paramToCaseMapping}
+                />
+            )}
         </>
     );
+
 }
 
 export default TowerGamePreview;

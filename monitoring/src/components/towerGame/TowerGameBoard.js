@@ -4,6 +4,7 @@ import "../PipeGameBoard.css";
 
 function TowerGameBoard({gameState, dimensions, cellSize, paramToCaseMapping}) {
 
+    console.log(gameState)
 
     const isGameSquare = (x, y) => {
         if (x < 1 || x > 3) return false;

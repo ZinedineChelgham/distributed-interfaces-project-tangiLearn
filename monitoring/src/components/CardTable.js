@@ -86,6 +86,7 @@ function CardTable({ table }) {
       justifyContent={"center"}
       alignItems={"center"}
       height={"90%"}
+      xs={8}
       spacing={4}
       backgroundColor={"#3c9cf7f7"}
       borderRadius={2}
