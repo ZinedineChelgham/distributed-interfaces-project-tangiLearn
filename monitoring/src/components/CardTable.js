@@ -7,6 +7,7 @@ import bip from "../assets/sounds/bip.mp3";
 import useSound from "use-sound";
 import { BACKEND_URL } from "../util";
 import PipeGamePreview from "./PipeGamePreview";
+import TowerGamePreview from "./towerGame/TowerGamePreview";
 
 function CardTable({ table }) {
   const [isClicked, setIsClicked] = useState(false);
@@ -85,6 +86,7 @@ function CardTable({ table }) {
       justifyContent={"center"}
       alignItems={"center"}
       height={"90%"}
+      xs={8}
       spacing={4}
       backgroundColor={"#3c9cf7f7"}
       borderRadius={2}
