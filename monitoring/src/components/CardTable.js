@@ -164,7 +164,7 @@ function CardTable({ table }) {
           ))
         ) : (
           <Grid2 xs={12} sx={{ height: "100%" }}>
-            <TowerGamePreview />
+            <PipeGamePreview />
           </Grid2>
         )}
       </Grid2>
