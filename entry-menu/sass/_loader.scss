@@ -1,0 +1,52 @@
+@use "colors" as *;
+
+$loader-thickness: 1.3rem;
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 30vw;
+  height: 30vw;
+  color: $white;
+
+  .ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: $loader-thickness solid $white;
+    border-top: $loader-thickness solid transparentize($white, 0.7);
+    border-radius: 50%;
+    text-align: center;
+    animation: spin 2s linear infinite;
+  }
+
+  .text {
+    position: absolute;
+    width: 26rem;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
+    text-align: center;
+    font-size: 2vw;
+    font-weight: 500;
+    animation: rotateText 25s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotateText {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
