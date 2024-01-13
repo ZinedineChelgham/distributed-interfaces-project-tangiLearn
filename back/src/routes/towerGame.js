@@ -115,12 +115,28 @@ router.post("/update-data/:id", async (req, res) => {
     console.log("Données de jeu mises à jour :", game);
     // Sauvegardez les modifications dans la base de données
     await game.save();
+    const formattedState = {
+      A1state: game.state_game[0][0],
+      A2state: game.state_game[0][1],
+      A3state: game.state_game[0][2],
+      B1state: game.state_game[1][0],
+      B2state: game.state_game[1][1],
+      B3state: game.state_game[1][2],
+      C1state: game.state_game[2][0],
+      C2state: game.state_game[2][1],
+      C3state: game.state_game[2][2],
+    };
     // Envoyez les données mises à jour à tous les clients WebSocket connectés
     if (action === "increment") action = 1;
     else if (action === "decrement") action = -1;
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify({ origin: "backend", row, col, action }));
+      }
+    });
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ origin: "backend", formattedState }));
       }
     });
     res
@@ -141,7 +157,7 @@ router.post("/ping", async (req, res) => {
     const { row, col, action } = req.body;
 
     // Recherchez la partie dans la base de données par gameId
-    const game = await TowerGame.findOne({ gameId: gameId });
+    const game = await TowerGame.findOne();
 
     // Vérifiez si la partie existe
     if (!game) {
