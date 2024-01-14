@@ -59,7 +59,12 @@ button.start {
   font-weight: 600;
   background-color: $green;
   border: none;
-  transition: background-color 0.2s ease-out;
+  transition:
+    background-color 0.2s ease-out,
+    top 0.2s ease-out,
+    left 0.2s ease-out,
+    right 0.2s ease-out,
+    bottom 0.2s ease-out;
 
   &.upper-left {
     top: $start-button-offset-y;

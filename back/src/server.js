@@ -7,7 +7,7 @@ import teacherRoutes from "./routes/teachers.js";
 import pupilRoutes from "./routes/pupils.js";
 import mongoose from "mongoose";
 import cors from "cors";
-import { populateDb } from "../db/init.js";
+import { populateDb } from "./lib/populateDb.js";
 import { BACKEND_URL } from "./util.js";
 
 // Connect to MongoDB
