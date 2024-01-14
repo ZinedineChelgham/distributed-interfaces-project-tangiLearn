@@ -8,8 +8,7 @@ import pupilRoutes from "./routes/pupils.js";
 import mongoose from "mongoose";
 import cors from "cors";
 import { populateDb } from "../db/init.js";
-import { BACKEND_URL} from "./util.js";
-
+import { BACKEND_URL } from "./util.js";
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL, {});
@@ -20,6 +19,7 @@ db.once("open", async () => {
   console.log("Connected to Database");
   // Populate database with initial data
   await db.dropDatabase();
+  console.log("Database dropped");
   await populateDb();
 });
 
@@ -37,8 +37,7 @@ app.use("/api/tower-game", towerGameRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/pupil", pupilRoutes);
 // Serve at localhost:3000
-const PORT = BACKEND_URL.split(":")[2]
+const PORT = BACKEND_URL.split(":")[2];
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-

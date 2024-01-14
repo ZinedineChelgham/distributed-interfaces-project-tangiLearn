@@ -4,15 +4,22 @@ import { Pupil } from "../model/pupil.js";
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  Pupil.find().then((pupils) => {
-    res.send(pupils);
-  });
+  const { tokenId } = req.query;
+  if (tokenId) {
+    return Pupil.findOne({ tokenId: tokenId }).then((pupil) => {
+      res.send(pupil);
+    });
+  } else {
+    return Pupil.find().then((pupils) => {
+      res.send(pupils);
+    });
+  }
 });
 
 router.get("/:id", (req, res) =>
   Pupil.findById(req.params.id).then((pupil) => {
     res.send(pupil);
-  })
+  }),
 );
 
 router.post("/", (req, res) => {
@@ -40,14 +47,13 @@ router.put("/playing/:tokenId", async (req, res) => {
     const updatedPupil = await Pupil.findOneAndUpdate(
       { tokenId: tokenId },
       { isPlaying: true },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedPupil) {
       return res.status(404).json({ message: "Pupil not found" });
     }
     res.json(updatedPupil);
-
   } catch (error) {
     res.status(500).json({ message: "Server Error" });
   }
@@ -61,16 +67,16 @@ router.put("/stop-playing/:tokenId", async (req, res) => {
     const updatedPupil = await Pupil.findOneAndUpdate(
       { tokenId: tokenId },
       { isPlaying: false },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedPupil) {
-      return res.status(404).json({ message: 'Pupil not found' });
+      return res.status(404).json({ message: "Pupil not found" });
     }
 
     res.json(updatedPupil);
   } catch (error) {
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: "Server Error" });
   }
 });
 

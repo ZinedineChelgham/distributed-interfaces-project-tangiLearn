@@ -1,0 +1,88 @@
+@use "colors" as *;
+
+$slot-size: 12rem;
+$slot-size-active: 14rem;
+$name-offset: 10rem;
+
+.token-slots {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  .token-slot {
+    position: absolute;
+    width: $slot-size;
+    height: $slot-size;
+    background: $light-grey;
+    border-radius: 50%;
+    border-width: 1rem;
+    border-style: solid;
+    border-color: $grey;
+    transition: all 0.2s ease-in-out;
+
+    &.active {
+      background: $green;
+      border-color: $blue;
+      border-width: 1.2rem;
+      width: $slot-size-active;
+      height: $slot-size-active;
+    }
+
+    &.upper-left {
+      top: 0;
+      left: 0;
+      transform: translate(-50%, -50%);
+
+      .pupil-name {
+        top: $name-offset + 1.5;
+        left: $name-offset/2;
+        rotate: 135deg;
+      }
+    }
+
+    &.upper-right {
+      top: 0;
+      right: 0;
+      transform: translate(50%, -50%);
+
+      .pupil-name {
+        top: $name-offset + 1.5;
+        right: $name-offset/2;
+        rotate: -135deg;
+      }
+    }
+
+    &.lower-left {
+      bottom: 0;
+      left: 0;
+      transform: translate(-50%, 50%);
+
+      .pupil-name {
+        bottom: $name-offset + 1.5;
+        left: $name-offset/2;
+        rotate: 45deg;
+      }
+    }
+
+    &.lower-right {
+      bottom: 0;
+      right: 0;
+      transform: translate(50%, 50%);
+    }
+
+    .pupil-name {
+      position: absolute;
+      width: 15rem;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: $white;
+      text-wrap: nowrap;
+      text-align: center;
+      transition: all 0.2s ease-in-out;
+    }
+  }
+}

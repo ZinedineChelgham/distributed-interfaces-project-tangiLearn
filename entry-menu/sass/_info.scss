@@ -1,8 +1,9 @@
 @use "colors" as *;
+@import "animations";
 
 $loader-thickness: 1.3rem;
 
-.loader {
+.info {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,6 +11,21 @@ $loader-thickness: 1.3rem;
   width: 30vw;
   height: 30vw;
   color: $white;
+
+  .icon-container {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 4rem;
+    width: 10rem;
+    height: 10rem;
+
+    .icon {
+      font-size: 8rem;
+      font-weight: 700;
+    }
+  }
 
   .ring {
     position: absolute;
@@ -19,34 +35,18 @@ $loader-thickness: 1.3rem;
     border-top: $loader-thickness solid transparentize($white, 0.7);
     border-radius: 50%;
     text-align: center;
-    animation: spin 2s linear infinite;
+
+    &.full {
+      border-top-color: $white;
+    }
   }
 
   .text {
     position: absolute;
-    width: 26rem;
-    transform: translate(-50%, -50%);
+    width: 27rem;
     transform-origin: center;
     text-align: center;
     font-size: 2vw;
     font-weight: 500;
-    animation: rotateText 25s linear infinite;
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-@keyframes rotateText {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(-360deg);
   }
 }
