@@ -1,22 +1,13 @@
 import "./style.scss";
 import "material-icons/iconfont/material-icons.css";
 import { TUIOManager } from "@dj256/tuiomanager";
-
-const BACKEND_URL = "http://localhost:3000";
-
-// Get the IP address and port separately
-const ipAddress = BACKEND_URL.substring(0, BACKEND_URL.lastIndexOf(":"));
-
-const GAME_URL_MAPPER = {
-  pipe: `${ipAddress}:5174/`,
-  tower: `${ipAddress}:5173/`,
-};
-
-const API = `${BACKEND_URL}/api`;
+import { animateWithClass, getPupil, toKebabCase } from "./lib/util.js";
+import { API, GAME_URL_MAPPER } from "./lib/config.js";
 
 TUIOManager.start();
 
 const root = document.getElementById("root");
+const startButton = root.querySelector("button.start");
 function checkGameStatus() {
   return fetch(`${API}/monitoring/current-game`)
     .then((response) => response.json())
@@ -41,9 +32,6 @@ function checkGameStatus() {
     .catch((error) => console.error("Error checking game status:", error));
 }
 
-const doAfter = (time, callback) =>
-  new Promise((resolve) => setTimeout(() => resolve(callback()), time));
-
 const onNewGameLaunch = (gameName) => {
   root.classList.add("login");
   root.querySelector(".ring").classList.add("full");
@@ -53,18 +41,15 @@ const onNewGameLaunch = (gameName) => {
   root.querySelector(".token-slots").classList.add("enter-scale");
   root.querySelector(".token-slots").style.visibility = "visible";
 
-  handleLogin();
+  handleLogin(gameName);
 };
 
-const getPupil = (tokenId) =>
-  fetch(`${API}/pupil/?tokenId=${tokenId}`).then((response) => response.json());
-
-const animateWithClass = (element, className, delay = 201) => {
-  element.classList.add(className);
-  return doAfter(delay, () => element.classList.remove(className));
+const onStartButtonClick = (gameName) => {
+  console.log("start");
+  window.location.href = GAME_URL_MAPPER[gameName] + "gamepage?id=" + gameName;
 };
 
-const handleLogin = () => {
+const handleLogin = (gameName) => {
   const loginMap = {
     upperLeft: undefined,
     upperRight: undefined,
@@ -77,16 +62,29 @@ const handleLogin = () => {
     lowerLeft: document.querySelector(".token-slot.lower-left"),
     lowerRight: document.querySelector(".token-slot.lower-right"),
   };
+  let count = 0;
 
   Object.keys(tokenSlots).forEach((key) => {
     tokenSlots[key].addEventListener("tuiotagdown", ({ detail: tag }) => {
       if (loginMap[key]) return;
+      count++;
       loginMap[key] = tag.id;
       tokenSlots[key].classList.add("active");
       getPupil(tag.id).then((pupil) => {
         console.log(pupil);
         tokenSlots[key].querySelector(".pupil-name").innerText =
           `${pupil.name} ${pupil.surname[0]}.`;
+        if (count === 1) {
+          startButton.style.visibility = "visible";
+          startButton.classList.add("inactive");
+          startButton.classList.add(toKebabCase(key));
+          animateWithClass(startButton, "enter-scale-fast");
+        } else if (count === 2) {
+          startButton.classList.remove("inactive");
+          startButton.addEventListener("click", () =>
+            onStartButtonClick(gameName),
+          );
+        }
         return animateWithClass(
           tokenSlots[key].querySelector(".pupil-name"),
           "enter-scale-fast",
@@ -96,6 +94,7 @@ const handleLogin = () => {
 
     document.addEventListener("tuiotagup", ({ detail: tag }) => {
       if (loginMap[key] !== tag.id) return;
+      count--;
       loginMap[key] = undefined;
       tokenSlots[key].classList.remove("active");
       return animateWithClass(

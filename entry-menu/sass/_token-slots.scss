@@ -72,6 +72,12 @@ $name-offset: 10rem;
       bottom: 0;
       right: 0;
       transform: translate(50%, 50%);
+
+      .pupil-name {
+        bottom: $name-offset + 1.5;
+        right: $name-offset/2;
+        rotate: -45deg;
+      }
     }
 
     .pupil-name {

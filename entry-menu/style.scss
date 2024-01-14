@@ -3,6 +3,8 @@
 @import "sass/token-slots";
 
 $logo-width: 12rem;
+$start-button-offset-x: 15rem;
+$start-button-offset-y: 2rem;
 
 * {
   box-sizing: border-box;
@@ -46,4 +48,42 @@ body {
 
 .reverse {
   transform: rotate(180deg);
+}
+
+button.start {
+  position: absolute;
+  visibility: hidden;
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  color: $white;
+  font-weight: 600;
+  background-color: $green;
+  border: none;
+  transition: background-color 0.2s ease-out;
+
+  &.upper-left {
+    top: $start-button-offset-y;
+    left: $start-button-offset-x;
+    rotate: 180deg;
+  }
+
+  &.upper-right {
+    top: $start-button-offset-y;
+    right: $start-button-offset-x;
+    rotate: 180deg;
+  }
+
+  &.lower-left {
+    bottom: $start-button-offset-y;
+    left: $start-button-offset-x;
+  }
+
+  &.lower-right {
+    bottom: $start-button-offset-y;
+    right: $start-button-offset-x;
+  }
+
+  &.inactive {
+    background-color: $grey;
+  }
 }
