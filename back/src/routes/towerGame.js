@@ -2,7 +2,7 @@ import express from "express";
 import { TowerGame } from "../model/towerGame.js";
 import { WebSocketServer } from "ws";
 import WebSocket from "ws";
-import {BACKEND_URL} from "../util.js"
+import {BACKEND_URL} from "../lib/config.js"
 
 const app = express();
 import cors from "cors";

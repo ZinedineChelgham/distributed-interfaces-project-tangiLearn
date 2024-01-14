@@ -12,7 +12,9 @@ function PipeGameCell({ size, x, y, pipe }) {
         left: x * size + "px",
       }}
     >
-      {pipe && <Pipe type={pipe.type} fixed={true} rotation={pipe.rotation} />}
+      {pipe && (
+        <Pipe type={pipe.type} fixed={pipe.fixed} rotation={pipe.rotation} />
+      )}
     </div>
   );
 }

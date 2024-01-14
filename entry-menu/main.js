@@ -2,14 +2,14 @@ import "./style.scss";
 import "material-icons/iconfont/material-icons.css";
 import { TUIOManager } from "@dj256/tuiomanager";
 import { animateWithClass, getPupil, toKebabCase } from "./lib/util.js";
-import { API, GAME_URL_MAPPER } from "./lib/config.js";
+import { API_URL, GAME_URL_MAPPER } from "./lib/config.js";
 
 TUIOManager.start();
 
 const root = document.getElementById("root");
 const startButton = root.querySelector("button.start");
 function checkGameStatus() {
-  return fetch(`${API}/monitoring/current-game`)
+  return fetch(`${API_URL}/monitoring/current-game`)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -44,11 +44,6 @@ const onNewGameLaunch = (gameName) => {
   handleLogin(gameName);
 };
 
-const onStartButtonClick = (gameName) => {
-  console.log("start");
-  window.location.href = GAME_URL_MAPPER[gameName] + "gamepage?id=" + gameName;
-};
-
 const handleLogin = (gameName) => {
   const loginMap = {
     upperLeft: undefined,
@@ -63,27 +58,44 @@ const handleLogin = (gameName) => {
     lowerRight: document.querySelector(".token-slot.lower-right"),
   };
   let count = 0;
+  let first = undefined;
+
+  const onStartButtonClick = (gameName) => {
+    const players = Object.values(loginMap)
+      .filter((v) => v !== undefined)
+      .map((v) => v.pupil);
+    return fetch(`${API_URL}/${gameName}-game/`, {
+      method: "POST",
+      body: JSON.stringify({ players }),
+    }).then((game) => {
+      console.log(game);
+      window.location.href =
+        GAME_URL_MAPPER[gameName] + "gamepage?id=" + game._id;
+    });
+  };
+  const listener = () => onStartButtonClick(gameName);
 
   Object.keys(tokenSlots).forEach((key) => {
     tokenSlots[key].addEventListener("tuiotagdown", ({ detail: tag }) => {
       if (loginMap[key]) return;
       count++;
-      loginMap[key] = tag.id;
+      loginMap[key] = {};
+      loginMap[key].tagId = tag.id;
       tokenSlots[key].classList.add("active");
       getPupil(tag.id).then((pupil) => {
         console.log(pupil);
         tokenSlots[key].querySelector(".pupil-name").innerText =
           `${pupil.name} ${pupil.surname[0]}.`;
+        loginMap[key].pupil = pupil;
         if (count === 1) {
+          first = key;
           startButton.style.visibility = "visible";
           startButton.classList.add("inactive");
           startButton.classList.add(toKebabCase(key));
           animateWithClass(startButton, "enter-scale-fast");
         } else if (count === 2) {
           startButton.classList.remove("inactive");
-          startButton.addEventListener("click", () =>
-            onStartButtonClick(gameName),
-          );
+          startButton.addEventListener("tuioclick", listener);
         }
         return animateWithClass(
           tokenSlots[key].querySelector(".pupil-name"),
@@ -94,7 +106,22 @@ const handleLogin = (gameName) => {
 
     document.addEventListener("tuiotagup", ({ detail: tag }) => {
       if (loginMap[key] !== tag.id) return;
+      loginMap[key] = undefined;
       count--;
+      if (count < 2) {
+        startButton.classList.add("inactive");
+        startButton.removeEventListener("tuioclick", listener);
+      }
+      if (count === 1) {
+        if (first === key)
+          first = Object.keys(loginMap).find((k) => loginMap[k]);
+        startButton.classList.remove(toKebabCase(key));
+        startButton.classList.add(toKebabCase(first));
+      } else if (count === 0) {
+        startButton.style.visibility = "hidden";
+        startButton.classList.remove(toKebabCase(first));
+        animateWithClass(startButton, "exit-scale-fast");
+      }
       loginMap[key] = undefined;
       tokenSlots[key].classList.remove("active");
       return animateWithClass(

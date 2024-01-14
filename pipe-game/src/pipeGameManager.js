@@ -213,6 +213,15 @@ export class PipeGameManager {
     this.helpButtons.forEach(
       (button) => (button.onclick = () => this.onHelpRequested()),
     );
+    return this.publishGameState();
+  }
+
+  publishGameState() {
+    return fetch(`${BACKEND_URL}/api/pipe-game/fakeId`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ state: this.state }),
+    });
   }
 
   onHelpRequested() {
@@ -305,15 +314,25 @@ export class PipeGameManager {
         pipeDescription.x,
         pipeDescription.y,
         pipeDescription.rotation,
+        true,
       );
     });
   }
 
-  addNewPipeToState(pipeType, x, y, rotation) {
+  addNewPipeToState(pipeType, x, y, rotation, fixed = false) {
     this.state.board[y][x] = {
       type: pipeType,
       rotation,
+      fixed,
     };
+  }
+
+  updateStateAfterMove(x, y, newX, newY, newRotation) {
+    this.state.board[newY][newX] = {
+      type: this.state.board[y][x].type,
+      rotation: newRotation,
+    };
+    this.state.board[y][x] = null;
   }
 
   /**
@@ -333,15 +352,24 @@ export class PipeGameManager {
    */
   getNewPipe(level, pipeType) {
     this.pipeCounts[pipeType] += 1;
-    const pipe = new Pipe(pipeType, (isNew, newPos) => {
+    const pipe = new Pipe(pipeType, async (isNew, newPos) => {
       if (isNew) {
         if (level.pipes[pipeType] - this.pipeCounts[pipeType] > 0) {
           this.addNewPipeToGraph(newPos.x, newPos.y, pipe.pipeType, pipe.angle);
+          this.addNewPipeToState(pipe.pipeType, newPos.x, newPos.y, pipe.angle);
           this.getNewPipe(level, pipeType);
         }
       } else {
         this.movePipe(newPos.x, newPos.y, pipe.angle, pipe);
+        this.updateStateAfterMove(
+          pipe.boardX,
+          pipe.boardY,
+          newPos.x,
+          newPos.y,
+          pipe.angle,
+        );
       }
+      await this.publishGameState();
       if (this.checkWin(level)) {
         console.log("////////////////////////////////////////////////");
         console.log("//                                            //");

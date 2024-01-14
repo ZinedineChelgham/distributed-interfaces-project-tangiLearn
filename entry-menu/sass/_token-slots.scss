@@ -39,7 +39,7 @@ $name-offset: 10rem;
 
       .pupil-name {
         top: $name-offset + 1.5;
-        left: $name-offset/2;
+        left: calc($name-offset/2);
         rotate: 135deg;
       }
     }
@@ -51,7 +51,7 @@ $name-offset: 10rem;
 
       .pupil-name {
         top: $name-offset + 1.5;
-        right: $name-offset/2;
+        right: calc($name-offset/2);
         rotate: -135deg;
       }
     }
@@ -63,7 +63,7 @@ $name-offset: 10rem;
 
       .pupil-name {
         bottom: $name-offset + 1.5;
-        left: $name-offset/2;
+        left: calc($name-offset/2);
         rotate: 45deg;
       }
     }
@@ -75,7 +75,7 @@ $name-offset: 10rem;
 
       .pupil-name {
         bottom: $name-offset + 1.5;
-        right: $name-offset/2;
+        right: calc($name-offset/2);
         rotate: -45deg;
       }
     }
