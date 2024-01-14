@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import bip from "../assets/sounds/bip.mp3";
 import useSound from "use-sound";
 import { BACKEND_URL } from "../util";
-import PipeGamePreview from "./PipeGamePreview";
+import PipeGamePreview from "./pipeGame/PipeGamePreview";
 import TowerGamePreview from "./towerGame/TowerGamePreview";
 
 function CardTable({ table }) {

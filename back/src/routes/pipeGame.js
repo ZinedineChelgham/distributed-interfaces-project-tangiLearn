@@ -14,7 +14,16 @@ router.post("/", (req, res) => {
   });
 });
 
-router.post("/:gameId", (req, res) => {
+router.get("/:gameId", (req, res) => {
+  /** @type {string} */
+  const { gameId } = req.params;
+  PipeGame.findById(gameId).then((game) => {
+    if (!game) return res.sendStatus(404);
+    res.send(game);
+  });
+});
+
+router.patch("/:gameId", (req, res) => {
   /** @type {string} */
   const { gameId } = req.params;
   /** @type {PipeGameAction} */

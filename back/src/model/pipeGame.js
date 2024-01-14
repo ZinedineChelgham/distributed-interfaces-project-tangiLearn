@@ -8,7 +8,6 @@ const pipeGameSchema = new mongoose.Schema({
   },
   state: {
     type: [[[mongoose.Schema.Types.Number]]],
-    required: true,
   },
 });
 

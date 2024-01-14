@@ -8,8 +8,22 @@
  * @typedef PipeGameState {{type: PipeType, rotation: 0 | 90 | 180 | 270}[][]}
  */
 import PipeGameBoard from "./PipeGameBoard";
+import { useEffect, useState } from "react";
+import { BACKEND_URL } from "../../util";
 
-function PipeGamePreview() {
+function PipeGamePreview({ gameId }) {
+  const [state, setState] = useState();
+  useEffect(() => {
+    const id = setInterval(
+      () =>
+        fetch(`${BACKEND_URL}/api/pipe-game/${gameId}`).then((game) =>
+          setState(game.state),
+        ),
+      1000,
+    );
+
+    return () => clearInterval(id);
+  }, []);
   const pipeGameState = [
     [
       null,

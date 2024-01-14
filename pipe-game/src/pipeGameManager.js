@@ -213,6 +213,20 @@ export class PipeGameManager {
     this.helpButtons.forEach(
       (button) => (button.onclick = () => this.onHelpRequested()),
     );
+    this.publishGameState();
+  }
+
+  postNewGame() {
+    return fetch(`${BACKEND_URL}/api/pipe-game/`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  }
+
+  publishGameState() {
+    return fetch(`${BACKEND_URL}/api/pipe-game/`, {
+      method: POST,
+    });
   }
 
   onHelpRequested() {
