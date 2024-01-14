@@ -2,7 +2,7 @@ import "./style.scss";
 import "material-icons/iconfont/material-icons.css";
 import { TUIOManager } from "@dj256/tuiomanager";
 import { animateWithClass, getPupil, toKebabCase } from "./lib/util.js";
-import {API_URL, BACKEND_URL, GAME_URL_MAPPER} from "./lib/config.js";
+import { API_URL, GAME_URL_MAPPER } from "./lib/config.js";
 
 TUIOManager.start();
 
@@ -61,26 +61,32 @@ const handleLogin = (gameName) => {
   let first = undefined;
 
   const onStartButtonClick = (gameName) => {
-    const players = Object.values(loginMap).filter(v => v !== undefined).map(v => v.pupil)
+    const players = Object.values(loginMap)
+      .filter((v) => v !== undefined)
+      .map((v) => v.pupil);
     return fetch(`${API_URL}/${gameName}-game/`, {
       method: "POST",
-      body: JSON.stringify({players})
-    })
+      body: JSON.stringify({ players }),
+    }).then((game) => {
+      console.log(game);
+      window.location.href =
+        GAME_URL_MAPPER[gameName] + "gamepage?id=" + game._id;
+    });
   };
   const listener = () => onStartButtonClick(gameName);
-
 
   Object.keys(tokenSlots).forEach((key) => {
     tokenSlots[key].addEventListener("tuiotagdown", ({ detail: tag }) => {
       if (loginMap[key]) return;
       count++;
+      loginMap[key] = {};
       loginMap[key].tagId = tag.id;
       tokenSlots[key].classList.add("active");
       getPupil(tag.id).then((pupil) => {
         console.log(pupil);
         tokenSlots[key].querySelector(".pupil-name").innerText =
           `${pupil.name} ${pupil.surname[0]}.`;
-        loginMap[key].pupil = pupil
+        loginMap[key].pupil = pupil;
         if (count === 1) {
           first = key;
           startButton.style.visibility = "visible";

@@ -22,6 +22,7 @@ function PipeGameBoard({
             size={cellSize}
             x={column}
             y={row}
+            pipe={pipeGameState[row][column]}
           />
         )),
       )}
