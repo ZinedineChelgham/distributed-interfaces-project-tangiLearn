@@ -1,0 +1,19 @@
+.gate {
+  display: flex;
+  position: absolute;
+}
+
+.gate.up {
+  top: 0;
+  transform: translate(0, -100%);
+}
+
+.gate.down {
+  bottom: 0;
+  transform: translate(0, 100%);
+}
+
+.gate img {
+  width: 100%;
+  height: auto;
+}

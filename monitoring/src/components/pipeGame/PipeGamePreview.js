@@ -19,7 +19,7 @@ function PipeGamePreview({ gameId }) {
       () =>
         fetch(`${BACKEND_URL}/api/pipe-game/${gameId}`)
           .then((response) => response.json())
-          .then((game) => setState(game.state.board[0]))
+          .then((game) => setState(game.state))
           .catch((error) =>
             console.error("Error checking game status:", error),
           ),
@@ -30,7 +30,7 @@ function PipeGamePreview({ gameId }) {
   }, []);
   return (
     <>
-      {state && (
+      {state && state.board && state.board[0] && (
         <PipeGameBoard
           pipeGameState={state}
           dimensions={{ rows: 8, columns: 14 }}

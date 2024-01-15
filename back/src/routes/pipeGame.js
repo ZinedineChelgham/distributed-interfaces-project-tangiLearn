@@ -32,15 +32,11 @@ router.get("/:gameId", (req, res) => {
 router.patch("/:gameId", (req, res) => {
   /** @type {string} */
   const { gameId } = req.params;
-
-  return PipeGame.findOne()
-    .then((pipeGame) => {
-      pipeGame.state = req.body.state;
-      return pipeGame.save();
-    })
-    .then((pipeGame) => {
+  return PipeGame.findOneAndUpdate({}, req.body, { new: true }).then(
+    (pipeGame) => {
       res.send(pipeGame);
-    });
+    },
+  );
 });
 
 export default router;
