@@ -17,7 +17,7 @@
     "ws": "^8.15.0"
   },
   "scripts": {
-    "start": "vite",
+    "start": "vite --host 192.168.1.14",
     "serve": "vite preview"
   },
   "eslintConfig": {
