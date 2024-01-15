@@ -126,10 +126,6 @@ export class PipeGameManager {
             .classList.add(Pipes.tokenContainerBackgroundActive);
           if (count === 2) {
             gamePreStart();
-            // Added by zine
-            tagIds.forEach((tagId) => {
-              this.updatePupilState(tagId);
-            });
           }
         });
         container.addEventListener("tuiotagup", () => {
@@ -614,14 +610,5 @@ export class PipeGameManager {
     setTimeout(() => {
       cell.classList.remove(Animations.cellBlink);
     }, 1000);
-  }
-
-  // Added by zine
-  updatePupilState(tagId) {
-    fetch(`${BACKEND_URL}/api/pupil/playing/${tagId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isPlaying: true }),
-    }).then((r) => console.log(r));
   }
 }

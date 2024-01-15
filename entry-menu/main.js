@@ -12,7 +12,6 @@ function checkGameStatus() {
   return fetch(`${API_URL}/monitoring/current-game`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       const gameName = data;
       if (!gameName) return;
       clearInterval(interval);
@@ -64,14 +63,27 @@ const handleLogin = (gameName) => {
     const players = Object.values(loginMap)
       .filter((v) => v !== undefined)
       .map((v) => v.pupil);
-    return fetch(`${API_URL}/${gameName}-game/`, {
-      method: "POST",
-      body: JSON.stringify({ players }),
-    }).then((game) => {
-      console.log(game);
-      window.location.href =
-        GAME_URL_MAPPER[gameName] + "gamepage?id=" + game._id;
-    });
+    return Promise.all(
+      players.map((player) =>
+        fetch(`${API_URL}/pupil/playing/${player.tokenId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ isPlaying: true }),
+        }),
+      ),
+    )
+      .then(() =>
+        fetch(`${API_URL}/${gameName}-game/`, {
+          method: "POST",
+          body: JSON.stringify({ players }),
+        }),
+      )
+      .then((game) => {
+        window.location.href =
+          GAME_URL_MAPPER[gameName] + "gamepage?id=" + game._id;
+      });
   };
   const listener = () => onStartButtonClick(gameName);
 

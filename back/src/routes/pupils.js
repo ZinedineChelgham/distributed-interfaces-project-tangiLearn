@@ -1,26 +1,29 @@
 import express from "express";
 import { Pupil } from "../model/pupil.js";
+import { ObjectId } from "bson";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  const { tokenId } = req.query;
-  if (tokenId) {
-    return Pupil.findOne({ tokenId: tokenId }).then((pupil) => {
-      res.send(pupil);
-    });
+router.get("/", (req, res) =>
+  Pupil.find().then((pupils) => {
+    res.send(pupils);
+  }),
+);
+
+router.get("/:id", (req, res) => {
+  if (ObjectId.isValid(req.params.id)) {
+    return Pupil.findById(req.params.id).then((pupil) => res.send(pupil));
   } else {
-    return Pupil.find().then((pupils) => {
-      res.send(pupils);
+    return Pupil.findOne({ tokenId: req.params.id }).then((pupil) => {
+      if (!pupil) {
+        return res.status(404).send({
+          message: "Pupil not found with id " + req.params.id,
+        });
+      }
+      res.send(pupil);
     });
   }
 });
-
-router.get("/:id", (req, res) =>
-  Pupil.findById(req.params.id).then((pupil) => {
-    res.send(pupil);
-  }),
-);
 
 router.post("/", (req, res) => {
   console.log("POST request received at /api/pupil/");
