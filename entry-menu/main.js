@@ -77,7 +77,7 @@ const handleLogin = (gameName) => {
       .then(() =>
         fetch(`${API_URL}/${gameName}-game/`, {
           method: "POST",
-          body: JSON.stringify({ players }),
+          body: JSON.stringify({ players: players.map((p) => p.id) }),
         }),
       )
       .then((game) => {
