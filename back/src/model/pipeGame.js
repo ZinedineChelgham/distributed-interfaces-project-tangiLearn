@@ -8,7 +8,15 @@ const pipeGameSchema = new mongoose.Schema({
   },
   state: {
     board: {
-      type: [[[{}]]],
+      type: [mongoose.Schema.Types.Mixed],
+    },
+    outlet: {
+      x: Number,
+      side: String,
+    },
+    inlet: {
+      x: Number,
+      side: String,
     },
   },
 });

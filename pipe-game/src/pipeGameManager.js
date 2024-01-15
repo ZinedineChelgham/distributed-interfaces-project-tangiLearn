@@ -136,17 +136,17 @@ export class PipeGameManager {
           count -= 1;
         });
       });
-      setTimeout(() => {
-        this.pipesGameContainer
-          .querySelector(`.${Pipes.startScreen}`)
-          .classList.add(Animations.fadeOut);
-        setTimeout(() => {
-          this.pipesGameContainer
-            .querySelector(`.${Pipes.startScreen}`)
-            .remove();
-          this.launchGame();
-        }, 1000);
-      }, 2000);
+      // setTimeout(() => {
+      //   this.pipesGameContainer
+      //     .querySelector(`.${Pipes.startScreen}`)
+      //     .classList.add(Animations.fadeOut);
+      //   setTimeout(() => {
+      //     this.pipesGameContainer
+      //       .querySelector(`.${Pipes.startScreen}`)
+      //       .remove();
+      //     this.launchGame();
+      //   }, 1000);
+      // }, 2000);
     };
 
     this.pipesGameContainer.classList.add(Pipes.pipesGameContainer);
@@ -160,6 +160,8 @@ export class PipeGameManager {
 
   launchGame() {
     const level = levels[0];
+    this.state.inlet = level.inlet;
+    this.state.outlet = level.outlet;
     this.pipesGameContainer.innerHTML = `
       <div class="${Pipes.gameContainer}">
         <div class="${Pipes.inventory} ${Pipes.inventoryLeft}">

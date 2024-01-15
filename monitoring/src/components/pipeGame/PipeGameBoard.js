@@ -1,5 +1,6 @@
-import PipeGameCell from "./PipeGameCell";
 import "./PipeGameBoard.css";
+import PipeGameCell from "./PipeGameCell";
+import Gate from "./Gate";
 
 function PipeGameBoard({
   pipeGameState,
@@ -22,10 +23,12 @@ function PipeGameBoard({
             size={cellSize}
             x={column}
             y={row}
-            pipe={pipeGameState[row][column]}
+            pipe={pipeGameState.board[row][column]}
           />
         )),
       )}
+      <Gate {...pipeGameState.inlet} size={cellSize} />
+      <Gate {...pipeGameState.outlet} size={cellSize} />
     </div>
   );
 }
