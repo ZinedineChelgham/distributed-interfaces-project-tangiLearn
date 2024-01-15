@@ -8,7 +8,8 @@ import pupilRoutes from "./routes/pupils.js";
 import mongoose from "mongoose";
 import cors from "cors";
 import { populateDb } from "./lib/populateDb.js";
-import { BACKEND_URL, PORT } from "./lib/config.js";
+import { PORT } from "./lib/config.js";
+import path from "path";
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL, {});
@@ -36,6 +37,42 @@ app.use("/api/pipe-game", pipeGameRoutes);
 app.use("/api/tower-game", towerGameRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/pupil", pupilRoutes);
+
+// entry menu
+app.use("/entry-menu/assets", express.static("../entry-menu/dist/assets"));
+app.get("/entry-menu", (req, res) => {
+  res.sendFile(
+    path.resolve(path.dirname(""), "../entry-menu/dist", "index.html"),
+  );
+});
+
+// pipe game
+app.use("/pipe-game/assets", express.static("../pipe-game/dist/assets"));
+app.get("/pipe-game", (req, res) => {
+  res.sendFile(
+    path.resolve(path.dirname(""), "../pipe-game/dist", "index.html"),
+  );
+});
+
+// tower game
+app.use("/tower-game/assets", express.static("../tower-game/dist/assets"));
+app.get("/tower-game", (req, res) => {
+  res.sendFile(
+    path.resolve(path.dirname(""), "../tower-game/dist", "index.html"),
+  );
+});
+
+// token registration
+app.use(
+  "/token-registration/assets",
+  express.static("../token-registration/dist/assets"),
+);
+app.get("/token-registration", (req, res) => {
+  res.sendFile(
+    path.resolve(path.dirname(""), "../token-registration/dist", "index.html"),
+  );
+});
+
 // Serve at localhost:3000
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

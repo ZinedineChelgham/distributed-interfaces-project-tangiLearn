@@ -6,6 +6,11 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
+    "build:pipe": "npm run build --prefix ../pipe-game",
+    "build:tower": "npm run build --prefix ../jeu-des-tours",
+    "build:registration": "npm run build --prefix ../token-registration",
+    "build:entry-menu": "npm run build --prefix ../entry-menu",
+    "build:all": "npm run build:pipe && npm run build:tower && npm run build:registration && npm run build:entry-menu",
     "dev": "nodemon src/server.js",
     "lint": "eslint . --ext .js --fix",
     "mongo": "node db/inMemoryDb.js",
