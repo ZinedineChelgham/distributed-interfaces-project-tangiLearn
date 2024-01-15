@@ -131,12 +131,7 @@ router.post("/update-data/:id", async (req, res) => {
     else if (action === "decrement") action = -1;
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ origin: "backend", row, col, action }));
-      }
-    });
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ origin: "backend", formattedState }));
+        client.send(JSON.stringify({ ...formattedState }));
       }
     });
     res
