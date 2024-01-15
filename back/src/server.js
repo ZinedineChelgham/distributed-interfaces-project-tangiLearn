@@ -53,6 +53,11 @@ app.get("/pipe-game", (req, res) => {
     path.resolve(path.dirname(""), "../pipe-game/dist", "index.html"),
   );
 });
+app.get("/pipe-game/*", (req, res) => {
+  res.sendFile(
+    path.resolve(path.dirname(""), "../pipe-game/dist", "index.html"),
+  );
+});
 
 // tower game
 app.use("/tower-game/assets", express.static("../tower-game/dist/assets"));
