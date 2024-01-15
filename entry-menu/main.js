@@ -82,16 +82,16 @@ const handleLogin = (gameName) => {
         }),
       )
       .then((game) => {
-        fetch(`${API_URL}/get-id`, {
-            method: "POST",
-            body: JSON.stringify({ gameId: game._id }),
-            })
+        fetch(`${API_URL}/tower-game/get-id`)
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
+              if(data.gameId) {
+                window.location.href =
+                    GAME_URL_MAPPER[gameName] + "gamepage?id=" + data.gameId;
+              }
                 });
-        window.location.href =
-          GAME_URL_MAPPER[gameName] + "gamepage?id=" + game._id;
+
       });
   };
   const listener = () => onStartButtonClick(gameName);
