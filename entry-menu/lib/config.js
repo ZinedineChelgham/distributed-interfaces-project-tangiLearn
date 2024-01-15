@@ -1,5 +1,5 @@
 export const BACKEND_URL =
-  import.meta.env.BACKEND_URL ?? "http://localhost:3000";
+  import.meta.env.BACKEND_URL ?? "http://192.168.1.14:3000";
 export const API_URL = `${BACKEND_URL}/api`;
 // Get the IP address and port separately
 const ipAddress = BACKEND_URL.substring(0, BACKEND_URL.lastIndexOf(":"));

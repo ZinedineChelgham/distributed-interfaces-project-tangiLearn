@@ -14,7 +14,7 @@ import longFixed from "../assets/images/pipe_long_fixed.svg";
 import long from "../assets/images/pipe_long.svg";
 
 export const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL ?? "http://localhost:3000";
+  import.meta.env.VITE_BACKEND_URL ?? "http://192.168.1.14:3000";
 
 export const PIPE_DATA = {
   straight: {
