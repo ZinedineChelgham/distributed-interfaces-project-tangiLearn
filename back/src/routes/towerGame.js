@@ -2,7 +2,7 @@ import express from "express";
 import { TowerGame } from "../model/towerGame.js";
 import { WebSocketServer } from "ws";
 import WebSocket from "ws";
-import {BACKEND_URL} from "../util.js"
+import {BACKEND_URL} from "../lib/config.js"
 
 const app = express();
 import cors from "cors";
@@ -129,6 +129,11 @@ router.post("/update-data/:id", async (req, res) => {
     // Envoyez les données mises à jour à tous les clients WebSocket connectés
     if (action === "increment") action = 1;
     else if (action === "decrement") action = -1;
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ origin: "backend", row, col, action }));
+      }
+    });
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify({ ...formattedState }));

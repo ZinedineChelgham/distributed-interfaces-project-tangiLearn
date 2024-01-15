@@ -126,27 +126,23 @@ export class PipeGameManager {
             .classList.add(Pipes.tokenContainerBackgroundActive);
           if (count === 2) {
             gamePreStart();
-            // Added by zine
-            tagIds.forEach((tagId) => {
-              this.updatePupilState(tagId);
-            });
           }
         });
         container.addEventListener("tuiotagup", () => {
           count -= 1;
         });
       });
-      setTimeout(() => {
-        this.pipesGameContainer
-          .querySelector(`.${Pipes.startScreen}`)
-          .classList.add(Animations.fadeOut);
-        setTimeout(() => {
-          this.pipesGameContainer
-            .querySelector(`.${Pipes.startScreen}`)
-            .remove();
-          this.launchGame();
-        }, 1000);
-      }, 2000);
+      // setTimeout(() => {
+      //   this.pipesGameContainer
+      //     .querySelector(`.${Pipes.startScreen}`)
+      //     .classList.add(Animations.fadeOut);
+      //   setTimeout(() => {
+      //     this.pipesGameContainer
+      //       .querySelector(`.${Pipes.startScreen}`)
+      //       .remove();
+      //     this.launchGame();
+      //   }, 1000);
+      // }, 2000);
     };
 
     this.pipesGameContainer.classList.add(Pipes.pipesGameContainer);
@@ -160,6 +156,8 @@ export class PipeGameManager {
 
   launchGame() {
     const level = levels[0];
+    this.state.inlet = level.inlet;
+    this.state.outlet = level.outlet;
     this.pipesGameContainer.innerHTML = `
       <div class="${Pipes.gameContainer}">
         <div class="${Pipes.inventory} ${Pipes.inventoryLeft}">
@@ -213,6 +211,15 @@ export class PipeGameManager {
     this.helpButtons.forEach(
       (button) => (button.onclick = () => this.onHelpRequested()),
     );
+    return this.publishGameState();
+  }
+
+  publishGameState() {
+    return fetch(`${BACKEND_URL}/api/pipe-game/fakeId`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ state: this.state }),
+    });
   }
 
   onHelpRequested() {
@@ -305,15 +312,25 @@ export class PipeGameManager {
         pipeDescription.x,
         pipeDescription.y,
         pipeDescription.rotation,
+        true,
       );
     });
   }
 
-  addNewPipeToState(pipeType, x, y, rotation) {
+  addNewPipeToState(pipeType, x, y, rotation, fixed = false) {
     this.state.board[y][x] = {
       type: pipeType,
       rotation,
+      fixed,
     };
+  }
+
+  updateStateAfterMove(x, y, newX, newY, newRotation) {
+    this.state.board[newY][newX] = {
+      type: this.state.board[y][x].type,
+      rotation: newRotation,
+    };
+    this.state.board[y][x] = null;
   }
 
   /**
@@ -333,15 +350,24 @@ export class PipeGameManager {
    */
   getNewPipe(level, pipeType) {
     this.pipeCounts[pipeType] += 1;
-    const pipe = new Pipe(pipeType, (isNew, newPos) => {
+    const pipe = new Pipe(pipeType, async (isNew, newPos) => {
       if (isNew) {
         if (level.pipes[pipeType] - this.pipeCounts[pipeType] > 0) {
           this.addNewPipeToGraph(newPos.x, newPos.y, pipe.pipeType, pipe.angle);
+          this.addNewPipeToState(pipe.pipeType, newPos.x, newPos.y, pipe.angle);
           this.getNewPipe(level, pipeType);
         }
       } else {
         this.movePipe(newPos.x, newPos.y, pipe.angle, pipe);
+        this.updateStateAfterMove(
+          pipe.boardX,
+          pipe.boardY,
+          newPos.x,
+          newPos.y,
+          pipe.angle,
+        );
       }
+      await this.publishGameState();
       if (this.checkWin(level)) {
         console.log("////////////////////////////////////////////////");
         console.log("//                                            //");
@@ -584,14 +610,5 @@ export class PipeGameManager {
     setTimeout(() => {
       cell.classList.remove(Animations.cellBlink);
     }, 1000);
-  }
-
-  // Added by zine
-  updatePupilState(tagId) {
-    fetch(`${BACKEND_URL}/api/pupil/playing/${tagId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isPlaying: true }),
-    }).then((r) => console.log(r));
   }
 }

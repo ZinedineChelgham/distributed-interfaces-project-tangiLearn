@@ -2910,7 +2910,7 @@ var globalThisShim = (() => {
   }
 })();
 
-// node_modules/engine.io-client/build/esm/util.js
+// node_modules/engine.io-client/build/esm/config.js
 function pick(obj, ...attr) {
   return attr.reduce((acc, k) => {
     if (obj.hasOwnProperty(k)) {

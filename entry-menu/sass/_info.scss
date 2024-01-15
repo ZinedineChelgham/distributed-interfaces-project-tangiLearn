@@ -1,0 +1,52 @@
+@use "colors" as *;
+@import "animations";
+
+$loader-thickness: 1.3rem;
+
+.info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 30vw;
+  height: 30vw;
+  color: $white;
+
+  .icon-container {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 4rem;
+    width: 10rem;
+    height: 10rem;
+
+    .icon {
+      font-size: 8rem;
+      font-weight: 700;
+    }
+  }
+
+  .ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: $loader-thickness solid $white;
+    border-top: $loader-thickness solid transparentize($white, 0.7);
+    border-radius: 50%;
+    text-align: center;
+
+    &.full {
+      border-top-color: $white;
+    }
+  }
+
+  .text {
+    position: absolute;
+    width: 27rem;
+    transform-origin: center;
+    text-align: center;
+    font-size: 2vw;
+    font-weight: 500;
+  }
+}

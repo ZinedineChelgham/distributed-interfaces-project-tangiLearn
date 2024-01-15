@@ -66,7 +66,7 @@ export class Pipe {
     this.setAngle(tuioTag.angle + this.tagOffset.angle);
   }
 
-  onTagUp({ detail: tuioTagId }) {
+  async onTagUp({ detail: tuioTagId }) {
     if (this.tagId === undefined || this.tagId !== tuioTagId) return;
     this.tagId = undefined;
     this.element.classList.remove(`drag-${tuioTagId}`);
@@ -89,9 +89,9 @@ export class Pipe {
     this.setPosition(closestCellPosition.x, closestCellPosition.y);
     if (this.element.classList.contains("new")) {
       this.element.classList.remove("new");
-      this.onDropped(true, { x: closestCellX, y: closestCellY });
+      await this.onDropped(true, { x: closestCellX, y: closestCellY });
     } else {
-      this.onDropped(false, { x: closestCellX, y: closestCellY });
+      await this.onDropped(false, { x: closestCellX, y: closestCellY });
     }
     this.boardX = closestCellX;
     this.boardY = closestCellY;

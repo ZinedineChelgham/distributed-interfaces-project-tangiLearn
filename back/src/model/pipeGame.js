@@ -7,8 +7,17 @@ const pipeGameSchema = new mongoose.Schema({
     required: true,
   },
   state: {
-    type: [[[mongoose.Schema.Types.Number]]],
-    required: true,
+    board: {
+      type: [mongoose.Schema.Types.Mixed],
+    },
+    outlet: {
+      x: Number,
+      side: String,
+    },
+    inlet: {
+      x: Number,
+      side: String,
+    },
   },
 });
 

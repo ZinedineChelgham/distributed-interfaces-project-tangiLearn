@@ -6,19 +6,33 @@ import Box from "@mui/material/Box";
 import bip from "../assets/sounds/bip.mp3";
 import useSound from "use-sound";
 import { BACKEND_URL } from "../util";
-import PipeGamePreview from "./PipeGamePreview";
-import TowerGamePreview from "./towerGame/TowerGamePreview";
+import GamePreview from "./GamePreview";
 
 function CardTable({ table }) {
   const [isClicked, setIsClicked] = useState(false);
+  const [currentGame, setCurrentGame] = useState("");
 
-  function setCurrentGame(game) {
-    fetch(`${BACKEND_URL}/api/monitoring/current-game`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ game: game }),
-    }).then((r) => console.log(r));
-  }
+  useEffect(() => {
+    if (currentGame === "pipe") {
+      fetch(`${BACKEND_URL}/api/monitoring/current-game`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ game: "pipe" }),
+      }).then((r) => console.log(r));
+    } else if (currentGame === "tower") {
+      fetch(`${BACKEND_URL}/api/monitoring/current-game`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ game: "tower" }),
+      }).then((r) => console.log(r));
+    } else {
+      fetch(`${BACKEND_URL}/api/monitoring/current-game`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ game: "" }),
+      }).then((r) => console.log(r));
+    }
+  }, [currentGame]);
 
   /**
    *
@@ -164,7 +178,7 @@ function CardTable({ table }) {
           ))
         ) : (
           <Grid2 xs={12} sx={{ height: "100%" }}>
-            <PipeGamePreview />
+            <GamePreview game={currentGame} />
           </Grid2>
         )}
       </Grid2>

@@ -1,7 +1,13 @@
-import PipeGameCell from "./PipeGameCell";
 import "./PipeGameBoard.css";
+import PipeGameCell from "./PipeGameCell";
+import Gate from "./Gate";
 
-function PipeGameBoard({ pipeGameState, dimensions, cellSize, paramToCaseMapping }) {
+function PipeGameBoard({
+  pipeGameState,
+  dimensions,
+  cellSize,
+  paramToCaseMapping,
+}) {
   return (
     <div
       id="board"
@@ -17,9 +23,12 @@ function PipeGameBoard({ pipeGameState, dimensions, cellSize, paramToCaseMapping
             size={cellSize}
             x={column}
             y={row}
+            pipe={pipeGameState.board[row][column]}
           />
         )),
       )}
+      <Gate {...pipeGameState.inlet} size={cellSize} />
+      <Gate {...pipeGameState.outlet} size={cellSize} />
     </div>
   );
 }

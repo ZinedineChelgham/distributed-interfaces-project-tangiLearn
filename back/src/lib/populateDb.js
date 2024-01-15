@@ -1,9 +1,9 @@
 // db.js - Database initialization module
-import { Teacher } from "../src/model/teacher.js";
-import { Pupil } from "../src/model/pupil.js";
-import {hashPassword} from "../src/lib/util.js";
+import { Teacher } from "../model/teacher.js";
+import { Pupil } from "../model/pupil.js";
+import {hashPassword} from "./util.js";
 
-async function populateDb() {
+export async function populateDb() {
   const newTeacher = await Teacher.create({
     name: "benten",
     surname: "Weel",
@@ -37,5 +37,3 @@ async function populateDb() {
   const insertedPupils = await Pupil.insertMany(pupils);
   console.log(`${insertedPupils.length} pupils added to the database`);
 }
-
-export { populateDb };

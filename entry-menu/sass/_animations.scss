@@ -1,0 +1,43 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scale-up {
+  0% {
+    scale: 0;
+    opacity: 0;
+  }
+  100% {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+.spin {
+  animation: spin 2s linear infinite;
+}
+
+.slow-spin {
+  animation: spin 25s linear infinite;
+}
+
+.enter-scale {
+  animation: scale-up 0.5s ease-out forwards;
+}
+
+.enter-scale-fast {
+  animation: scale-up 0.2s ease-out forwards;
+}
+
+.exit-scale {
+  animation: scale-up 0.5s ease-in reverse forwards;
+}
+
+.exit-scale-fast {
+  animation: scale-up 0.2s ease-in reverse forwards;
+}

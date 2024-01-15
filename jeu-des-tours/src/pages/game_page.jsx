@@ -12,8 +12,7 @@ function GamePage() {
     const [state_game, setState_game] = React.useState(null);
     const queryParameters = new URLSearchParams(window.location.search);
     const gameId = queryParameters.get('id');
-
-
+    
     function fetchGameData() {
         if (!gameId) return;
         fetch(`${BACKEND_URL}/api/tower-game/get-game-data/${gameId}`)
