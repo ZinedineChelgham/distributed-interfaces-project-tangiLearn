@@ -82,6 +82,7 @@ const handleLogin = (gameName) => {
         }),
       )
       .then((game) => {
+        if (gameName === "tower") {
         fetch(`${API_URL}/tower-game/get-id`)
             .then((response) => response.json())
             .then((data) => {
@@ -91,7 +92,7 @@ const handleLogin = (gameName) => {
                     GAME_URL_MAPPER[gameName] + "gamepage?id=" + data.gameId;
               }
                 });
-
+        } else window.location.href = GAME_URL_MAPPER[gameName];
       });
   };
   const listener = () => onStartButtonClick(gameName);

@@ -84,6 +84,7 @@ const handleIncrement = (index) => {
 
       // Vérifie si le match a réussi
       if (match) {
+        console.log("On est dans le game ");
         const column = parseInt(match[1], 10); // Convertit la valeur de colonne en nombre entier
         const row = parseInt(match[2], 10); // Convertit la valeur de ligne en nombre entier
 
