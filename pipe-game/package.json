@@ -7,12 +7,13 @@
   "scripts": {
     "dev": "vite --host 192.168.1.14",
     "build": "vite build",
+    "build:watch": "vite build --watch",
     "serve": "vite preview"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dj256/tuiomanager": "^2.0.3",
+    "@dj256/tuiomanager": "^2.2.3",
     "vite": "^5.0.4"
   },
   "devDependencies": {

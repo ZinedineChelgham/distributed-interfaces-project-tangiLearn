@@ -37,6 +37,15 @@ function PipeGamePreview({ gameId }) {
           cellSize={50}
         />
       )}
+      <div className="players">
+        {state &&
+          state.players &&
+          state.players.map((player) => (
+            <div key={player.id} className="player">
+              <div className="name">{player.name}</div>
+            </div>
+          ))}
+      </div>
     </>
   );
 }

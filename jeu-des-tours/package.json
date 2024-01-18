@@ -18,7 +18,9 @@
   },
   "scripts": {
     "start": "vite --host 192.168.1.14",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "build": "vite build",
+    "build:watch": "vite build --watch"
   },
   "eslintConfig": {
     "extends": [

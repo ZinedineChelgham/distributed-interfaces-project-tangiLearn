@@ -70,6 +70,8 @@ export class PipeGameManager {
     this.state = new GameState();
     /** @type {Map<number, TagInfo>} */
     this.tagsInfo = new Map();
+    /** @type {Map<number, Pipe>} */
+    this.dragMap = new Map();
   }
 
   displayLogo() {
@@ -113,13 +115,14 @@ export class PipeGameManager {
         }, 1000);
       }, 2000);
     };
+
     const startSpinAndAddListeners = () => {
       this.root
         .querySelector(`.${Pipes.logo}`)
         .classList.add(Animations.slowSpin);
       slots.forEach((container) => {
         container.addEventListener("tuiotagdown", ({ detail: tag }) => {
-          tagIds.add(tag.id); // Added by zine
+          tagIds.add(tag.id);
           count += 1;
           container
             .querySelector(`.${Pipes.tokenContainerBackground}`)
@@ -129,7 +132,7 @@ export class PipeGameManager {
           }
         });
         container.addEventListener("tuiotagup", () => {
-          count -= 1;
+          if (count > 0) count -= 1;
         });
       });
       // setTimeout(() => {
@@ -223,7 +226,7 @@ export class PipeGameManager {
   }
 
   onHelpRequested() {
-    fetch(`${BACKEND_URL}/api/monitoring/need-help`, {
+    return fetch(`${BACKEND_URL}/api/monitoring/need-help`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -350,7 +353,7 @@ export class PipeGameManager {
    */
   getNewPipe(level, pipeType) {
     this.pipeCounts[pipeType] += 1;
-    const pipe = new Pipe(pipeType, async (isNew, newPos) => {
+    const pipe = new Pipe(pipeType, this.dragMap, async (isNew, newPos) => {
       if (isNew) {
         if (level.pipes[pipeType] - this.pipeCounts[pipeType] > 0) {
           this.addNewPipeToGraph(newPos.x, newPos.y, pipe.pipeType, pipe.angle);

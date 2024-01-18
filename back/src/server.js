@@ -8,7 +8,8 @@ import pupilRoutes from "./routes/pupils.js";
 import mongoose from "mongoose";
 import cors from "cors";
 import { populateDb } from "./lib/populateDb.js";
-import { BACKEND_URL, PORT } from "./lib/config.js";
+import { PORT } from "./lib/config.js";
+import path from "path";
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL, {});
@@ -36,6 +37,21 @@ app.use("/api/pipe-game", pipeGameRoutes);
 app.use("/api/tower-game", towerGameRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/pupil", pupilRoutes);
+
+for (const dir of [
+  "entry-menu",
+  "pipe-game",
+  "tower-game",
+  "token-registration",
+]) {
+  app.use(`/${dir}/assets`, express.static(`./fronts/${dir}/assets`));
+  app.get(`/${dir}*`, (req, res) => {
+    res.sendFile(
+      path.resolve(path.dirname(""), `./fronts/${dir}`, "index.html"),
+    );
+  });
+}
+
 // Serve at localhost:3000
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
