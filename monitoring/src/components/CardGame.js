@@ -23,13 +23,14 @@ import Box from "@mui/material/Box";
 import {useState} from "react";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import {nanoid} from "nanoid";
+import {BACKEND_URL} from "../util";
 
 function CardGame({game, handleClick}) {
     // State for modal visibility
     // State for dialog visibility
     const [openDialog, setOpenDialog] = useState(false);
     const [isTowerParamClicked, setIsTowerParamClicked] = useState(false);
-    const [towerParams, setTowerParams] = useState([1,1,1,1,2,2,2,2,4,4,4,4]);
+    const [towerParams, setTowerParams] = useState([1, 2, 1, 1, 2, 2, 3, 2, 1, 2, 2, 3]);
 
     // Function to handle opening and closing dialog
     const handleDialog = () => {
@@ -40,7 +41,7 @@ function CardGame({game, handleClick}) {
     const sendGameDataToBackend = async (data) => {
         try {
             const response = await fetch(
-                `http://127.0.0.1:3000/api/tower-game/start-game`,
+                `${BACKEND_URL}/api/tower-game/update-default-values`,
                 {
                     method: "POST",
                     headers: {
@@ -143,25 +144,17 @@ function CardGame({game, handleClick}) {
                     >
                         <Button
                             variant={"contained"}
+                            color={"success"}
                             onClick={() => {
                                 handleDialog();
-                                const initialGameState = Array.from({length: 3}, () =>
-                                    Array(3).fill(0),
-                                );
-                                const id = nanoid(8);
-                                console.log("id", id);
-                                console.log("towerParams", towerParams);
-                                console.log("initialGameState", initialGameState);
                                 sendGameDataToBackend({
                                     selectedValues: towerParams,
-                                    gameId: id,
-                                    state_game: initialGameState,
                                 });
                             }}
                         >
                             Sauvegarder
                         </Button>
-                        <Button variant={"contained"} onClick={handleDialog}>
+                        <Button color={"primary"} variant={"contained"} onClick={handleDialog}>
                             Fermer
                         </Button>
                     </Box>

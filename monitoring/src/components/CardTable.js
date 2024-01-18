@@ -38,13 +38,38 @@ function CardTable({ table }) {
    *
    * @param {String} game
    */
-  const onClick = (game) => {
+  const onClick = async (game) => {
     setIsClicked(!isClicked);
     if (!isClicked) {
       if (game.includes("tuyaux")) {
         setCurrentGame("pipe");
       } else {
         setCurrentGame("tower");
+
+        try {
+          const response = await fetch(
+              `${BACKEND_URL}/api/tower-game/start-game`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({}),
+              },
+          );
+
+          if (response.ok) {
+            const responseData = await response.json();
+            console.log("Réponse du backend :", responseData);
+          } else {
+            console.error(
+                "Erreur lors de la requête au backend :",
+                response.statusText,
+            );
+          }
+        } catch (error) {
+          console.error("Erreur lors de l'envoi des données au backend :", error);
+        }
       }
     } else {
       setCurrentGame("");

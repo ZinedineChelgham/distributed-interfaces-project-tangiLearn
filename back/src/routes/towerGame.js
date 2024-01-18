@@ -1,19 +1,28 @@
 import express from "express";
 import { TowerGame } from "../model/towerGame.js";
-import WebSocket, { WebSocketServer } from "ws";
-import { BACKEND_URL } from "../lib/config.js";
+import { WebSocketServer } from "ws";
+import WebSocket from "ws";
+import {BACKEND_URL} from "../lib/config.js"
 import cors from "cors";
 import bodyParser from "body-parser";
+import { nanoid } from "nanoid";
+
+
+
 
 const app = express();
-
 const router = express.Router();
 const wss = new WebSocketServer({ port: 8080 });
 app.use(cors());
 
+let defaultSelectedValues = ["1","2","1","1","2","2","3","2","1","2","2","3"]
+const initialGameState = Array.from({length: 3}, () =>
+    Array(3).fill(0),
+);
+
 app.use(bodyParser.json());
 // Exemple de gestion de la connexion WebSocket
-wss.on("listening", () => console.log("WSS listening on port 8080"));
+wss.on("listening", () => console.log("Server listening on port 8080"));
 
 // Exemple de gestion de la connexion WebSocket
 wss.on("connection", (ws) => {
@@ -33,28 +42,52 @@ wss.on("connection", (ws) => {
     });
   });
 });
+
+// post to update defaultSelectedValues
+router.post("/update-default-values", async (req, res) => {
+  try {
+    const { selectedValues } = req.body;
+    defaultSelectedValues = selectedValues;
+    res
+      .status(200)
+      .json({ success: true, message: "Données mises à jour avec succès." });
+    console.log("Données de jeu mises à jour :", defaultSelectedValues)
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour des données du jeu :", error);
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Erreur lors de la mise à jour des données du jeu.",
+      });
+  }
+});
+
+
 router.post("/start-game", async (req, res) => {
   try {
-    const { selectedValues, gameId, state_game } = req.body;
     await TowerGame.deleteMany({});
+    const id = nanoid(8);
     // Enregistrez les données dans la base de données
     const TowerGameInstance = new TowerGame({
-      selectedValues,
-      gameId,
-      state_game,
+      selectedValues: defaultSelectedValues,
+      gameId: id,
+      state_game: initialGameState,
     });
     await TowerGameInstance.save();
     console.log("Données enregistrées avec succès :", TowerGameInstance);
     res
       .status(200)
       .json({ success: true, message: "Données enregistrées avec succès." });
-    setCurrentGame();
+    //setCurrentGame();
   } catch (error) {
     console.error("Erreur lors de l'enregistrement des données :", error);
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de l'enregistrement des données.",
-    });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Erreur lors de l'enregistrement des données.",
+      });
   }
 });
 
@@ -81,10 +114,12 @@ router.get("/get-game-data/:id", async (req, res) => {
       "Erreur lors de la récupération des données de la partie :",
       error,
     );
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de la récupération des données de la partie.",
-    });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Erreur lors de la récupération des données de la partie.",
+      });
   }
 });
 router.post("/update-data/:id", async (req, res) => {
@@ -139,10 +174,12 @@ router.post("/update-data/:id", async (req, res) => {
       .json({ success: true, message: "Données mises à jour avec succès." });
   } catch (error) {
     console.error("Erreur lors de la mise à jour des données du jeu :", error);
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de la mise à jour des données du jeu.",
-    });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Erreur lors de la mise à jour des données du jeu.",
+      });
   }
 });
 router.post("/ping", async (req, res) => {
@@ -173,12 +210,32 @@ router.post("/ping", async (req, res) => {
 });
 
 function setCurrentGame() {
-  fetch(`${BACKEND_URL}/api/monitoring/current-game`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ game: "tower" }),
-  }).then((r) => console.log(r));
+  console.log("Envoi de la requête au backend");
+
+  try {
+    fetch(`${BACKEND_URL}/api/monitoring/current-game`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ game: "tower" }),
+    })
+        .then((response) => {
+          // Check if the response status is OK (status code 200)
+          if (!response.ok) {
+            throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+          }
+          return response.json(); // Parse the response body as JSON
+        })
+        .then((data) => console.log(data))
+        .catch((error) => {
+          console.error("Error during fetch:", error.message);
+          // Handle the error or throw it again if needed
+        });
+  } catch (error) {
+    console.error("Caught an exception:", error.message);
+    // Handle the exception if needed
+  }
 }
+
 
 router.get("/get-id", async (req, res) => {
   try {
@@ -194,10 +251,12 @@ router.get("/get-id", async (req, res) => {
     }
   } catch (error) {
     console.error("Erreur lors de la récupération de l'ID :", error);
-    res.status(500).json({
-      success: false,
-      message: "Erreur lors de la récupération de l'ID.",
-    });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Erreur lors de la récupération de l'ID.",
+      });
   }
 });
 
