@@ -90,12 +90,13 @@ function CardGame({game, handleClick}) {
                         <PlayCircleIcon/>
                     </IconButton>
                 </Tooltip>
-
-                <Tooltip title="Paramètres" placement={"right"}>
-                    <IconButton aria-label="settings" onClick={handleDialog}>
-                        <SettingsIcon/>
-                    </IconButton>
-                </Tooltip>
+                {game.name.includes("tours") && (
+                    <Tooltip title="Paramètres" placement={"right"}>
+                        <IconButton aria-label="settings" onClick={handleDialog}>
+                            <SettingsIcon/>
+                        </IconButton>
+                    </Tooltip>
+                )}
             </Box>
             {/* Modal component */}
             <Dialog
