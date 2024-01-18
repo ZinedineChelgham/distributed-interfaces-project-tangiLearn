@@ -11,7 +11,7 @@
     "build:registration": "npm run build --prefix ../token-registration",
     "build:entry-menu": "npm run build --prefix ../entry-menu",
     "build:all": "npm run build:pipe && npm run build:tower && npm run build:registration && npm run build:entry-menu",
-    "dev": "nodemon src/server.js",
+    "dev": "nodemon --watch src --watch fronts src/server.js",
     "lint": "eslint . --ext .js --fix",
     "mongo": "node db/inMemoryDb.js",
     "format": "prettier --write \"src/**/*.js\""

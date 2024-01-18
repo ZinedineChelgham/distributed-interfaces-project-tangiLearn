@@ -38,45 +38,19 @@ app.use("/api/tower-game", towerGameRoutes);
 app.use("/api/teacher", teacherRoutes);
 app.use("/api/pupil", pupilRoutes);
 
-// entry menu
-app.use("/entry-menu/assets", express.static("../entry-menu/dist/assets"));
-app.get("/entry-menu", (req, res) => {
-  res.sendFile(
-    path.resolve(path.dirname(""), "../entry-menu/dist", "index.html"),
-  );
-});
-
-// pipe game
-app.use("/pipe-game/assets", express.static("../pipe-game/dist/assets"));
-app.get("/pipe-game", (req, res) => {
-  res.sendFile(
-    path.resolve(path.dirname(""), "../pipe-game/dist", "index.html"),
-  );
-});
-app.get("/pipe-game/*", (req, res) => {
-  res.sendFile(
-    path.resolve(path.dirname(""), "../pipe-game/dist", "index.html"),
-  );
-});
-
-// tower game
-app.use("/tower-game/assets", express.static("../tower-game/dist/assets"));
-app.get("/tower-game", (req, res) => {
-  res.sendFile(
-    path.resolve(path.dirname(""), "../tower-game/dist", "index.html"),
-  );
-});
-
-// token registration
-app.use(
-  "/token-registration/assets",
-  express.static("../token-registration/dist/assets"),
-);
-app.get("/token-registration", (req, res) => {
-  res.sendFile(
-    path.resolve(path.dirname(""), "../token-registration/dist", "index.html"),
-  );
-});
+for (const dir of [
+  "entry-menu",
+  "pipe-game",
+  "tower-game",
+  "token-registration",
+]) {
+  app.use(`/${dir}/assets`, express.static(`./fronts/${dir}/assets`));
+  app.get(`/${dir}*`, (req, res) => {
+    res.sendFile(
+      path.resolve(path.dirname(""), `./fronts/${dir}`, "index.html"),
+    );
+  });
+}
 
 // Serve at localhost:3000
 app.listen(PORT, () => {
