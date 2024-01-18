@@ -9,7 +9,7 @@ import {
   setPlayingStatus,
   toKebabCase,
 } from "./lib/util.js";
-import { GAME_URL_MAPPER } from "./lib/config.js";
+import { API_URL, GAME_URL_MAPPER } from "./lib/config.js";
 
 TUIOManager.start();
 
@@ -21,17 +21,6 @@ function checkGameStatus() {
     .then((gameName) => {
       if (!gameName) return;
       clearInterval(interval);
-      // if (gameName === "tower") {
-      //   fetch(`${API}/tower-game/get-id`)
-      //     .then((response) => response.json())
-      //     .then((data) => {
-      //       console.log(data);
-      //       if (data.gameId) {
-      //         window.location.href =
-      //           GAME_URL_MAPPER[gameName] + "gamepage?id=" + data.gameId;
-      //       }
-      //     });
-      // } else window.location.href = GAME_URL_MAPPER[gameName];
       onNewGameLaunch(gameName);
     })
     .catch((error) => console.error("Error checking game status:", error));
@@ -66,7 +55,6 @@ const handleLogin = (gameName) => {
   let first = undefined;
 
   const onStartButtonClick = (gameName) => {
-
     const players = Object.values(loginMap)
       .filter((v) => v !== undefined)
       .map((v) => v.pupil);
@@ -76,15 +64,15 @@ const handleLogin = (gameName) => {
       .then(() => postNewGame(gameName, players))
       .then((game) => {
         if (gameName === "tower") {
-        fetch(`${API_URL}/tower-game/get-id`)
+          fetch(`${API_URL}/tower-game/get-id`)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
-              if(data.gameId) {
+              console.log(data);
+              if (data.gameId) {
                 window.location.href =
-                    GAME_URL_MAPPER[gameName] + "gamepage?id=" + data.gameId;
+                  GAME_URL_MAPPER[gameName] + "gamepage?id=" + data.gameId;
               }
-                });
+            });
         } else window.location.href = GAME_URL_MAPPER[gameName];
       });
   };
