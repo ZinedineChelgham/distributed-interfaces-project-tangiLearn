@@ -7,7 +7,7 @@ import {
 import { PIPE_DATA } from "./util.js";
 
 export class Pipe {
-  constructor(pipeType, onDropped) {
+  constructor(pipeType, dragMap, onDropped) {
     this.pipeType = pipeType;
     const pipeElement = document.createElement("img");
     pipeElement.src = PIPE_DATA[pipeType].images.movable;
@@ -30,10 +30,13 @@ export class Pipe {
     this.element.addEventListener("tuiotagdown", this.onTagDown.bind(this));
     document.addEventListener("tuiotagmove", this.onTagMove.bind(this));
     this.element.addEventListener("tuiotagup", this.onTagUp.bind(this));
+    this.dragMap = dragMap;
   }
 
   onTagDown({ detail: tuioTag }) {
     if (this.tagId !== undefined) return;
+    if (this.dragMap.get(tuioTag.id) !== undefined) return;
+    this.dragMap.set(tuioTag.id, this);
     this.tagId = tuioTag.id;
     this.element.classList.add(`drag-${tuioTag.id}`);
     const pipeX = (this.x = this.element.style.left.match(/\d+/)[0]);
@@ -66,10 +69,11 @@ export class Pipe {
     this.setAngle(tuioTag.angle + this.tagOffset.angle);
   }
 
-  async onTagUp({ detail: tuioTagId }) {
-    if (this.tagId === undefined || this.tagId !== tuioTagId) return;
+  async onTagUp({ detail: tuioTag }) {
+    if (this.tagId === undefined || this.tagId !== tuioTag.id) return;
+    this.dragMap.delete(tuioTag.id);
     this.tagId = undefined;
-    this.element.classList.remove(`drag-${tuioTagId}`);
+    this.element.classList.remove(`drag-${tuioTag.id}`);
     const closestCellX = Math.round((this.x - INVENTORY_WIDTH) / 100);
     const closestCellY = Math.round((this.y - HORIZONTAL_MARGIN_HEIGHT) / 100);
     const closestCellPosition = {

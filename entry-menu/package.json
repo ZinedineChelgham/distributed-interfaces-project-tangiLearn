@@ -14,7 +14,7 @@
     "vite": "^5.0.8"
   },
   "dependencies": {
-    "@dj256/tuiomanager": "^2.2.0",
+    "@dj256/tuiomanager": "^2.2.3",
     "material-icons": "^1.13.12"
   }
 }
