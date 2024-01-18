@@ -152,7 +152,7 @@ function CardTable({ table }) {
             zIndex: 1,
           }}
         >
-          {table.name}
+          {currentGame ? `${table.name} en direct` : table.name}
         </Typography>
         {needHelp && !helpAcknowledged && (
           <Box

@@ -54,7 +54,7 @@ function TowerGamePreview() {
                 <TowerGameBoard
                     gameState={gameState}
                     dimensions={{rows: 5, columns: 5}}
-                    cellSize={50}
+                    cellSize={80}
                     paramToCaseMapping={paramToCaseMapping}
                 />
             )}
