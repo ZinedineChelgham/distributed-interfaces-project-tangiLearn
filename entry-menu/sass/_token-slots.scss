@@ -1,8 +1,10 @@
 @use "colors" as *;
 
-$slot-size: 12rem;
-$slot-size-active: 14rem;
-$name-offset: 10rem;
+$slot-size: 16rem;
+$half-slot-size: $slot-size / 2;
+$slot-size-active: 18rem;
+$name-offset: 18rem;
+$name-offset-y: 3rem;
 
 .token-slots {
   position: absolute;
@@ -14,6 +16,9 @@ $name-offset: 10rem;
   bottom: 0;
 
   .token-slot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     width: $slot-size;
     height: $slot-size;
@@ -38,9 +43,7 @@ $name-offset: 10rem;
       transform: translate(-50%, -50%);
 
       .pupil-name {
-        top: $name-offset + 1.5;
-        left: calc($name-offset/2);
-        rotate: 135deg;
+        transform: translate($half-slot-size, $half-slot-size) rotate(135deg);
       }
     }
 
@@ -50,9 +53,7 @@ $name-offset: 10rem;
       transform: translate(50%, -50%);
 
       .pupil-name {
-        top: $name-offset + 1.5;
-        right: calc($name-offset/2);
-        rotate: -135deg;
+        transform: translate(-$half-slot-size, $half-slot-size) rotate(-135deg);
       }
     }
 
@@ -62,9 +63,7 @@ $name-offset: 10rem;
       transform: translate(-50%, 50%);
 
       .pupil-name {
-        bottom: $name-offset + 1.5;
-        left: calc($name-offset/2);
-        rotate: 45deg;
+        transform: translate($half-slot-size, -$half-slot-size) rotate(45deg);
       }
     }
 
@@ -74,9 +73,7 @@ $name-offset: 10rem;
       transform: translate(50%, 50%);
 
       .pupil-name {
-        bottom: $name-offset + 1.5;
-        right: calc($name-offset/2);
-        rotate: -45deg;
+        transform: translate(-$half-slot-size, -$half-slot-size) rotate(-45deg);
       }
     }
 
@@ -89,6 +86,7 @@ $name-offset: 10rem;
       text-wrap: nowrap;
       text-align: center;
       transition: all 0.2s ease-in-out;
+      transform-origin: center;
     }
   }
 }
