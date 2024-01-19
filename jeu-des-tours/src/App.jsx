@@ -8,12 +8,9 @@ const App = () => {
     <Router>
       <div className="App">
         <Routes>
-          {/*<Route exact path="/">*/}
-          {/*  <Navigate to="/startgame" />*/}
-          {/*</Route>*/}
-          <Route exact path={"/"} element={<GamePage />} />
+          <Route exact path={"/jeu-des-tours"} element={<GamePage />} />
           <Route path="/startgame" element={<GamePage />} />
-          <Route path="/gamepage" element={<GamePage />} />
+          <Route path="/gamepage/" element={<GamePage />} />
         </Routes>
       </div>
     </Router>

@@ -7,6 +7,6 @@ export const GAME_URL_MAPPER = {
     ? `${BACKEND_URL}/pipe-game/`
     : "http://localhost:5173/",
   tower: import.meta.env.PROD
-    ? `${BACKEND_URL}/tower-game/`
+    ? `${BACKEND_URL}/jeu-des-tours/`
     : "http://localhost:5174/",
 };

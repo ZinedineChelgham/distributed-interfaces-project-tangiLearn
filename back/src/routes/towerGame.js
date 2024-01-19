@@ -3,24 +3,19 @@ import { TowerGame } from "../model/towerGame.js";
 import { WebSocketServer } from "ws";
 import WebSocket from "ws";
 import {BACKEND_URL} from "../lib/config.js"
-import cors from "cors";
-import bodyParser from "body-parser";
 import { nanoid } from "nanoid";
 
 
 
 
-const app = express();
 const router = express.Router();
 const wss = new WebSocketServer({ port: 8080 });
-app.use(cors());
 
 let defaultSelectedValues = ["1","2","1","1","2","2","3","2","1","2","2","3"]
 const initialGameState = Array.from({length: 3}, () =>
     Array(3).fill(0),
 );
 
-app.use(bodyParser.json());
 // Exemple de gestion de la connexion WebSocket
 wss.on("listening", () => console.log("Server listening on port 8080"));
 

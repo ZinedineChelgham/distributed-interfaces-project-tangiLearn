@@ -1,7 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="back+db" type="CompoundRunConfigurationType">
+  <configuration default="false" name="back+db+client" type="CompoundRunConfigurationType">
     <toRun name="inMemoryDb" type="NodeJSConfigurationType" />
     <toRun name="back:dev" type="js.build_tools.npm" />
+    <toRun name="tuio client" type="js.build_tools.npm" />
     <method v="2" />
   </configuration>
 </component>

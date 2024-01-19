@@ -61,8 +61,11 @@ const handleLogin = (gameName) => {
     return Promise.all(
       players.map((player) => setPlayingStatus(player.tokenId, true)),
     )
-      .then(() => postNewGame(gameName, players))
-      .then((game) => {
+      .then(() => {
+        if (gameName === "tower") return;
+        return postNewGame(gameName, players);
+      })
+      .then(() => {
         if (gameName === "tower") {
           fetch(`${API_URL}/tower-game/get-id`)
             .then((response) => response.json())
@@ -70,7 +73,7 @@ const handleLogin = (gameName) => {
               console.log(data);
               if (data.gameId) {
                 window.location.href =
-                  GAME_URL_MAPPER[gameName] + "gamepage?id=" + data.gameId;
+                  GAME_URL_MAPPER[gameName] + "?id=" + data.gameId;
               }
             });
         } else window.location.href = GAME_URL_MAPPER[gameName];
