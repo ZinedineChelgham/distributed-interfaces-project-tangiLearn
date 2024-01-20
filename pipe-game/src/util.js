@@ -58,3 +58,20 @@ export const PIPE_DATA = {
     },
   },
 };
+
+export const getPingValue = () =>
+  fetch(`${BACKEND_URL}/api/pipe-game/ping`).then((res) => res.json());
+
+export const clearPing = () =>
+  fetch(`${BACKEND_URL}/api/pipe-game/ping`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ x: undefined, y: undefined }),
+  });
+
+export const getAllNeighbours = (x, y) => ({
+  up: { x: x, y: y - 1 },
+  down: { x: x, y: y + 1 },
+  left: { x: x - 1, y: y },
+  right: { x: x + 1, y: y },
+});
