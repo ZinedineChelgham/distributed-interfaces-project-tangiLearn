@@ -121,6 +121,10 @@ export class PipeGameManager {
         .querySelector(`.${Pipes.logo}`)
         .classList.add(Animations.slowSpin);
       slots.forEach((container) => {
+        const tagUpListener = () => {
+          if (count > 0) count -= 1;
+          container.removeEventListener("tuiotagup", tagUpListener);
+        };
         container.addEventListener("tuiotagdown", ({ detail: tag }) => {
           tagIds.add(tag.id);
           count += 1;
@@ -130,9 +134,7 @@ export class PipeGameManager {
           if (count === 2) {
             gamePreStart();
           }
-        });
-        container.addEventListener("tuiotagup", () => {
-          if (count > 0) count -= 1;
+          container.addEventListener("tuiotagup", tagUpListener);
         });
       });
       // setTimeout(() => {

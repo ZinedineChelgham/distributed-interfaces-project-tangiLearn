@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@dj256/tuiomanager": "^2.2.4",
+    "@dj256/tuiomanager": "^2.2.5",
     "vite": "^5.0.4"
   },
   "devDependencies": {

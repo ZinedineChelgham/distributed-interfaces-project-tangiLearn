@@ -1,7 +1,7 @@
 @use "colors" as *;
 
 $slot-size: 16rem;
-$half-slot-size: $slot-size / 2;
+$half-slot-size: calc($slot-size / 2);
 $slot-size-active: 18rem;
 $name-offset: 18rem;
 $name-offset-y: 3rem;
