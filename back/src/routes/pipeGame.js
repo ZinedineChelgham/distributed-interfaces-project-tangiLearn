@@ -3,6 +3,17 @@ import { PipeGame } from "../model/pipeGame.js";
 
 const router = express.Router();
 
+let ping = { x: undefined, y: undefined };
+
+router.get("/ping", (req, res) => {
+  res.send(ping);
+});
+
+router.post("/ping", (req, res) => {
+  ping = req.body;
+  res.send(ping);
+});
+
 router.get("/", (req, res) =>
   PipeGame.find().then((pipeGames) => {
     res.send(pipeGames);

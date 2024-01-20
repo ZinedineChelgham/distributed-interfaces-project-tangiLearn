@@ -216,7 +216,26 @@ export class PipeGameManager {
     this.helpButtons.forEach(
       (button) => (button.onclick = () => this.onHelpRequested()),
     );
+    this.initPingInterval();
     return this.publishGameState();
+  }
+
+  initPingInterval() {
+    this.pingInterval = setInterval(() => {
+      fetch(`${BACKEND_URL}/api/pipe-game/ping`)
+        .then((res) => res.json())
+        .then((ping) => {
+          const { x, y } = ping;
+          if (x !== undefined && y !== undefined) {
+            this.blinkCell(x, y);
+            return fetch(`${BACKEND_URL}/api/pipe-game/ping`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(undefined),
+            });
+          }
+        });
+    }, 1000);
   }
 
   publishGameState() {
@@ -620,7 +639,9 @@ export class PipeGameManager {
   }
 
   blinkCell(x, y) {
-    const cell = this.cells.find((cell) => cell.x === x && cell.y === y);
+    const cell = this.cells.find(
+      (cell) => cell.x === x * 100 && cell.y === y * 100,
+    );
     cell.classList.add(Animations.cellBlink);
     setTimeout(() => {
       cell.classList.remove(Animations.cellBlink);
