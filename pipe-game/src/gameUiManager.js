@@ -180,7 +180,7 @@ export class GameUiManager {
         button.innerText = "Demander de l'aide";
       });
     });
-    this.gameManager.on("blink", (x, y) => {
+    this.gameManager.on("ping", ({ x, y }) => {
       this.blinkCell(x, y);
     });
 
@@ -253,7 +253,6 @@ export class GameUiManager {
   onGrabPipe(pipe, tuioTag) {
     if (pipe.tagId !== undefined) return;
     if (this.dragMap.get(tuioTag.id) !== undefined) return;
-    console.log("grab", tuioTag);
     this.dragMap.set(tuioTag.id, pipe);
     pipe.tagId = tuioTag.id;
     pipe.element.classList.add(`drag-${tuioTag.id}`);
@@ -284,13 +283,11 @@ export class GameUiManager {
         tuioTag.y + pipe.tagOffset.y,
       );
     }
-    console.log("move", tuioTag);
     pipe.setAngle(tuioTag.angle + pipe.tagOffset.angle);
   }
 
   async onPipeDropped(pipe, tuioTag) {
     if (pipe.tagId === undefined || pipe.tagId !== tuioTag.id) return;
-    console.log("drop", tuioTag);
     this.dragMap.delete(tuioTag.id);
     pipe.tagId = undefined;
     pipe.element.classList.remove(`drag-${tuioTag.id}`);
@@ -370,7 +367,7 @@ export class GameUiManager {
     cell.classList.add(Animations.cellBlink);
     setTimeout(() => {
       cell.classList.remove(Animations.cellBlink);
-    }, 1000);
+    }, 2000);
   }
 
   onWin() {
