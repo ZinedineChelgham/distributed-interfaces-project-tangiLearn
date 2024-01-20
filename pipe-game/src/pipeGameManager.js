@@ -358,8 +358,18 @@ export class PipeGameManager {
     const pipe = new Pipe(pipeType, this.dragMap, async (isNew, newPos) => {
       if (isNew) {
         if (level.pipes[pipeType] - this.pipeCounts[pipeType] > 0) {
-          this.addNewPipeToGraph(newPos.x, newPos.y, pipe.pipeType, pipe.angle);
-          this.addNewPipeToState(pipe.pipeType, newPos.x, newPos.y, pipe.angle);
+          this.addNewPipeToGraph(
+            newPos.x,
+            newPos.y,
+            pipe.pipeType,
+            pipe.rotation,
+          );
+          this.addNewPipeToState(
+            pipe.pipeType,
+            newPos.x,
+            newPos.y,
+            pipe.rotation,
+          );
           this.getNewPipe(level, pipeType);
         }
       } else {

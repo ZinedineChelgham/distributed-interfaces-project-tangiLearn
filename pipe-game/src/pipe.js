@@ -31,6 +31,7 @@ export class Pipe {
     document.addEventListener("tuiotagmove", this.onTagMove.bind(this));
     this.element.addEventListener("tuiotagup", this.onTagUp.bind(this));
     this.dragMap = dragMap;
+    this.rotation = 0;
   }
 
   onTagDown({ detail: tuioTag }) {
@@ -83,6 +84,7 @@ export class Pipe {
     const rotation = (Math.round((this.angle * 2) / Math.PI) * 90) % 360;
     console.log(rotation);
     this.setAngle((rotation * Math.PI) / 180);
+    this.rotation = rotation;
 
     if (this.pipeType === PIPE_TYPES.LONG) {
       if (rotation === 90 || rotation === 270) {
