@@ -14,7 +14,7 @@ import {
 } from "./constants.js";
 import { Cell } from "./cell.js";
 import inlet from "../assets/images/inlet.svg";
-import { getAllNeighbours, PIPE_DATA } from "./util.js";
+import { getAllNeighbours, PIPE_DATA, resetCurrentGame } from "./util.js";
 import { Pipe } from "./pipe.js";
 import win from "../assets/images/win.svg";
 
@@ -94,17 +94,17 @@ export class GameUiManager {
           container.addEventListener("tuiotagup", tagUpListener);
         });
       });
-      setTimeout(() => {
-        this.pipesGameContainer
-          .querySelector(`.${Pipes.startScreen}`)
-          .classList.add(Animations.fadeOut);
-        setTimeout(() => {
-          this.pipesGameContainer
-            .querySelector(`.${Pipes.startScreen}`)
-            .remove();
-          this.displayGame();
-        }, 1000);
-      }, 2000);
+      // setTimeout(() => {
+      //   this.pipesGameContainer
+      //     .querySelector(`.${Pipes.startScreen}`)
+      //     .classList.add(Animations.fadeOut);
+      //   setTimeout(() => {
+      //     this.pipesGameContainer
+      //       .querySelector(`.${Pipes.startScreen}`)
+      //       .remove();
+      //     this.displayGame();
+      //   }, 1000);
+      // }, 2000);
     };
 
     this.pipesGameContainer.classList.add(Pipes.pipesGameContainer);
@@ -182,6 +182,10 @@ export class GameUiManager {
     });
     this.gameManager.on("ping", ({ x, y }) => {
       this.blinkCell(x, y);
+    });
+
+    this.gameManager.on("win", () => {
+      this.onWin();
     });
 
     this.placeWaterGates();
@@ -314,7 +318,8 @@ export class GameUiManager {
       x: closestCellX * 100 + INVENTORY_WIDTH,
       y: closestCellY * 100 + HORIZONTAL_MARGIN_HEIGHT,
     };
-    const rotation = (Math.round((pipe.angle * 2) / Math.PI) * 90) % 360;
+    let rotation = (Math.round((pipe.angle * 2) / Math.PI) * 90) % 360;
+    if (rotation < 0) rotation += 360;
     pipe.setAngle((rotation * Math.PI) / 180);
     pipe.rotation = rotation;
     if (pipe.pipeType === PIPE_TYPES.LONG) {
@@ -382,7 +387,9 @@ export class GameUiManager {
       winOverlay.classList.add(Animations.fadeOut);
       setTimeout(() => {
         this.pipesGameContainer.innerHTML = "";
-        this.gameManager.onFinish();
+        resetCurrentGame().then(() => {
+          window.location.href = import.meta.env.VITE_ENTRY_MENU_URL;
+        });
       }, 500);
     }, 5000);
   }

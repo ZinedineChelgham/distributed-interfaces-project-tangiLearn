@@ -69,6 +69,13 @@ export const clearPing = () =>
     body: JSON.stringify({ x: undefined, y: undefined }),
   });
 
+export const resetCurrentGame = () =>
+  fetch(`${BACKEND_URL}/api/monitoring/current-game`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ game: "" }),
+  });
+
 export const getAllNeighbours = (x, y) => ({
   up: { x: x, y: y - 1 },
   down: { x: x, y: y + 1 },

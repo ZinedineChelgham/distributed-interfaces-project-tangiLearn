@@ -7,7 +7,6 @@ import {
   getPingValue,
 } from "./util.js";
 import { GameState } from "./gameState.js";
-import { Pipe } from "./pipe.js";
 import { EventEmitter } from "events";
 import { nanoid } from "nanoid";
 
@@ -28,8 +27,6 @@ import { nanoid } from "nanoid";
 //                                                                           ####
 //                                                                           ####
 //                                                                          ######
-
-let classId = 0;
 
 export class PipeGameManager extends EventEmitter {
   /** @typedef Position
@@ -58,6 +55,7 @@ export class PipeGameManager extends EventEmitter {
     /** @type {Map<number, {equivalenceClass: number, pipe: {pipeType: PipeType, rotation: 0|90|180|270}}>} */
     this.graphNodes = new Map();
     this.state = new GameState();
+    this.leaks = new Map();
   }
 
   get({ x, y }) {
@@ -93,7 +91,7 @@ export class PipeGameManager extends EventEmitter {
         );
       }
     } else {
-      this.movePipe(newPos.x, newPos.y, pipe.angle, pipe);
+      this.movePipe(newPos.x, newPos.y, pipe.rotation, pipe);
       this.updateStateAfterMove(
         pipe.boardX,
         pipe.boardY,
@@ -109,7 +107,7 @@ export class PipeGameManager extends EventEmitter {
       console.log("//                   WIN                      //");
       console.log("//                                            //");
       console.log("////////////////////////////////////////////////");
-      this.onWin();
+      this.emit("win");
     }
   }
 
@@ -185,6 +183,13 @@ export class PipeGameManager extends EventEmitter {
     };
   }
 
+  thereIsALeak() {
+    for (const leakList of this.leaks.values()) {
+      if (leakList.length > 0) return true;
+    }
+    return false;
+  }
+
   updateStateAfterMove(x, y, newX, newY, newRotation) {
     this.state.board[newY][newX] = {
       type: this.state.board[y][x].type,
@@ -198,7 +203,7 @@ export class PipeGameManager extends EventEmitter {
    * @param {number} pipeY
    * @param {PipeType} pipeType
    * @param {0|90|180|270} rotation
-   * @returns {{x: number, y: number}[]}
+   * @returns {{[k: "up"|"down"|"left"|"right"]: {x: number, y: number}}}
    */
   getNeighbours(pipeX, pipeY, pipeType, rotation) {
     const allNeighbours = getAllNeighbours(pipeX, pipeY);
@@ -270,7 +275,40 @@ export class PipeGameManager extends EventEmitter {
         }
         break;
     }
-    return Object.values(allNeighbours);
+    return allNeighbours;
+  }
+
+  getCoordsId(x, y) {
+    return (x + 1) * 100 + y + 1;
+  }
+
+  up(coordsId) {
+    return coordsId - 1;
+  }
+
+  down(coordsId) {
+    return coordsId + 1;
+  }
+
+  left(coordsId) {
+    return coordsId - 100;
+  }
+
+  right(coordsId) {
+    return coordsId + 100;
+  }
+
+  opposite(side) {
+    switch (side) {
+      case "up":
+        return "down";
+      case "down":
+        return "up";
+      case "left":
+        return "right";
+      case "right":
+        return "left";
+    }
   }
 
   /**
@@ -280,64 +318,74 @@ export class PipeGameManager extends EventEmitter {
    * @param {0|90|180|270} rotation
    */
   addNewPipeToGraph(newPipeX, newPipeY, pipeType, rotation) {
-    const id = classId++;
-    this.graphNodes.set((newPipeX + 1) * 100 + newPipeY + 1, {
+    const id = nanoid();
+    const coordsId = this.getCoordsId(newPipeX, newPipeY);
+    this.graphNodes.set(coordsId, {
       equivalenceClass: id,
       pipe: { pipeType, rotation },
     });
-    this.equivalenceClasses.set(id, [(newPipeX + 1) * 100 + newPipeY + 1]);
+    this.equivalenceClasses.set(id, [coordsId]);
+
     if (pipeType === PIPE_TYPES.LONG) {
       if (rotation === 0 || rotation === 180) {
-        this.graphNodes.set((newPipeX + 1) * 100 + newPipeY + 2, {
+        this.graphNodes.set(this.right(coordsId), {
           equivalenceClass: id,
           pipe: { pipeType, rotation },
         });
-        this.equivalenceClasses.set(id, [
-          (newPipeX + 1) * 100 + newPipeY + 1,
-          (newPipeX + 1) * 100 + newPipeY + 2,
-        ]);
+        this.equivalenceClasses.set(id, [coordsId, this.right(coordsId)]);
       } else {
-        this.graphNodes.set((newPipeX + 2) * 100 + newPipeY + 1, {
+        this.graphNodes.set(this.down(coordsId), {
           equivalenceClass: id,
           pipe: { pipeType, rotation },
         });
-        this.equivalenceClasses.set(id, [
-          (newPipeX + 1) * 100 + newPipeY + 1,
-          (newPipeX + 2) * 100 + newPipeY + 1,
-        ]);
+        this.equivalenceClasses.set(id, [coordsId, this.down(coordsId)]);
       }
     }
+
     const neighbours = this.getNeighbours(
       newPipeX,
       newPipeY,
       pipeType,
       rotation,
     );
-    for (const neighbour of neighbours) {
-      if (this.graphNodes.has((neighbour.x + 1) * 100 + neighbour.y + 1)) {
+    for (const [key, neighbour] of Object.entries(neighbours)) {
+      const neighbourCoordsId = this.getCoordsId(neighbour.x, neighbour.y);
+      if (this.graphNodes.has(neighbourCoordsId)) {
+        if (this.leaks.has(neighbourCoordsId)) {
+          const neighbourLeaks = this.leaks.get(neighbourCoordsId);
+          for (const leak of neighbourLeaks) {
+            if (leak === this.opposite(key)) {
+              this.leaks.set(
+                neighbourCoordsId,
+                neighbourLeaks.filter((l) => l !== leak),
+              );
+            }
+          }
+        }
         this.mergeEquivalenceClasses(
-          this.graphNodes.get((neighbour.x + 1) * 100 + neighbour.y + 1)
-            .equivalenceClass,
-          this.graphNodes.get((newPipeX + 1) * 100 + newPipeY + 1)
-            .equivalenceClass,
+          this.graphNodes.get(neighbourCoordsId).equivalenceClass,
+          this.graphNodes.get(coordsId).equivalenceClass,
         );
+      } else {
+        if (!this.leaks.has(coordsId)) {
+          this.leaks.set(coordsId, []);
+        }
+        this.leaks.set(coordsId, this.leaks.get(coordsId).concat([key]));
       }
     }
-    console.log(this.equivalenceClasses);
-    console.log(this.graphNodes);
   }
 
   /**
    * @param {number} newPipeX
    * @param {number} newPipeY
-   * @param {0|90|180|270} newAngle
+   * @param {0|90|180|270} newRotation
    * @param {Pipe} pipe
    */
-  movePipe(newPipeX, newPipeY, newAngle, pipe) {
+  movePipe(newPipeX, newPipeY, newRotation, pipe) {
     const oldPipeX = pipe.boardX;
     const oldPipeY = pipe.boardY;
     this.removeNode(oldPipeX, oldPipeY);
-    this.addNewPipeToGraph(newPipeX, newPipeY, pipe.pipeType, newAngle);
+    this.addNewPipeToGraph(newPipeX, newPipeY, pipe.pipeType, newRotation);
   }
 
   removeNode(x, y, removingLong = false) {
@@ -352,6 +400,9 @@ export class PipeGameManager extends EventEmitter {
     this.graphNodes.delete((x + 1) * 100 + y + 1);
     if (this.equivalenceClasses.get(id).length === 0) {
       this.equivalenceClasses.delete(id);
+    }
+    if (this.leaks.has(this.getCoordsId(x, y))) {
+      this.leaks.delete(this.getCoordsId(x, y));
     }
     if (!removingLong && node.pipe.pipeType === PIPE_TYPES.LONG) {
       if (node.pipe.rotation === 0 || node.pipe.rotation === 180) {
@@ -370,7 +421,9 @@ export class PipeGameManager extends EventEmitter {
       (this.level.outlet.x + 1) * 100 +
         (this.level.outlet.side === "up" ? 0 : 9),
     ).equivalenceClass;
-    return inletEquivalenceClass === outletEquivalenceClass;
+    return (
+      inletEquivalenceClass === outletEquivalenceClass && !this.thereIsALeak()
+    );
   }
 
   mergeEquivalenceClasses(equivalenceClass1, equivalenceClass2) {
@@ -392,10 +445,5 @@ export class PipeGameManager extends EventEmitter {
 
   onNewPipe(pipeType) {
     this.pipeCounts[pipeType] += 1;
-  }
-
-  start(onFinish) {
-    this.onFinish = onFinish;
-    // this.uiManager.displayLogo(() => this.launchGame());
   }
 }
