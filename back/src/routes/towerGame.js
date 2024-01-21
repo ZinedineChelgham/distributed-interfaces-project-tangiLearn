@@ -132,9 +132,9 @@ router.post("/update-data/:id", async (req, res) => {
     }
 
     // Mettez à jour les données de la partie
-    if (action === "increment") {
+    if (action === "increment" && game.state_game[row][col]<= 4 && game.state_game[row][col] => 0 ) {
       game.state_game[row][col] += 1;
-    } else if (action === "decrement") {
+    } else if (action === "decrement" && game.state_game[row][col]<= 4 && game.state_game[row][col] => 0) {
       game.state_game[row][col] -= 1;
     }
     console.log("Données de jeu mises à jour :", game);
