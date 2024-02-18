@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb41c8335e2ca96449f3991db5fa5702, type: 3}
+  m_Name: VegetationIconSet
+  m_EditorClassIdentifier: 
+  quadIcons:
+  - {fileID: 2800000, guid: 9bd0c975c0adb95418dbaa053d71b0f1, type: 3}
+  - {fileID: 2800000, guid: e53475332dffb9e4fb72a1c574b3ca29, type: 3}
+  - {fileID: 2800000, guid: 965f929319dc82548a5ff47a28fe9b82, type: 3}
+  - {fileID: 2800000, guid: f523789a936053c4595826d66b7b03e1, type: 3}
+  - {fileID: 2800000, guid: d40aaaa7d4a88c643b3049ea12c44c99, type: 3}
+  - {fileID: 2800000, guid: f7f995e7126342d408a1570588594128, type: 3}
+  - {fileID: 2800000, guid: fbc83172204cfcb4a9bce137904e5c8e, type: 3}
+  - {fileID: 2800000, guid: e502f4057d98aa94395e9c8f504109dc, type: 3}
+  - {fileID: 2800000, guid: 05c7bb17f560b794eadc9bdad5b2ed18, type: 3}
+  - {fileID: 2800000, guid: 54b5d30fab6970d4bb731d47df8f6f74, type: 3}
+  - {fileID: 2800000, guid: 4da510c2d09469346bff178e725b4f18, type: 3}
+  - {fileID: 2800000, guid: fdb2978a047bf79458df4ca990a8db2d, type: 3}
+  - {fileID: 2800000, guid: ab516da0f3c29b640b4b41722dccb970, type: 3}
+  - {fileID: 2800000, guid: 10a519cd338a42643b1b6cef06281b15, type: 3}
+  - {fileID: 2800000, guid: 328a93f99e3623a45ab182c46ea5e30e, type: 3}
+  - {fileID: 2800000, guid: 6c61a1a2c77c1b64f9673e23964b68f9, type: 3}
+  spriteIcons: []
+  charIconFont: {fileID: 0}
+  charIcons:
+  - Name: AppBarAdjust
+    Character: 60370
+  - Name: AppBarClose
+    Character: 59153
+  - Name: AppBarDone
+    Character: 59643
+  - Name: AppBarHide
+    Character: 59244
+  - Name: AppBarShow
+    Character: 59154
+  - Name: AppBarHome
+    Character: 60175

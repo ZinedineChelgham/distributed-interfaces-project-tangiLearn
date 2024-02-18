@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2161692218843072008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3776861741237889318}
+  m_Layer: 0
+  m_Name: ButtonHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3776861741237889318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2161692218843072008}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.855785, y: 2.566812, z: 1.4438515}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7575855060829742124}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2459640503268318790
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3776861741237889318}
+    m_Modifications:
+    - target: {fileID: 5404528509462646817, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fa419ab56051229449e3b813df8f295f, type: 2}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.048
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.016
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5404528509679170324, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 38a587e9218b3284485088c9925af61f, type: 2}
+    - target: {fileID: 5404528510636010756, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 21202819797275496, guid: 6a84f857bec7e7345843ae29404c57ce, type: 2}
+    - target: {fileID: 5404528511122324619, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_Name
+      value: PressableButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 5708886471662539009, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 329cdefad4cf0f14e9b6767d0af094b0, type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+--- !u!4 &7575855060829742124 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5404528509494409834, guid: 30100a6fbe49dca43b59af4051ca8cd7, type: 3}
+  m_PrefabInstance: {fileID: 2459640503268318790}
+  m_PrefabAsset: {fileID: 0}

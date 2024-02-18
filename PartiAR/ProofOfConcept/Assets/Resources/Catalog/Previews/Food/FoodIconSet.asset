@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb41c8335e2ca96449f3991db5fa5702, type: 3}
+  m_Name: FoodIconSet
+  m_EditorClassIdentifier: 
+  quadIcons:
+  - {fileID: 2800000, guid: 90bed77041d9fde49ad8ca1c6cd1a659, type: 3}
+  - {fileID: 2800000, guid: 9ea11dc51fccc334e8bf4a81fa33165a, type: 3}
+  - {fileID: 2800000, guid: 2b201bf5541ea784486bf5756226704e, type: 3}
+  - {fileID: 2800000, guid: ab31d1f7c3bc6e84fbc24cebdf8dc527, type: 3}
+  - {fileID: 2800000, guid: 68e5bbbb7844b334998e2fc21830c1e3, type: 3}
+  - {fileID: 2800000, guid: 80fafd8b19dcacd45b5e02922765f454, type: 3}
+  - {fileID: 2800000, guid: 0d0952324d8ec9f49ad613041dc2990a, type: 3}
+  - {fileID: 2800000, guid: bce7dc2b63e22be468de16b3b6533983, type: 3}
+  - {fileID: 2800000, guid: 4f7a5c6fdd6fd14478a8ee55bb01f80a, type: 3}
+  - {fileID: 2800000, guid: 34ba8345aee5a20439f9fc82c198ca3a, type: 3}
+  - {fileID: 2800000, guid: d4426fabb1848a741a793b581e7921c6, type: 3}
+  - {fileID: 2800000, guid: 43ea981a9331a5f46980931f15f85d94, type: 3}
+  - {fileID: 2800000, guid: 76ed8f2290912dc4abea227730a3cbff, type: 3}
+  - {fileID: 2800000, guid: ae0534241a18f7b4bb1b3e1fc21bc4af, type: 3}
+  spriteIcons: []
+  charIconFont: {fileID: 0}
+  charIcons:
+  - Name: AppBarAdjust
+    Character: 60370
+  - Name: AppBarClose
+    Character: 59153
+  - Name: AppBarDone
+    Character: 59643
+  - Name: AppBarHide
+    Character: 59244
+  - Name: AppBarShow
+    Character: 59154
+  - Name: AppBarHome
+    Character: 60175

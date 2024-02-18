@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - CatalogText
+  - Option
+  - GridButtonCollection
+  - CategoryButtonCollection
+  - ButtonCreateObject
+  - AnnotationMenu
+  - SelectionController
+  - SceneViewController
+  - ObjectAnnotation
+  - AnnotationButton
+  - CatalogButton
+  - VisualizationButton
+  - Tooltip
+  - BuildingButton
+  - GlobalMenu
+  - ModeController
+  - LinkedAnnotation
+  - MenuButtons
+  - Pillar
+  - VideoPlayer
+  - Keyboard
+  - MenuObject
+  - RealObject
+  - DirectionObject
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Spatial Awareness
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0

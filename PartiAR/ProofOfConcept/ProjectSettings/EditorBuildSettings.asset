@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/FinalScene.unity
+    guid: 9bfb196cf0af52248a5ff956eac0c461
+  - enabled: 1
+    path: Assets/Scenes/Test.unity
+    guid: 33845f73cf204df4d800a3c143a4a71e
+  m_configObjects:
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 418bce9f249cf1245865cb28b3ae3c81, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 30c2a5a890754bc458d4f3e85df28fd8, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 1e0fdcb263a90fc459b441f9eea0cab3, type: 2}
